@@ -1,30 +1,22 @@
 package com.mygdx.game.managers;
 
-import com.mygdx.game.interfaces.iInputOutput;
 
-public abstract class IOManager implements iInputOutput {
-	private float horizontalInput,verticalInput;
-	
-	
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+
+
+public abstract class IOManager implements InputProcessor {
+
 	public IOManager() {
-		
+		Gdx.input.setInputProcessor(this);
 	}
 	
 	public abstract boolean keyUp(int keycode);
 	public abstract boolean keyDown(int keycode);
 	
-	
-	public float getHorizontalInput() {
-		return horizontalInput;
+	public void loadAssets() {
+		
 	}
-	public void setHorizontalInput(float horizontalInput) {
-		horizontalInput = this.horizontalInput;
-	}
-	public float getVerticalInput() {
-		return verticalInput;
-	}
-	public void setVerticalInput(float verticalInput) {
-		verticalInput = this.verticalInput;
-	}
+
 	
 }
