@@ -28,6 +28,11 @@ public class IOManager implements iInputOutput {
 		else return false;
 	}
 
+	//public boolean pollEnterKey() {
+		//if(Gdx.input.isKeyPressed(Keys.ENTER)) return true;
+		//else return false;
+	//}
+
 
 	
 }
