@@ -4,65 +4,27 @@ import com.badlogic.gdx.Input;
 
 public class PlayerControlManager extends IOManager {
 
+	private boolean checkKey;
+	
 	public PlayerControlManager(){
 		super();
 	}
 	
 //not done yet ~
-    @Override
-    public boolean keyUp(int keycode) {
-    	if(keycode == Input.Keys.LEFT) System.out.println("Left arrow released");
-        return false;
-    }
+	
+	public void moveLeft() {
+		System.out.println("Move Left");
+	}
+	
+	public void moveRight() {
+		System.out.println("Move Right");
+	}
+	
+	public void checkKeyEvents() {
+		if(super.pollLeftKey()) moveLeft();
+		if(super.pollRightKey()) moveRight();
 
-    @Override
-    public boolean keyDown(int keycode) {
-    	if(keycode == Input.Keys.LEFT) System.out.println("Left arrow pressed");
-        return false;
-    }
-
-	@Override
-	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(float amountX, float amountY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-    //
 
 }

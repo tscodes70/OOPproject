@@ -18,6 +18,7 @@ public class spacepewpew extends Game {
 	
 	//audio testing
 	public static AssetManager manager;
+	public PlayerControlManager pcm;
 	
 	@Override
 	public void create () {
@@ -26,7 +27,8 @@ public class spacepewpew extends Game {
 //		img = new Texture("badlogic.jpg");
 		
 		// Input Processor
-		PlayerControlManager pcm = new PlayerControlManager();
+		pcm = new PlayerControlManager();
+
 		
 		//Audio testing
 		manager = new AssetManager();
@@ -34,12 +36,14 @@ public class spacepewpew extends Game {
 		manager.finishLoading();
 		
 		setScreen(new SplashScreen());
+		
+		
 	}
 
 	@Override
 	public void render () {
 		super.render();
-
+		pcm.checkKeyEvents();
 //		ScreenUtils.clear(1, 0, 0, 1);
 //		batch.begin();
 //		batch.draw(img, 0, 0);

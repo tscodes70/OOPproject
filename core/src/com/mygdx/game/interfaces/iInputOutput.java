@@ -1,6 +1,9 @@
 package com.mygdx.game.interfaces;
 
+import com.badlogic.gdx.Input;
+
 public interface iInputOutput {
-	public float getHorizontalInput();
-	public float getVerticalInput();
+	public boolean pollLeftKey();
+	public boolean pollRightKey();
+
 }
