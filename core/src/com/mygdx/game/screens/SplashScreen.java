@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,10 +17,12 @@ public class SplashScreen implements Screen {
 	
 	private Music bgMusic;
 	
-//	public SplashScreen(Music bgMusic) {
-//		this.bgMusic = bgMusic;
-//	}
-//	
+	private AssetManager manager;
+	
+	public SplashScreen(AssetManager manager) {
+		this.manager = manager;
+	}
+	
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
@@ -29,7 +32,7 @@ public class SplashScreen implements Screen {
 		splash = new Sprite(splashTexture);
 		splash.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
-		bgMusic = spacepewpew.manager.get("audio/music/megalovania.mp3",Music.class);
+		bgMusic = manager.get("audio/music/megalovania.mp3",Music.class);
 		bgMusic.setLooping(true);
 		bgMusic.setVolume(0.1f);
 		bgMusic.play();

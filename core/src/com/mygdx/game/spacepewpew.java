@@ -1,74 +1,58 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.managers.PlayerControlManager;
-import com.mygdx.game.screens.SplashScreen;
+import com.badlogic.gdx.ApplicationListener;
+import com.mygdx.game.managers.SimulationLifecycleManager;
+import com.mygdx.game.models.Simulation;
+import com.mygdx.game.simulations.AppSimulation;
 
-public class spacepewpew extends Game {
-	SpriteBatch batch;
-	Texture img;
-	
-	//audio testing
-	public static AssetManager manager;
-	public PlayerControlManager pcm;
+public class spacepewpew implements ApplicationListener {
+
+	private SimulationLifecycleManager slm;
 	
 	@Override
-	public void create () {
+	public void create() {
 
 //		batch = new SpriteBatch();
 //		img = new Texture("badlogic.jpg");
 		
-		// Input Processor
-		pcm = new PlayerControlManager();
-
-		
-		//Audio testing
-		manager = new AssetManager();
-		manager.load("audio/music/megalovania.mp3", Music.class);
-		manager.finishLoading();
-		
-		setScreen(new SplashScreen());
-		
+		// Simulation Lifecycle
+		slm = new SimulationLifecycleManager();
+		slm.addSimulation(new AppSimulation());
 		
 	}
 
-	@Override
-	public void render () {
-		super.render();
-		pcm.checkKeyEvents();
-//		ScreenUtils.clear(1, 0, 0, 1);
-//		batch.begin();
-//		batch.draw(img, 0, 0);
-//		batch.end();
-	}
-	
-	@Override
-	public void dispose () {
-		super.dispose();
-//		batch.dispose();
-//		img.dispose();
-	}
-	
 	@Override
 	public void resize(int width, int height) {
-		super.resize(width, height);
+		// TODO Auto-generated method stub
+		
 	}
-	
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		for (Simulation s : slm.getSimulations()) {
+			s.initialize();
+			s.render();
+		}
+		
+	}
+
 	@Override
 	public void pause() {
-		super.pause();
+		// TODO Auto-generated method stub
+		
 	}
-	
+
 	@Override
 	public void resume() {
-		super.resume();
+		// TODO Auto-generated method stub
+		
 	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
