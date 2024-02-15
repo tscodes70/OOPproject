@@ -2,24 +2,40 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.spacepewpew;
 
 public class SplashScreen implements Screen {
 	
 	private Sprite splash;
 	private SpriteBatch batch;
 	
+	private Music bgMusic;
+	
+	private AssetManager manager;
+	
+	public SplashScreen(AssetManager manager) {
+		this.manager = manager;
+	}
+	
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
 		batch = new SpriteBatch();
 		
-		Texture splashTexture = new Texture(Gdx.files.internal("splash.jpg"));
+		Texture splashTexture = new Texture(Gdx.files.internal("image/splash.jpg"));
 		splash = new Sprite(splashTexture);
 		splash.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
+		bgMusic = manager.get("audio/music/megalovania.mp3",Music.class);
+		bgMusic.setLooping(true);
+		bgMusic.setVolume(0.1f);
+		bgMusic.play();
 	}
 
 	@Override
