@@ -4,12 +4,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public abstract class Entity {
-    float positionX;
-    float positionY;
-    int speed;
-    boolean aiControl;
+    private float positionX;
+    private float positionY;
+    private int speed;
+    private boolean aiControl;
 
-    Entity(float positionX, float positionY, int speed, boolean aiControl) {
+    public Entity(float positionX, float positionY, int speed, boolean aiControl) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.speed = speed;
