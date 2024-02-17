@@ -1,15 +1,32 @@
 package com.mygdx.game.models;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 
-public abstract class Entity {
+public class Entity implements iMovable {
     private float positionX;
     private float positionY;
     private int speed;
     private boolean aiControl;
+    private float radius;
+    private Color colour;
+    private Texture tex;
 
-    public Entity(float positionX, float positionY, int speed, boolean aiControl) {
+    // For player entity
+    public Entity(float positionX, float positionY, int speed, float radius, Color colour) {
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.speed = speed;
+        this.radius = radius;
+        this.colour = colour;
+    }
+
+    // For AI entity
+    public Entity(String t, float positionX, float positionY, int speed, boolean aiControl) {
+        this.tex = new Texture(Gdx.files.internal(t));
         this.positionX = positionX;
         this.positionY = positionY;
         this.speed = speed;
@@ -17,22 +34,36 @@ public abstract class Entity {
     }
 
     public void draw(ShapeRenderer shape) {
+        shape.setColor(colour);
+        shape.circle(getPositionX(), getPositionY(), getRadius());
     }
 
     public void draw(SpriteBatch batch) {
+        batch.draw(tex, getPositionX(), getPositionY());
     }
 
     public void update(float deltaTime) {
-        // Update entity
+        // Update entity (psps im not sure waht to put here)
     }
 
     public void render(SpriteBatch batch) {
-        // Render the entity
+        // Render the entity (and here)
     }
 
-    abstract void moveEntity();
+    public void moveEntity() {
+        if (aiControl) {
+            moveAiControlled();
+        }
+        else {
+            movePlayerControlled();
+        }
+    }
 
-    abstract void updateEntity();
+    @Override
+    public void moveAiControlled() {}
+
+    @Override
+    public void movePlayerControlled() {}
 
     public float getPositionX() {
         return positionX;
@@ -58,11 +89,20 @@ public abstract class Entity {
         this.speed = speed;
     }
 
-    public boolean isAiControl() {
-        return aiControl;
-    }
+    public float getRadius() { return radius; }
 
-    public void setAiControl(boolean aiControl) {
-        this.aiControl = aiControl;
-    }
+    public void setRadius(float radius) { this.radius = radius; }
+
+    public Color getColour() { return colour; }
+
+    public void setColour(Color colour) { this.colour = colour; }
+
+    public boolean isAiControl() { return aiControl; }
+
+    public void setAiControl(boolean aiControl) { this.aiControl = aiControl; }
+
+    public Texture getTex() { return tex; }
+
+    public void setTex(Texture t) { tex = t; }
+
 }
