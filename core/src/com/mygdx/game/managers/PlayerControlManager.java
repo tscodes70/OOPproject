@@ -30,8 +30,6 @@ public class PlayerControlManager extends IOManager {
 		if(super.pollLeftKey()) moveLeft();
 		if(super.pollRightKey()) moveRight();
 		if(super.pollPauseKey()) pause();
-		if(super.pollPauseKey()) enter();
+		if(super.pollEnterKey()) enter();
 	}
-
-
 }
