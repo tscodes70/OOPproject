@@ -2,7 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.mygdx.game.managers.SimulationLifecycleManager;
-import com.mygdx.game.models.Simulation;
+//import com.mygdx.game.models.Simulation;
 import com.mygdx.game.simulations.AppSimulation;
 
 public class spacepewpew implements ApplicationListener {
@@ -18,7 +18,6 @@ public class spacepewpew implements ApplicationListener {
 		// Simulation Lifecycle
 		slm = new SimulationLifecycleManager();
 		slm.addSimulation(new AppSimulation());
-		
 	}
 
 	@Override
@@ -30,11 +29,15 @@ public class spacepewpew implements ApplicationListener {
 	@Override
 	public void render() {
 		// TODO Auto-generated method stub
-		for (Simulation s : slm.getSimulations()) {
-			s.initialize();
-			s.render();
-		}
-		
+		// for now only one simulation in the entire game
+//		for (Simulation s : slm.getSimulations()) {
+//			if(!s.isInitialized()) {
+//				s.initialize();
+//			}
+//			slm.update();
+//			s.update();
+//		}
+		slm.updateSimulation();
 	}
 
 	@Override
@@ -52,7 +55,7 @@ public class spacepewpew implements ApplicationListener {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+		slm.dispose();
 	}
 
 }
