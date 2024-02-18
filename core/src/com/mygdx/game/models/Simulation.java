@@ -7,16 +7,11 @@ public abstract class Simulation {
 
     private boolean initialized;
     private boolean started;
-    private boolean active;
-    private int gameState;
+
 	protected SceneManager sm;
 
     public void initialize() {
         if (!initialized) {
-        	gameState = 0;
-            // Perform initialization tasks here (e.g., load resources)
-        	sm = new SceneManager();	
-    		sm.setScene(com.mygdx.game.globals.Constants.SPLASH_SCREEN);
             initialized = true;
         }
     }
@@ -89,7 +84,6 @@ public abstract class Simulation {
 		this.started = started;
 	}
 	public void dispose() {
-		sm.dispose(); // make scene manager dispose its resources
 	}
 
 }

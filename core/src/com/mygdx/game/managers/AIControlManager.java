@@ -5,8 +5,8 @@ import com.mygdx.game.models.Entity;
 
 public class AIControlManager extends EntityManager { 
 
-    public AIControlManager(List<Entity> entityList) {
-        super(entityList);
+    public AIControlManager() {
+        super();
     }
 
 

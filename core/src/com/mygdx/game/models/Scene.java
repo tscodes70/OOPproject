@@ -1,4 +1,4 @@
-package com.mygdx.game.screens;
+package com.mygdx.game.models;
 
 import com.badlogic.gdx.Gdx;
 //import com.badlogic.gdx.Screen;
@@ -38,6 +38,7 @@ public abstract class Scene {
 		bgMusic.setLooping(true);
 		bgMusic.setVolume(0.15f);
 	}
+
 	
 	//@Override
 	// render background texture, called by scene manager
