@@ -10,8 +10,6 @@ public class PlayerControlManager extends IOManager {
 		super();
 	}
 
-
-	
 	public void moveLeft() {
 		System.out.println("Move Left");
 	}
@@ -20,20 +18,18 @@ public class PlayerControlManager extends IOManager {
 		System.out.println("Move Right");
 	}
 
-	//public void pause() {
-		//System.out.println("pause");
-	//}
+	public void pause() {
+		System.out.println("pause");
+	}
 
-	//public void enter() {
-		//System.out.println("continue/start");
-	//}
+	public void enter() {
+		System.out.println("continue/start");
+	}
 	
 	public void checkKeyEvents() {
 		if(super.pollLeftKey()) moveLeft();
 		if(super.pollRightKey()) moveRight();
-		//if(super.pollPauseKey()) pause();
-		//if(super.pollPauseKey()) enter();
+		if(super.pollPauseKey()) pause();
+		if(super.pollEnterKey()) enter();
 	}
-
-
 }

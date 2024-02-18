@@ -1,38 +1,29 @@
 package com.mygdx.game.simulations;
 
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
+//import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.managers.PlayerControlManager;
 import com.mygdx.game.models.Simulation;
-import com.mygdx.game.screens.SplashScreen;
 
-public class AppSimulation extends Simulation{
-	
-	private SpriteBatch batch;
-	private Texture img;
-	
+public class AppSimulation extends Simulation {
+    private int gameState;
+
 	//audio testing
-	private static AssetManager manager;
+	//private static AssetManager manager;
 	private PlayerControlManager pcm;
 
+	//private SceneManager sm;
     @Override
     public void initialize() {
         super.initialize();
-
     	// Input Processor testing
 		pcm = new PlayerControlManager();
-
 		
-		//Audio testing
-		manager = new AssetManager();
-		manager.load("audio/music/megalovania.mp3", Music.class);
-		manager.finishLoading();
-		
-		setScreen(new SplashScreen(manager));
+//		sm = new SceneManager();	
+//		sm.setScene(com.mygdx.game.globals.Constants.SPLASH_SCREEN);
 		
         // Load specific resources for this simulation
+		// resource loading has been moved to scene manager
     }
 
     @Override
@@ -41,32 +32,56 @@ public class AppSimulation extends Simulation{
         // Begin specific simulation logic
     }
 
+    // update simulation. currently called from simulation lifecycle manager
     @Override
-    public void update(float deltaTime) {
-        // Update things in simulation and simulation state
-    }
-
-    @Override
-    public void render() {
-    	super.render();
-        // Render the things in simulation
+    public void update() {
+    	// testing game logic is currently here
+    	
+    	// press enter to move from splash screen to game
+    	if(pcm.pollEnterKey() && gameState == com.mygdx.game.globals.Constants.SPLASH_SCREEN) {
+    		gameState = com.mygdx.game.globals.Constants.GAME_SCREEN;
+			sm.setScene(gameState);
+		}
+    	
+    	// press right or left arrow to end game
+    	if(pcm.pollRightKey() || pcm.pollLeftKey() && gameState == com.mygdx.game.globals.Constants.GAME_SCREEN) {
+			gameState = com.mygdx.game.globals.Constants.END_SCREEN;
+			sm.setScene(gameState);
+    	}
+    	
+    	// press escape key to go back to splash screen
+    	if(pcm.pollPauseKey() && gameState == com.mygdx.game.globals.Constants.END_SCREEN) {
+			gameState = com.mygdx.game.globals.Constants.SPLASH_SCREEN;
+			sm.setScene(gameState);
+    	}
+    	
+    	// Render the things in simulation
+    	// rendering moved to within scene
+    	sm.renderScene();
+    	
+    	// print key events in console
     	pcm.checkKeyEvents();
     	// render(batch);
     	
     }
     
-	@Override
+	//@Override
 	public void render(SpriteBatch batch) {
 		// Render things on screen
-		
+		// rendering currently moved inside scene
 	}
 
 	@Override
-	public void create() {
+	public void update(float deltaTime) {
 		// TODO Auto-generated method stub
 		
 	}
 
+//	@Override
+//	public void create() {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 
     // ... other lifecycle methods
