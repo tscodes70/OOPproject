@@ -73,7 +73,28 @@ public class Entity implements iMovable,iCollidable {
     public void onCollision(Entity other) {
         // Collision Response
         System.out.println(this.getClass().getSimpleName() + " collided with " + other.getClass().getSimpleName());
+        
+        //implement collision response for player and enemy
+        if(this.isPlayer() && other.isEnemy()) {
+        	//player take damage when colliding into enemy 
+        	System.out.println("Player took damage from enemy!");
+        }
+        else if(this.isEnemy() && other.isPlayer()) {
+        	System.out.println("Enemy destroyed player!");
+        }
+        
     }
+    
+    //check if entity is a player
+    public boolean isPlayer() {
+    	return false;
+    }
+    
+    //check if entity is an enemy
+    public boolean isEnemy() {
+    	return false;
+    }
+    
     
 
     public void moveEntity() {
