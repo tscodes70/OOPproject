@@ -34,11 +34,13 @@ public class CollisionManager {
 	    }
 	 public void handleCollisions(EntityManager entityManager, Entity x, Entity y) {
 		 if(x.isAiControl()) {
-			 entityManager.removeEntity(x);
+			 collidableList.remove(x);	//update collidableList to remove entity
+			 entityManager.removeEntity(x);	//update entityManager to remove entity
 			 System.out.println("AI Entity Removed");
 		 }
 		 else {
-			 entityManager.removeEntity(y);
+			 collidableList.remove(y);	//update collidableList to remove entity
+			 entityManager.removeEntity(y);	//update entityManager to remove entity
 			 System.out.println("AI Entity Removed");
 		 }
 		 
