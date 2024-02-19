@@ -21,6 +21,8 @@ public class GeneralControlManager extends IOManager {
 	public void checkKeyEvents() {
 		if(super.pollPauseKey()) pause();
 		if(super.pollEnterKey()) enter();
-		if(super.pollBackspaceKey()) enter();
+		if(super.pollBackspaceKey()) backspace();
+		
+		
 	}
 }

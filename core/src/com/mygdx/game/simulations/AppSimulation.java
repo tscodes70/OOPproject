@@ -10,6 +10,7 @@ import com.mygdx.game.models.Simulation;
 import com.mygdx.game.screens.EndScreen;
 import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.screens.SplashScreen;
+import com.mygdx.game.globals.Globals;
 
 public class AppSimulation extends Simulation {
 
@@ -26,20 +27,27 @@ public class AppSimulation extends Simulation {
     @Override
     public void initialize() {
         super.initialize();
-    	// General IO Processor testing
+    	// General IO Processor
         generalControlManager = new GeneralControlManager();
 		
         // Load specific resources for this simulation
 		manager = new AssetManager();
-		manager.load("audio/music/mii-channel.mp3", Music.class); // splash screen music
-		manager.load("audio/music/megalovania.mp3", Music.class); // game scene music
-		manager.load("audio/music/bbq.mp3", Music.class); // game scene music
+		manager.load(Globals.BGAUDIO_SS, Music.class); // splash screen music
+		manager.load(Globals.BGAUDIO_GS, Music.class); // game scene music
+		manager.load(Globals.BGAUDIO_ES, Music.class); // end scene music
 		manager.finishLoading();
-		
+
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        // Begin specific simulation logic
+    	
 		// instantiate scene instances
-		splashScene = new SplashScreen(manager, "image/splash.jpg", "audio/music/mii-channel.mp3");
-		gameScene = new GameScreen(manager, "image/badlogic.jpg", "audio/music/megalovania.mp3");
-		endScene = new EndScreen(manager, "audio/music/bbq.mp3");
+		splashScene = new SplashScreen(manager, Globals.BGIMAGE_SS, Globals.BGAUDIO_SS);
+		gameScene = new GameScreen(manager, Globals.BGIMAGE_GS, Globals.BGAUDIO_GS);
+		endScene = new EndScreen(manager, Globals.BGAUDIO_ES);
 		
 		this.sceneManager = new SceneManager();
 		this.sceneManager.addScene(splashScene);
@@ -48,72 +56,49 @@ public class AppSimulation extends Simulation {
 		
 		// Initial Scene
 		gameState = 0;
-    	sceneManager.setScene(com.mygdx.game.globals.Constants.SPLASH_SCREEN);
-		
+    	sceneManager.setScene(Globals.SPLASH_SCREEN);
+    	
+    	
     }
 
-    @Override
-    public void start() {
-        super.start();
-        // Begin specific simulation logic
-    }
-
-    // update simulation. currently called from simulation lifecycle manager
     @Override
     public void update() {
-    	// testing game logic is currently here
+    	System.out.println("update");
     	
+    }
+    
+	@Override
+	public void render() {
+
     	// press enter to move from splash screen to game
-    	if(generalControlManager.pollEnterKey() && gameState == com.mygdx.game.globals.Constants.SPLASH_SCREEN) {
-    		gameState = com.mygdx.game.globals.Constants.GAME_SCREEN;
+    	if(generalControlManager.pollEnterKey() && gameState == Globals.SPLASH_SCREEN) {
+    		gameState = Globals.GAME_SCREEN;
     		this.sceneManager.setScene(gameState);
 		}
     	
     	// press right or left arrow to end game
-    	if(generalControlManager.pollBackspaceKey() && gameState == com.mygdx.game.globals.Constants.GAME_SCREEN) {
-			gameState = com.mygdx.game.globals.Constants.END_SCREEN;
+    	if(generalControlManager.pollBackspaceKey() && gameState == Globals.GAME_SCREEN) {
+			gameState = Globals.END_SCREEN;
 			this.sceneManager.setScene(gameState);
     	}
     	
     	// press escape key to go back to splash screen
-    	if(generalControlManager.pollPauseKey() && gameState == com.mygdx.game.globals.Constants.END_SCREEN) {
-			gameState = com.mygdx.game.globals.Constants.SPLASH_SCREEN;
+    	if(generalControlManager.pollPauseKey() && gameState == Globals.END_SCREEN) {
+			gameState = Globals.SPLASH_SCREEN;
 			this.sceneManager.setScene(gameState);
     	}
-    	
+    	generalControlManager.checkKeyEvents();
+    	// print key events in console
     	// Render the things in simulation
     	// rendering moved to within scene
     	this.sceneManager.renderScene();
-    	
-    	// print key events in console
-    	generalControlManager.checkKeyEvents();
-    	// render(batch);
-    	
-    }
-    
-	//@Override
-	public void render(SpriteBatch batch) {
-		// Render things on screen
-		// rendering currently moved inside scene
-	}
-
-	@Override
-	public void update(float deltaTime) {
-		// TODO Auto-generated method stub
-		
 	}
 	
+	@Override
 	public void dispose() {
+		super.dispose();
 		manager.dispose();
 	}
 
-//	@Override
-//	public void create() {
-//		// TODO Auto-generated method stub
-//		
-//	}
-
-
-    // ... other lifecycle methods
 
 }

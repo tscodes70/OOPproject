@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class spacepewpew implements ApplicationListener {
+public class spacepewpew extends ApplicationAdapter {
 
 	private SimulationLifecycleManager slm;
 
@@ -24,8 +25,6 @@ public class spacepewpew implements ApplicationListener {
 		// Simulation Lifecycle
 		slm = new SimulationLifecycleManager();
 		slm.addSimulation(new AppSimulation());
-
-
 	}
 
 	@Override
@@ -45,8 +44,12 @@ public class spacepewpew implements ApplicationListener {
 //			slm.update();
 //			s.update();
 //		}
-		slm.updateSimulation();
+		slm.renderSimulation();
 
+	}
+	
+	public void update() {
+		slm.updateSimulation();
 	}
 
 	@Override

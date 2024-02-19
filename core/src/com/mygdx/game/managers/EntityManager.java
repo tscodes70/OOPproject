@@ -17,8 +17,9 @@ public class EntityManager {
     	entityList.add(entity);
     }
     
-    public void removeEntity() {
+    public void removeEntity(Entity entity) {
     	//implement remove entity logic here
+    	entityList.remove(entity);
     }
 
 	public void drawEntities(SpriteBatch batch) {

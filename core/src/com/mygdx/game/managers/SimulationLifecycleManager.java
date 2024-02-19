@@ -21,12 +21,17 @@ public class SimulationLifecycleManager {
 	// called by spacepewpew
     public void updateSimulation() {
         for (Simulation simulation : simulations) {
+            simulation.update();
+        }
+    }
+    
+    public void renderSimulation() {
+        for (Simulation simulation : simulations) {
             if (!simulation.isStarted()) {
                 simulation.initialize();
                 simulation.start();
             }
-            //simulation.update(Gdx.graphics.getDeltaTime());
-            simulation.update();
+            simulation.render();
         }
     }
 

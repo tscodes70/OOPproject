@@ -8,6 +8,5 @@ public interface iCollidable {
 	public Rectangle getBoundingBox();
     public void updateBoundingBox();
     public boolean collidesWith(Entity other);
-    public void onCollision(Entity other);
 	public boolean isCollidable();
 }	

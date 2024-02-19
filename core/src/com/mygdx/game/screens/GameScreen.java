@@ -63,7 +63,7 @@ public class GameScreen extends Scene {
 		
 		playerControlManager.checkKeyEvents();
 		aiControlManager.moveAIControlledEntities();
-		collisonManager.checkCollisions();
+		collisonManager.checkCollisions(entityManager);
 	}
 	
 	
