@@ -1,5 +1,6 @@
 package com.mygdx.game.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,6 +20,8 @@ public class GameScreen extends Scene {
     private AIControlManager aiControlManager;
     private CollisionManager collisonManager;
     
+    private Entity[] circles;
+    
 	public GameScreen(AssetManager manager, String spriteImageName, String bgMusicName) {
 		super(manager, spriteImageName, bgMusicName);
 		batch = new SpriteBatch();
@@ -30,15 +33,22 @@ public class GameScreen extends Scene {
 		
 		//Using shapes render
         Entity playerEntity = new Entity(100, 100, 2, 40, Color.BLUE, false, true);
-        Entity aiEntity = new Entity(200,100,2,40,Color.RED, true, true);
+        
+        circles = new Entity[10];
+        for (int i=0; i<circles.length; i++) {
+        	float positionX = (float) (Math.random() * Gdx.graphics.getWidth());
+        	float positionY = (float) (Math.random() * Gdx.graphics.getHeight());
+            circles[i] = new Entity(positionX ,positionY ,2,40,Color.RED, true, true);	
+        }
 		
         //Instantiate EM
 		entityManager = new EntityManager();
 		
 		//Adding into EntityList
 		entityManager.addEntity(playerEntity);
-		entityManager.addEntity(aiEntity);
-		
+		for (Entity circle : circles) {
+        	entityManager.addEntity(circle);
+        	}		
 		//Instantiate AIControlManager
 		aiControlManager = new AIControlManager(entityManager.getEntityList());
 		
