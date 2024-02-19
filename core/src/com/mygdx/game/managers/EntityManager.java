@@ -35,6 +35,9 @@ public class EntityManager {
 	}
 
 	public void moveEntities() {
+		for(Entity entity : entityList) {
+			entity.updateBoundingBox();
+		}
 	}
 
 	public void setEntityList(List<Entity> entityList) {
