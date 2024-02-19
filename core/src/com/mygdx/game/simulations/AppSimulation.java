@@ -46,7 +46,7 @@ public class AppSimulation extends Simulation {
     	
 		// instantiate scene instances
 		splashScene = new SplashScreen(manager, Globals.BGIMAGE_SS, Globals.BGAUDIO_SS);
-		gameScene = new GameScreen(manager, Globals.BGIMAGE_GS, Globals.BGAUDIO_GS);
+		gameScene = new GameScreen(manager, Globals.BGAUDIO_GS);
 		endScene = new EndScreen(manager, Globals.BGAUDIO_ES);
 		
 		this.sceneManager = new SceneManager();
@@ -56,9 +56,7 @@ public class AppSimulation extends Simulation {
 		
 		// Initial Scene
 		gameState = 0;
-    	sceneManager.setScene(Globals.SPLASH_SCREEN);
-    	
-    	
+    	sceneManager.setScene(Globals.SPLASH_SCREEN);    	
     }
 
     @Override
@@ -87,7 +85,9 @@ public class AppSimulation extends Simulation {
 			gameState = Globals.SPLASH_SCREEN;
 			this.sceneManager.setScene(gameState);
     	}
+    	
     	generalControlManager.checkKeyEvents();
+    	generalControlManager.checkClickEvents();
     	// print key events in console
     	// Render the things in simulation
     	// rendering moved to within scene

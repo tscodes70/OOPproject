@@ -47,4 +47,9 @@ public class PlayerControlManager extends IOManager {
 		if(super.pollLeftKey()) moveLeft();
 		if(super.pollRightKey()) moveRight();
 	}
+
+	@Override
+	public void checkClickEvents() {
+		
+	}
 }

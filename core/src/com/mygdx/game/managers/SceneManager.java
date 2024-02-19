@@ -74,7 +74,7 @@ public class SceneManager {
 	
 	// dispose of scenes
 	public void dispose() {
-		for(Scene s: scenes) {
+		for(Scene s: this.scenes) {
 			s.dispose();
 		}
 	}
