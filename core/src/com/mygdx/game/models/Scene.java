@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Scene {
+	
 	protected Sprite bgSprite;
 	protected SpriteBatch batch;
 	protected Texture bgTexture;
@@ -42,7 +43,7 @@ public abstract class Scene {
 	
 	//@Override
 	// render background texture, called by scene manager
-	public void render(float delta) {
+	public void render() {
 		// TODO Auto-generated method stub
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

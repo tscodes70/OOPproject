@@ -4,14 +4,10 @@ package com.mygdx.game.managers;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
-import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.models.Scene;
-import com.mygdx.game.screens.*;
 
 public class SceneManager {
+	
 	private List<Scene> scenes;
 	private int currentSceneCode = -1;
 	private Scene activeScene;
@@ -33,7 +29,6 @@ public class SceneManager {
 			
 			this.activeScene = this.scenes.get(this.currentSceneCode); // make the selected scene active
 			this.activeScene.show(); // must always be called after changing the active scene
-			//setScreen(scenes.get(sceneCode));
 		}
 	}
 	
@@ -74,7 +69,7 @@ public class SceneManager {
 	// make the active scene render itself
 	// called by Simulation
 	public void renderScene() {
-		this.activeScene.render(Gdx.graphics.getDeltaTime());
+		this.activeScene.render();
 	}
 	
 	// dispose of scenes

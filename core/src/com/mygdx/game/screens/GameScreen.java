@@ -50,8 +50,8 @@ public class GameScreen extends Scene {
 	}
 	
 	@Override
-	public void render(float delta) {
-		super.render(delta);
+	public void render() {
+		super.render();
 		
 		batch.begin();
 		entityManager.drawEntities(batch);

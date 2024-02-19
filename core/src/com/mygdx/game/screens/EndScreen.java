@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 
 public class EndScreen extends Scene {
+	
 	private BitmapFont font;
 	GlyphLayout title;
 	public EndScreen(AssetManager manager, String bgMusicName) {
@@ -18,7 +19,7 @@ public class EndScreen extends Scene {
 	
 	// override the superclass method to draw using font instead of image texture
 	@Override
-	public void render(float delta) {
+	public void render() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
