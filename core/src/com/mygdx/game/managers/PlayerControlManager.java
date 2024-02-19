@@ -1,18 +1,38 @@
 package com.mygdx.game.managers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mygdx.game.models.Entity;
 
 public class PlayerControlManager extends IOManager {
 	
-	public PlayerControlManager(){
+    private List<Entity> playerEntityList;
+
+	
+	public PlayerControlManager(List<Entity> entityList){
 		super();
+		playerEntityList = new ArrayList<Entity>();
+		
+		for(Entity entity : entityList) {
+        	if(!entity.isAiControl()) playerEntityList.add(entity);
+        }
 	}
 
 	public void moveLeft() {
-		System.out.println("Move Left");
+		for (Entity entity : this.playerEntityList) {
+            entity.setPositionX(entity.getPositionX() - entity.getSpeed());
+            entity.updateBoundingBox();
+    }
+//		System.out.println("Move Left");
 	}
 	
 	public void moveRight() {
-		System.out.println("Move Right");
+		for (Entity entity : this.playerEntityList) {
+            entity.setPositionX(entity.getPositionX() + entity.getSpeed());
+            entity.updateBoundingBox();
+    }
+//		System.out.println("Move Right");
 	}
 	
 	@Override

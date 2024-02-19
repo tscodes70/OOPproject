@@ -1,44 +1,33 @@
 package com.mygdx.game.managers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mygdx.game.interfaces.iCollidable;
+import com.mygdx.game.models.Entity;
 
-public class CollisionManager implements iCollidable {
-	private List<iCollidable> collidableList;
+public class CollisionManager {
+	private List<Entity> collidableList;
 	
-	public CollisionManager(List<iCollidable> collidableList) {
-		this.setCollidableList(collidableList);
-	}
-	
-	public List<iCollidable> getCollidableList(){
-		return collidableList;
-	}
-	
-	public void setCollidableList(List<iCollidable> collidableList) {
-		this.collidableList = collidableList;
-	}
-	
-	public CollisionManager() {
-			
-	}
-
-	@Override
-	public boolean checkCollision() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void resolveCollision() {
-		// TODO Auto-generated method stub
+	public CollisionManager(List<Entity> entityList) {
 		
-	}
-
-	@Override
-	public void updateCollision() {
-		// TODO Auto-generated method stub
+		collidableList = new ArrayList<Entity>();
 		
+		for(Entity entity : entityList) {
+			if(entity.isCollidable()) collidableList.add(entity);
+		}
 	}
+	
+	 public void checkCollisions() {
+		 for (int i = 0; i < collidableList.size() - 1; i++) {
+	            for (int j = i + 1; j < collidableList.size(); j++) {
+
+	                if (collidableList.get(i).collidesWith(collidableList.get(j))) {
+	                	collidableList.get(i).onCollision(collidableList.get(j));
+	                	collidableList.get(j).onCollision(collidableList.get(i));
+	                }
+	            }
+	        }
+	    }
 	
 }
