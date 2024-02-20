@@ -34,15 +34,15 @@ public abstract class IOManager implements iInputOutput {
 	
 	// For General Inputs
 	public boolean pollPauseKey() {
-		if(Gdx.input.isKeyPressed(kEsc)) return true;
+		if(Gdx.input.isKeyJustPressed(kEsc)) return true;
 		else return false;
 	}
 	public boolean pollEnterKey() {
-		if(Gdx.input.isKeyPressed(kEnter)) return true;
+		if(Gdx.input.isKeyJustPressed(kEnter)) return true;
 		else return false;
 	}
 	public boolean pollBackspaceKey() {
-		if(Gdx.input.isKeyPressed(kBackspace)) return true;
+		if(Gdx.input.isKeyJustPressed(kBackspace)) return true;
 		else return false;
 	}
 	public boolean pollLeftMouseButton() {
