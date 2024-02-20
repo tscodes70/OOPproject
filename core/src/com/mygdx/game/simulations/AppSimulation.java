@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.managers.IOManager;
 import com.mygdx.game.managers.SceneManager;
 import com.mygdx.game.models.KeyboardInput;
 import com.mygdx.game.models.MouseInput;
@@ -19,6 +20,8 @@ public class AppSimulation extends Simulation {
 	private int gameState;
 	private AssetManager manager;
 	private SceneManager sceneManager;
+	private IOManager<KeyboardInput> keyboardIO;
+	private IOManager<MouseInput> mouseIO;
 	private KeyboardInput keyboardDevice;
 	private MouseInput mouseDevice;
 	
@@ -90,6 +93,7 @@ public class AppSimulation extends Simulation {
 	public void start() {
 		super.start();
 		
+
 		// Instantiate KeyboardInput
 		keyboardDevice = new KeyboardInput();
 		keyboardDevice.add(LEFTARROWKEY);
@@ -104,6 +108,10 @@ public class AppSimulation extends Simulation {
 		mouseDevice = new MouseInput();
 		mouseDevice.add(LEFTCLICKBUTTON);
 		mouseDevice.add(RIGHTCLICKBUTTON);
+		
+		// Instantiate IOManager
+		keyboardIO.add(keyboardDevice);
+		mouseIO.add(mouseDevice);
 		
 		// Instantiate SceneManager & All AppSimulation Scenes
 		sceneManager = new SceneManager();
