@@ -1,5 +1,9 @@
 package com.mygdx.game.interfaces;
 
-public interface iManager {
-	
+import java.util.List;
+
+public interface iManager<T> {
+	public void add(T obj);
+	public void remove(T obj);
+	public void update(List<T> objList);
 }

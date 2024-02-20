@@ -1,11 +1,7 @@
 package com.mygdx.game.interfaces;
 
-import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.models.Entity;
-
-public interface iCollidable {
+public interface iCollidable<T, U> {
 	
-	public Rectangle getBoundingBox();
-//    public boolean collidesWith(Entity other);
-	public boolean isCollidable();
+	public void checkCollisions(T manager);
+	public void handleCollisions(T manager, U obj1, U obj2);
 }	

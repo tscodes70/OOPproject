@@ -4,24 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.mygdx.game.interfaces.iManager;
 import com.mygdx.game.models.Button;
 import com.mygdx.game.models.Entity;
 
-public class ButtonManager {
+public class ButtonManager implements iManager<Button> {
     private List<Button> buttonList;
+    private List<Button> updatedButtonList;
 
     public ButtonManager() {
         buttonList = new ArrayList<Button>();
     }
     
-    public void addButton(Button button) {
+    public void add(Button button) {
     	buttonList.add(button);
     }
     
-    public void removeButton(Button button) {
-    	//implement remove Button logic here
+    public void remove(Button button) {
     	buttonList.remove(button);
+    	button.dispose();
     }
+    
+    public void update(List<Button> buttonList) {
+    	updatedButtonList = new ArrayList<Button>();
+    	for (Button button : buttonList) updatedButtonList.add(button);
+    	this.buttonList = updatedButtonList;
+    }
+    
 
 	public void drawButtons(SpriteBatch batch) {
 		for (Button button : this.buttonList) {

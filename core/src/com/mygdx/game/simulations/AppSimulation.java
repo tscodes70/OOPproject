@@ -1,24 +1,54 @@
 package com.mygdx.game.simulations;
 
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
-//import com.badlogic.gdx.assets.AssetManager;
-import com.mygdx.game.managers.GeneralControlManager;
 import com.mygdx.game.managers.SceneManager;
+import com.mygdx.game.models.KeyboardInput;
+import com.mygdx.game.models.MouseInput;
 import com.mygdx.game.models.Simulation;
 import com.mygdx.game.screens.EndScreen;
 import com.mygdx.game.screens.PauseScreen;
 import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.screens.SplashScreen;
-import com.mygdx.game.globals.Globals;
 
 public class AppSimulation extends Simulation {
 	
 	private int gameState;
 	private AssetManager manager;
 	private SceneManager sceneManager;
-	private GeneralControlManager generalControlManager;
+	private KeyboardInput keyboardDevice;
+	private MouseInput mouseDevice;
+	
+	private final int ENTERKEY = Keys.ENTER;
+	private final int BACKSPACEKEY = Keys.BACKSPACE;
+	private final int ESCAPEKEY = Keys.ESCAPE;
+	private final int LEFTARROWKEY = Keys.LEFT;
+	private final int RIGHTARROWKEY = Keys.RIGHT;
+	private final int UPARROWKEY = Keys.UP;
+	private final int DOWNARROWKEY = Keys.DOWN;
+	
+	private final int LEFTCLICKBUTTON = Buttons.LEFT;
+	private final int RIGHTCLICKBUTTON = Buttons.RIGHT;
+	
+	private final String IMAGE_PATH = "image";
+	private final String AUDIO_PATH = "audio/music";
+
+	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
+	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
+	
+	private final String BGAUDIO_SS = String.format("%s/mii-channel.mp3", AUDIO_PATH);
+	private final String BGAUDIO_GS = String.format("%s/megalovania.mp3", AUDIO_PATH);
+	private final String BGAUDIO_ES = String.format("%s/bbq.mp3", AUDIO_PATH);
+	private final String BGIMAGE_SS = String.format("%s/splash.jpg", IMAGE_PATH);
+	
+	private final int SPLASH_SCREEN = 0;
+	private final int GAME_SCREEN = 1;
+	private final int PAUSE_SCREEN = 2;
+	private final int END_SCREEN = 3;
+
 
 	/**
 	 * This method is called upon initialization of the AppSimulation.
@@ -32,12 +62,12 @@ public class AppSimulation extends Simulation {
 		try {
 			// Load all resources for this simulation
 			manager = new AssetManager();
-			manager.load(Globals.BGAUDIO_SS, Music.class); // splash screen music
-			manager.load(Globals.BGAUDIO_GS, Music.class); // game scene music
-			manager.load(Globals.BGAUDIO_ES, Music.class); // end scene music
-			manager.load(Globals.BGIMAGE_SS, Texture.class);
-			manager.load(Globals.IMAGE_BUTTON1, Texture.class);
-			manager.load(Globals.IMAGE_BUTTON2, Texture.class);
+			manager.load(BGAUDIO_SS, Music.class); // splash screen music
+			manager.load(BGAUDIO_GS, Music.class); // game scene music
+			manager.load(BGAUDIO_ES, Music.class); // end scene music
+			manager.load(BGIMAGE_SS, Texture.class);
+			manager.load(IMAGE_SA, Texture.class);
+			manager.load(IMAGE_SP, Texture.class);
 			manager.finishLoading();
 		}catch(Exception ex) {
 			System.out.println("INIT ERROR - Unable to load resources, check resource paths.");
@@ -59,20 +89,32 @@ public class AppSimulation extends Simulation {
 	@Override
 	public void start() {
 		super.start();
-
-		// Instantiate GeneralIOManager
-		generalControlManager = new GeneralControlManager();
+		
+		// Instantiate KeyboardInput
+		keyboardDevice = new KeyboardInput();
+		keyboardDevice.add(LEFTARROWKEY);
+		keyboardDevice.add(RIGHTARROWKEY);
+		keyboardDevice.add(UPARROWKEY);
+		keyboardDevice.add(DOWNARROWKEY);
+		keyboardDevice.add(ESCAPEKEY);	
+		keyboardDevice.add(ENTERKEY);
+		keyboardDevice.add(BACKSPACEKEY);
+		
+		// Instantiate MouseInput
+		mouseDevice = new MouseInput();
+		mouseDevice.add(LEFTCLICKBUTTON);
+		mouseDevice.add(RIGHTCLICKBUTTON);
 		
 		// Instantiate SceneManager & All AppSimulation Scenes
 		sceneManager = new SceneManager();
-		sceneManager.addScene(new SplashScreen(manager, manager.get(Globals.BGIMAGE_SS),Globals.BGAUDIO_SS));
-		sceneManager.addScene(new GameScreen(manager, Globals.BGAUDIO_GS));
-		sceneManager.addScene(new PauseScreen());
-		sceneManager.addScene(new EndScreen(manager, Globals.BGAUDIO_ES));
+		sceneManager.add(new SplashScreen(manager, manager.get(BGIMAGE_SS),BGAUDIO_SS));
+		sceneManager.add(new GameScreen(manager, BGAUDIO_GS,keyboardDevice,mouseDevice));
+		sceneManager.add(new PauseScreen());
+		sceneManager.add(new EndScreen(manager, BGAUDIO_ES));
 
 		// Set Starting Scene
-		gameState = Globals.SPLASH_SCREEN;
-		sceneManager.setScene(Globals.SPLASH_SCREEN);
+		gameState = SPLASH_SCREEN;
+		sceneManager.setScene(SPLASH_SCREEN);
 		
 		System.out.println(String.format("Simulation Status: %s", super.getStartedStatus()));
 	}
@@ -92,32 +134,32 @@ public class AppSimulation extends Simulation {
 	public void render() {
 
 		// Transition from SPLASH_SCREEN to GAME_SCREEN (ENTER key)
-		if (generalControlManager.pollEnterKey() && gameState == Globals.SPLASH_SCREEN) {
-			gameState = Globals.GAME_SCREEN;
+		if (keyboardDevice.pollInputPress(ENTERKEY) && gameState == SPLASH_SCREEN) {
+			gameState = GAME_SCREEN;
 			sceneManager.setScene(gameState);
 		}
 		
 		// Transition from END_SCREEN to SPLASH_SCREEN (ESC key)
-		if (generalControlManager.pollEscapeKey() && gameState == Globals.END_SCREEN) {
-			gameState = Globals.SPLASH_SCREEN;
+		if (keyboardDevice.pollInputPress(ESCAPEKEY) && gameState == END_SCREEN) {
+			gameState = SPLASH_SCREEN;
 			sceneManager.setScene(gameState);
 		}
 
 		// Transition from GAME_SCREEN to PAUSE_SCREEN and vice-versa (ESC key)
-		if (generalControlManager.pollEscapeKey() && (gameState == Globals.GAME_SCREEN || (gameState == Globals.PAUSE_SCREEN))) {
-			gameState = (gameState == Globals.GAME_SCREEN) ? Globals.PAUSE_SCREEN : Globals.GAME_SCREEN;
+		if (keyboardDevice.pollInputPress(ESCAPEKEY) && (gameState == GAME_SCREEN || (gameState == PAUSE_SCREEN))) {
+			gameState = (gameState == GAME_SCREEN) ? PAUSE_SCREEN : GAME_SCREEN;
 			sceneManager.setScene(gameState);
 		}
 
 		// Transition from PAUSE_SCREEN/END_SCREEN to GAME_SCREEN and vice-versa (ENTER key)
-		if (generalControlManager.pollEnterKey() && (gameState == Globals.PAUSE_SCREEN || gameState == Globals.SPLASH_SCREEN)) {
-			gameState = Globals.GAME_SCREEN;
+		if (keyboardDevice.pollInputPress(ENTERKEY) && (gameState == PAUSE_SCREEN || gameState == SPLASH_SCREEN)) {
+			gameState = GAME_SCREEN;
 			sceneManager.setScene(gameState);
 		}
         // Transition from PAUSE_SCREEN/GAME_SCREEN to SPLASH_SCREEN (BACKSPACE key)
-		if (generalControlManager.pollBackspaceKey() && (gameState == Globals.GAME_SCREEN || gameState == Globals.PAUSE_SCREEN)) {
-			gameState = Globals.END_SCREEN;
-			sceneManager.resetGameScene(manager);
+		if (keyboardDevice.pollInputPress(BACKSPACEKEY) && (gameState == GAME_SCREEN || gameState == PAUSE_SCREEN)) {
+			gameState = END_SCREEN;
+			sceneManager.resetGameScene(manager, keyboardDevice, mouseDevice);
 			sceneManager.setScene(gameState);
 		}
 		

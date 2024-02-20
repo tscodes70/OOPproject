@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mygdx.game.interfaces.iCollidable;
+import com.mygdx.game.interfaces.iManager;
 import com.mygdx.game.models.Entity;
 
-public class CollisionManager {
+public class CollisionManager implements iCollidable<EntityManager, Entity>, iManager<Entity>{
 	private List<Entity> collidableList;
 	private List<Entity> updatedEntityList;
 	
@@ -20,9 +21,16 @@ public class CollisionManager {
 		collidableList = new ArrayList<Entity>();
 		
 		// Retrieve entities that are collidable
-		for(Entity entity : entityList) {
-			if(entity.isCollidable()) collidableList.add(entity);
-		}
+		for(Entity entity : entityList) if(entity.isCollidable()) this.add(entity);
+	}
+	
+	public void add(Entity entity) {
+		collidableList.add(entity);
+	}
+	
+	public void remove(Entity entity) {
+		collidableList.remove(entity);
+		entity.dispose();
 	}
 	
 	/**
@@ -44,6 +52,7 @@ public class CollisionManager {
      * Calls handleCollisions method to then resolve these detected collisions.
      * @param entityManager
      */
+    @Override
 	 public void checkCollisions(EntityManager entityManager) {
 		 for (int i = 0; i < collidableList.size() - 1; i++) {
 	            for (int j = i + 1; j < collidableList.size(); j++) {
@@ -65,6 +74,7 @@ public class CollisionManager {
 	  * @param x
 	  * @param y
 	  */
+    @Override
 	 public void handleCollisions(EntityManager entityManager, Entity x, Entity y) {
 		 if(x.isAiControl() && y.isAiControl()) {
 //			 System.out.println("Collision Between 2 AIs - Allowed");
@@ -72,13 +82,13 @@ public class CollisionManager {
 //			 System.out.println("Collision Between 2 Players - Allowed");
 		 }else {
 			 if(x.isAiControl()) {
-				 collidableList.remove(x);	//update collidableList to remove entity
-				 entityManager.removeEntity(x);	//update entityManager to remove entity
+				 this.remove(x);	//update collidableList to remove entity
+				 entityManager.remove(x);	//update entityManager to remove entity
 				 System.out.println("Collision Between Player & AI - AI Entity Removed");
 			 }
 			 else {
-				 collidableList.remove(y);	//update collidableList to remove entity
-				 entityManager.removeEntity(y);	//update entityManager to remove entity
+				 this.remove(y);	//update collidableList to remove entity
+				 entityManager.remove(y);	//update entityManager to remove entity
 				 System.out.println("Collision Between Player & AI - AI Entity Removed");
 			 }
 		 }

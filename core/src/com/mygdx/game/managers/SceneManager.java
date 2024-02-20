@@ -5,28 +5,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.mygdx.game.globals.Globals;
-
+import com.mygdx.game.interfaces.iManager;
+import com.mygdx.game.models.Entity;
+import com.mygdx.game.models.KeyboardInput;
+import com.mygdx.game.models.MouseInput;
 import com.mygdx.game.models.Scene;
 import com.mygdx.game.screens.GameScreen;
 
-public class SceneManager {
+public class SceneManager implements iManager<Scene>{
 	
-	private List<Scene> scenes;
+	private List<Scene> sceneList;
+	private List<Scene> updatedSceneList;
 	private int currentSceneCode = -1;
 	private Scene activeScene;
+	
+	private final int GAME_SCREEN = 1;
+	private final String AUDIO_PATH = "audio/music";
+	private final String BGAUDIO_GS = String.format("%s/megalovania.mp3", AUDIO_PATH);
 		
 	public SceneManager() {
-		this.scenes = new ArrayList<Scene>();
+		this.sceneList = new ArrayList<Scene>();
 	}
 	
 	/**
 	 * Adds a scene into SceneManager list
 	 * @param scene
 	 */
-	public void addScene(Scene scene) {
-		this.scenes.add(scene);
+	public void add(Scene scene) {
+		this.sceneList.add(scene);
 	}
+	
+	/**
+	 * Remove a scene from SceneManager list
+	 * @param scene
+	 */
+	public void remove(Scene scene) {
+		this.sceneList.remove(scene);
+		scene.dispose();
+	}
+	
+	/**
+	 * Retrieves updated entityList when entityList is modified
+	 */
+	public void update(List<Scene> sceneList) {
+		updatedSceneList = new ArrayList<Scene>();
+        for (Scene scene : sceneList) {
+            	updatedSceneList.add(scene);
+        }
+        this.sceneList = updatedSceneList;
+    }
 	
 	/**
 	 * Sets a scene from list as the active scene
@@ -38,7 +65,7 @@ public class SceneManager {
 			
 			if(this.activeScene != null) this.activeScene.hide(); // hide the current scene
 			
-			this.activeScene = this.scenes.get(this.currentSceneCode); // make the selected scene active
+			this.activeScene = this.sceneList.get(this.currentSceneCode); // make the selected scene active
 			this.activeScene.show(); // must always be called after changing the active scene
 		}
 	}
@@ -47,10 +74,10 @@ public class SceneManager {
 	 * Reinitializes the game scene
 	 * @param manager
 	 */
-	public void resetGameScene(AssetManager manager) {
-		Scene gameScene = scenes.get(Globals.GAME_SCREEN);
-		int gameSceneIndex = scenes.indexOf(gameScene);
-		scenes.set(gameSceneIndex, new GameScreen(manager, Globals.BGAUDIO_GS));
+	public void resetGameScene(AssetManager manager, KeyboardInput keyboardDevice, MouseInput mouseDevice) {
+		Scene gameScene = sceneList.get(GAME_SCREEN);
+		int gameSceneIndex = sceneList.indexOf(gameScene);
+		sceneList.set(gameSceneIndex, new GameScreen(manager,BGAUDIO_GS,keyboardDevice,mouseDevice));
 	}
 	
 	/**
@@ -77,7 +104,7 @@ public class SceneManager {
 	 * Disposal of SceneManager Resources
 	 */
 	public void dispose() {
-		for(Scene s: this.scenes) s.dispose();
+		for(Scene s: sceneList) s.dispose();
 		System.out.println("SceneManager Resources Disposed");
 	}
 	

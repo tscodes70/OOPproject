@@ -17,7 +17,7 @@ public class EntityManager {
      * Adds an entity into the entityManager list
      * @param entity
      */
-    public void addEntity(Entity entity) {
+    public void add(Entity entity) {
     	entityList.add(entity);
     }
     
@@ -25,7 +25,7 @@ public class EntityManager {
      * Removes an entity from the entityManager list and disposes its resources
      * @param entity
      */
-    public void removeEntity(Entity entity) {
+    public void remove(Entity entity) {
     	//implement remove entity logic here
     	entityList.remove(entity);
     	entity.dispose();

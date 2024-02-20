@@ -4,23 +4,37 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
-import com.mygdx.game.globals.Globals;
+import com.badlogic.gdx.graphics.Color;
 import com.mygdx.game.models.Button;
 import com.mygdx.game.models.Entity;
+import com.mygdx.game.models.MouseInput;
 
 public class ButtonControlManager extends IOManager {
 	
     private List<Button> buttonList;
     private Button spawnAIButton;
     private Button spawnPlayerButton;
+    private MouseInput mouseDevice;
+    
+	private final int LEFTCLICKBUTTON = Buttons.LEFT;
+	private final int RIGHTCLICKBUTTON = Buttons.RIGHT;
+	
+	private final int DEFAULT_ENTITY_SPEED = 2;
+	private final int DEFAULT_ENTITY_RADIUS = 40;
+	private final Color DEFAULT_PLAYER_COLOR = Color.BLUE;
+	private final Color DEFAULT_AI_COLOR = Color.RED;
+	private final boolean COLLIDABLE = true;
+	private final boolean AI_CONTROL = true;
+
     
     /**
      * Constructor that manages a list of Button instances
      * @param buttonList
      */
-	public ButtonControlManager(List<Button> buttonList){
+	public ButtonControlManager(List<Button> buttonList,MouseInput mouseDevice){
 		super();
 		this.buttonList = buttonList;
+		this.mouseDevice = mouseDevice;
 		spawnAIButton = buttonList.get(0);
 		spawnPlayerButton = buttonList.get(1);
 	}
@@ -36,30 +50,30 @@ public class ButtonControlManager extends IOManager {
 	 * @param collisionManager
 	 */
 	public void buttonClick(int clickedButton, EntityManager entityManager, AIControlManager aiControlManager, PlayerControlManager playerControlManager, CollisionManager collisionManager) {
-		float x = (float)getMouseX();
-		float y = Gdx.graphics.getHeight() - (float)getMouseY(); // texture y-axis coordinates are inverted
+		float x = mouseDevice.getMouseX();
+		float y = Gdx.graphics.getHeight() - mouseDevice.getMouseY(); // texture y-axis coordinates are inverted
 			
             if(spawnAIButton.getBoundingBox().contains(x, y)) {
-                    	entityManager.addEntity(new Entity(
+                    	entityManager.add(new Entity(
                     			(float) (Math.random() * Gdx.graphics.getWidth()),
                     			(float) (Math.random() * Gdx.graphics.getHeight()),
-                    			Globals.DEFAULT_ENTITY_SPEED,
-                        		Globals.DEFAULT_ENTITY_RADIUS,
-                        		Globals.DEFAULT_AI_COLOR, 
-                        		Globals.AI_CONTROL, 
-                        		Globals.COLLIDABLE));
+                    			DEFAULT_ENTITY_SPEED,
+                        		DEFAULT_ENTITY_RADIUS,
+                        		DEFAULT_AI_COLOR, 
+                        		AI_CONTROL, 
+                        		COLLIDABLE));
                     	System.out.println("AI Spawned");
             	}            		 
             
             if(spawnPlayerButton.getBoundingBox().contains(x, y)) {
-                    	entityManager.addEntity(new Entity(
+                    	entityManager.add(new Entity(
                     			(float) (Math.random() * Gdx.graphics.getWidth()),
                     			(float) (Math.random() * Gdx.graphics.getHeight()),
-                    			Globals.DEFAULT_ENTITY_SPEED,
-                        		Globals.DEFAULT_ENTITY_RADIUS,
-                        		Globals.DEFAULT_PLAYER_COLOR, 
-                        		!Globals.AI_CONTROL, 
-                        		Globals.COLLIDABLE));
+                    			DEFAULT_ENTITY_SPEED,
+                        		DEFAULT_ENTITY_RADIUS,
+                        		DEFAULT_PLAYER_COLOR, 
+                        		!AI_CONTROL, 
+                        		COLLIDABLE));
                     	System.out.println("Player Spawned");
             }
             
@@ -77,7 +91,7 @@ public class ButtonControlManager extends IOManager {
 	 * @param collisionManager
 	 */
 	public void handleClickEvents(EntityManager entityManager, AIControlManager aiControlManager, PlayerControlManager playerControlManager, CollisionManager collisionManager) {
-		if(super.pollLeftMouseButton()) this.buttonClick(Buttons.LEFT,entityManager, aiControlManager, playerControlManager, collisionManager);
+		if(mouseDevice.pollInputPress(LEFTCLICKBUTTON)) this.buttonClick(Buttons.LEFT,entityManager, aiControlManager, playerControlManager, collisionManager);
 	}
 	
 	/**

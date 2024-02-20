@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.interfaces.iCollidable;
 import com.mygdx.game.interfaces.iMovable;
 
-public class Entity implements iMovable,iCollidable {
+public class Entity {
     private float positionX;
     private float positionY;
     private float speed;

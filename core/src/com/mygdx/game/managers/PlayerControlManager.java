@@ -4,26 +4,56 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.mygdx.game.globals.Globals;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
+import com.mygdx.game.interfaces.iManager;
+import com.mygdx.game.interfaces.iMovable;
 import com.mygdx.game.models.Entity;
+import com.mygdx.game.models.KeyboardInput;
 
-public class PlayerControlManager extends IOManager {
+public class PlayerControlManager implements iManager<Entity>, iMovable {
 	
     private List<Entity> playerEntityList;
     private List<Entity> updatedEntityList;
+    private KeyboardInput keyboardDevice;
+    
+	private final int LEFTKEY = Keys.LEFT;
+	private final int RIGHTKEY = Keys.RIGHT;
+	private final int UPKEY = Keys.UP;
+	private final int DOWNKEY = Keys.DOWN;
+	
+	private final int DEFAULT_ENTITY_SPEED_MULTIPLIER = 100;
 
 	/**
 	 * Constructor that takes a list of entities, extracts each entity
 	 * that has variable aiControl=false.
 	 * @param entityList
 	 */
-	public PlayerControlManager(List<Entity> entityList){
+	public PlayerControlManager(List<Entity> entityList, KeyboardInput keyboardDevice){
 		super();
+		this.keyboardDevice = keyboardDevice;
 		playerEntityList = new ArrayList<Entity>();
 		
 		for(Entity entity : entityList) {
         	if(!entity.isAiControl()) playerEntityList.add(entity);
         }
+	}
+	
+	/**
+     * Adds a Player entity into PlayerControlManager list
+     * @param entity
+     */
+	public void add(Entity entity) {
+		playerEntityList.add(entity);
+	}
+	
+	/**
+     * Removes a Player entity from PlayerControlManager list
+     * @param entity
+     */
+	public void remove(Entity entity) {
+		playerEntityList.remove(entity);
+		entity.dispose();
 	}
 	
 	/**
@@ -46,7 +76,7 @@ public class PlayerControlManager extends IOManager {
 	  */
 	 public void moveLeft(float deltaTime) {
 		    for (Entity entity : this.playerEntityList) {
-		        float distanceToMove = entity.getSpeed() * Globals.DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
+		        float distanceToMove = entity.getSpeed() * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
 
 		        // Ensure entity is within left boundary of screen
 		        if (entity.getPositionX() - distanceToMove - entity.getRadius() >= 0) {
@@ -62,7 +92,7 @@ public class PlayerControlManager extends IOManager {
 	  */
 	 public void moveRight(float deltaTime) {
 		    for (Entity entity : this.playerEntityList) {
-		        float distanceToMove = entity.getSpeed() * Globals.DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
+		        float distanceToMove = entity.getSpeed() * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
 
 		        // Ensure entity is within right boundary of screen
 		        if (entity.getPositionX() + distanceToMove + entity.getRadius() <= Gdx.graphics.getWidth()) {
@@ -78,7 +108,7 @@ public class PlayerControlManager extends IOManager {
 	  */
 	 public void moveUp(float deltaTime) {
 		    for (Entity entity : this.playerEntityList) {
-		        float distanceToMove = entity.getSpeed() * Globals.DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
+		        float distanceToMove = entity.getSpeed() * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
 
 		        // Ensure entity is within top boundary of screen
 		        if (entity.getPositionY() + distanceToMove + entity.getRadius() <= Gdx.graphics.getHeight()) {  // Adjusted boundary check
@@ -94,7 +124,7 @@ public class PlayerControlManager extends IOManager {
 	  */
 	 public void moveDown(float deltaTime) {
 		    for (Entity entity : this.playerEntityList) {
-		        float distanceToMove = entity.getSpeed() * Globals.DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
+		        float distanceToMove = entity.getSpeed() * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
 
 		        // Ensure entity is within bottom boundary of screen
 		        if (entity.getPositionY() - distanceToMove - entity.getRadius() >= 0) {
@@ -108,11 +138,11 @@ public class PlayerControlManager extends IOManager {
 	  * based on respective movement key presses
 	  * @param deltaTime
 	  */
-	public void movePlayer(float deltaTime) {
-		if(super.pollLeftKey()) moveLeft(deltaTime);
-		if(super.pollRightKey()) moveRight(deltaTime);
-		if(super.pollUpKey()) moveUp(deltaTime);
-		if(super.pollDownKey()) moveDown(deltaTime);
+	public void move(float deltaTime) {
+		if(keyboardDevice.pollInputHold(LEFTKEY)) moveLeft(deltaTime);
+		if(keyboardDevice.pollInputHold(RIGHTKEY)) moveRight(deltaTime);
+		if(keyboardDevice.pollInputHold(UPKEY)) moveUp(deltaTime);
+		if(keyboardDevice.pollInputHold(DOWNKEY)) moveDown(deltaTime);
 	}
 	
 	/**

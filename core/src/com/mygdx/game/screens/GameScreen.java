@@ -14,8 +14,9 @@ import com.mygdx.game.managers.EntityManager;
 import com.mygdx.game.managers.PlayerControlManager;
 import com.mygdx.game.models.Button;
 import com.mygdx.game.models.Entity;
+import com.mygdx.game.models.KeyboardInput;
+import com.mygdx.game.models.MouseInput;
 import com.mygdx.game.models.Scene;
-import com.mygdx.game.globals.Globals;
 
 public class GameScreen extends Scene {	
 	private SpriteBatch batch;
@@ -26,11 +27,34 @@ public class GameScreen extends Scene {
     private CollisionManager collisionManager;
     private ButtonManager buttonManager;
     private ButtonControlManager buttonControlManager;
+    private KeyboardInput keyboardDevice;
+    private MouseInput mouseDevice;
     
-	public GameScreen(AssetManager manager, String bgMusicName) {
+	private final String IMAGE_PATH = "image";
+
+	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
+	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
+	
+	private final int DEFAULT_ENTITY_SPEED = 2;
+	private final int DEFAULT_ENTITY_RADIUS = 40;
+	private final int DEFAULT_PLAYER_X = 100;
+	private final int DEFAULT_PLAYER_Y = 100;
+	private final Color DEFAULT_PLAYER_COLOR = Color.BLUE;
+	private final Color DEFAULT_AI_COLOR = Color.RED;
+	private final boolean COLLIDABLE = true;
+	private final boolean AI_CONTROL = true;
+	
+	private final int INITIAL_MAX_SPAWN = 15;
+	private final int INITIAL_MIN_SPAWN = 5;
+
+    
+	public GameScreen(AssetManager manager, String bgMusicName, KeyboardInput keyboardDevice, MouseInput mouseDevice) {
 		super(manager, bgMusicName);
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
+		
+		this.keyboardDevice = keyboardDevice;
+		this.mouseDevice = mouseDevice;
 
 		//Using texture render
 //        Entity aiEntity = new Entity("image/ai.png", 50, 50, 2, true);
@@ -40,16 +64,16 @@ public class GameScreen extends Scene {
 		entityManager = new EntityManager();
 		
 		//Creation of Entities (Player Entity, AI Entities)
-		entityManager.addEntity(new Entity(100, 100, 2, 40, Color.BLUE, false, true));
-        for (int i=0; i<(int)Math.floor(Math.random() * Globals.INITIAL_MAX_SPAWN)+Globals.INITIAL_MIN_SPAWN; i++) {
-        	entityManager.addEntity(new Entity(
+		entityManager.add(new Entity(DEFAULT_PLAYER_X, DEFAULT_PLAYER_Y, DEFAULT_ENTITY_SPEED, DEFAULT_ENTITY_RADIUS, DEFAULT_PLAYER_COLOR, false, true));
+        for (int i=0; i<(int)Math.floor(Math.random() * INITIAL_MAX_SPAWN)+INITIAL_MIN_SPAWN; i++) {
+        	entityManager.add(new Entity(
             		(float) (Math.random() * Gdx.graphics.getWidth()),
             		(float) (Math.random() * Gdx.graphics.getHeight()),
-            		Globals.DEFAULT_ENTITY_SPEED,
-            		Globals.DEFAULT_ENTITY_RADIUS,
-            		Globals.DEFAULT_AI_COLOR, 
-            		Globals.AI_CONTROL, 
-            		Globals.COLLIDABLE));	
+            		DEFAULT_ENTITY_SPEED,
+            		DEFAULT_ENTITY_RADIUS,
+            		DEFAULT_AI_COLOR, 
+            		AI_CONTROL, 
+            		COLLIDABLE));	
         }
 		
 		
@@ -57,7 +81,7 @@ public class GameScreen extends Scene {
 		aiControlManager = new AIControlManager(entityManager.getEntityList());
 		
 		//Instantiate PlayerControlManager
-		playerControlManager = new PlayerControlManager(entityManager.getEntityList());
+		playerControlManager = new PlayerControlManager(entityManager.getEntityList(),keyboardDevice);
 		
 		//Instantiate CollisionManager
 		collisionManager = new CollisionManager(entityManager.getEntityList());
@@ -66,9 +90,9 @@ public class GameScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.addButton(new Button(manager.get(Globals.IMAGE_BUTTON1), 20, 400, 0.6f));
-		buttonManager.addButton(new Button(manager.get(Globals.IMAGE_BUTTON2), 20, 300, 0.6f));
-		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList());
+		buttonManager.add(new Button(manager.get(IMAGE_SA), 20, 400, 0.6f));
+		buttonManager.add(new Button(manager.get(IMAGE_SP), 20, 300, 0.6f));
+		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}
 	
 	/**
@@ -90,8 +114,8 @@ public class GameScreen extends Scene {
 		entityManager.drawEntities(shape);
 		shape.end();
 		
-		playerControlManager.movePlayer(deltaTime);
-		aiControlManager.moveAI(deltaTime);
+		playerControlManager.move(deltaTime);
+		aiControlManager.move(deltaTime);
 		collisionManager.checkCollisions(entityManager);
 		buttonControlManager.handleClickEvents(entityManager,aiControlManager,playerControlManager,collisionManager);
 

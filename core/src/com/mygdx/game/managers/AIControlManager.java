@@ -3,15 +3,18 @@ package com.mygdx.game.managers;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Color;
-import com.mygdx.game.globals.Globals;
+import com.mygdx.game.interfaces.iManager;
+import com.mygdx.game.interfaces.iMovable;
 import com.mygdx.game.models.Entity;
 
 // Manages AI-controlled entities
-public class AIControlManager { 
+public class AIControlManager implements iManager<Entity>, iMovable{ 
 	
     private List<Entity> aiEntityList;
     private List<Entity> updatedEntityList;
+    
+	private final int MAX_ENTITY_SPEED = 10;
+	private final int DEFAULT_ENTITY_SPEED_MULTIPLIER = 100;
     
     /**
      * Constructor that takes a list of entities, extracts each entity
@@ -27,21 +30,38 @@ public class AIControlManager {
     }
     
     /**
+     * Adds an AI entity into AIControlManager list
+     * @param entity
+     */
+    public void add(Entity entity) {
+    	aiEntityList.add(entity);
+    }
+    
+    /**
+     * Removes an AI entity from the AIControlManager list
+     * @param entity
+     */
+    public void remove(Entity entity) {
+    	aiEntityList.remove(entity);
+    	entity.dispose();
+    }
+    
+    /**
      * Main movement method to move all AI entities, utilizes deltaTime for distance
      * calculation of AI entities.
      * @param deltaTime
      */
-    public void moveAI(float deltaTime) {
+    public void move(float deltaTime) {
         for (Entity entity : this.aiEntityList) {
             // Move entity vertically proportionally to deltaTime and speed
-            float distanceToMove = entity.getSpeed() * Globals.DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
+            float distanceToMove = entity.getSpeed() * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
             entity.setPositionY(entity.getPositionY() - distanceToMove);
 
             // Check if entity has moved off-screen
             if (entity.getPositionY() < 0) {
                 // Reset entity's position to top of screen
                 entity.setPositionY(400);
-                if (entity.getSpeed() <= Globals.MAX_ENTITY_SPEED) {
+                if (entity.getSpeed() <= MAX_ENTITY_SPEED) {
                    entity.setSpeed(entity.getSpeed() + 2);
                 }
             }

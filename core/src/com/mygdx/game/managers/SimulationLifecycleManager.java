@@ -4,29 +4,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.mygdx.game.interfaces.iManager;
+import com.mygdx.game.models.Entity;
 import com.mygdx.game.models.Simulation;
 
-public class SimulationLifecycleManager {
-	private List<Simulation> simulations;
+public class SimulationLifecycleManager implements iManager<Simulation> {
+	private List<Simulation> simulationList;
+	private List<Simulation> updatedSimulationList;
 	
 	public SimulationLifecycleManager() {
-		simulations = new ArrayList<>();
+		simulationList = new ArrayList<>();
 		
 	}
 	
 	/**
-	 * Adds a Simulation into SimulationLifeCycleManager list
+	 * Add a Simulation into SimulationLifeCycleManager list
 	 * @param simulation
 	 */
-	public void addSimulation(Simulation simulation) {
-        simulations.add(simulation);
+	public void add(Simulation simulation) {
+		simulationList.add(simulation);
     }
+	
+	/**
+	 * Remove a Simulation from SimulationLifeCycleManager list
+	 * @param simulation
+	 */
+	public void remove(Simulation simulation) {
+		simulationList.remove(simulation);
+    }
+	
+	/**
+	 * Retrieves updated simulationList when it is modified
+	 * @param simulation
+	 */
+	public void update(List<Simulation> simulationList) {
+		updatedSimulationList = new ArrayList<Simulation>();
+		 for (Simulation entity : simulationList) updatedSimulationList.add(entity);
+	        this.simulationList = updatedSimulationList;
+	}
 
 	/**
 	 * Renders All Simulations
 	 */
     public void renderSimulation() {
-        for (Simulation simulation : simulations) {
+        for (Simulation simulation : simulationList) {
             if (!simulation.isStarted()) {
                 simulation.initialize();
                 simulation.start();
@@ -40,14 +61,14 @@ public class SimulationLifecycleManager {
      * Disposal of SimulationLifeCycleManager
      */
     public void dispose() {
-    	for(Simulation s: simulations) s.dispose();
+    	for(Simulation s: simulationList) s.dispose();
     	System.out.println("SimulationLifeCycleManager Resources Disposed");
     }
 
     // Setter Getters
-	public List<Simulation> getSimulations() { return simulations; }
+	public List<Simulation> getSimulations() { return simulationList; }
 
-	public void setSimulations(List<Simulation> simulations) { this.simulations = simulations; }
+	public void setSimulations(List<Simulation> simulations) { this.simulationList = simulations; }
     
   
 }

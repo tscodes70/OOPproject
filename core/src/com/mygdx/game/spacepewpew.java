@@ -9,6 +9,7 @@ import com.mygdx.game.managers.SimulationLifecycleManager;
 //import com.mygdx.game.models.Simulation;
 import com.mygdx.game.simulations.AppSimulation;
 import com.mygdx.game.models.Entity;
+import com.mygdx.game.models.Simulation;
 import com.mygdx.game.managers.EntityManager;
 import java.util.List;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class spacepewpew extends ApplicationAdapter {
 		
 		// Simulation Lifecycle
 		slm = new SimulationLifecycleManager();
-		slm.addSimulation(new AppSimulation());
+		slm.add(new AppSimulation());
 	}
 
 	@Override
@@ -37,15 +38,12 @@ public class spacepewpew extends ApplicationAdapter {
 	public void render() {
 		// TODO Auto-generated method stub
 		// for now only one simulation in the entire game
-//		for (Simulation s : slm.getSimulations()) {
-//			if(!s.isInitialized()) {
-//				s.initialize();
-//			}
-//			slm.update();
-//			s.update();
-//		}
-		slm.renderSimulation();
-
+		for (Simulation s : slm.getSimulations()) {
+			if(!s.isInitialized()) {
+				s.initialize();
+			}
+			slm.renderSimulation();
+		}
 	}
 
 	@Override
