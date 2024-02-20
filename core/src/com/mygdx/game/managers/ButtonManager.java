@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.game.models.Button;
+import com.mygdx.game.models.Entity;
 
 public class ButtonManager {
     private List<Button> buttonList;
@@ -35,4 +36,9 @@ public class ButtonManager {
 	public List<Button> getButtonList() {
 		return buttonList;
 	}
+	
+    public void dispose() {
+    	for (Button b : buttonList) b.dispose();
+		System.out.println("ButtonManager Resources Disposed");
+    }
 }

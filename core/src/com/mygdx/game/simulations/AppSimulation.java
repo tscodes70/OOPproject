@@ -2,6 +2,7 @@ package com.mygdx.game.simulations;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Texture;
 //import com.badlogic.gdx.assets.AssetManager;
 import com.mygdx.game.managers.GeneralControlManager;
 import com.mygdx.game.managers.SceneManager;
@@ -13,135 +14,126 @@ import com.mygdx.game.screens.SplashScreen;
 import com.mygdx.game.globals.Globals;
 
 public class AppSimulation extends Simulation {
-
-	private AssetManager manager;
-
-	private SplashScreen splashScene;
-	private GameScreen gameScene;
-	private PauseScreen pauseScene;
-	private EndScreen endScene;
+	
 	private int gameState;
-
+	private AssetManager manager;
 	private SceneManager sceneManager;
 	private GeneralControlManager generalControlManager;
 
+	/**
+	 * This method is called upon initialization of the AppSimulation.
+	 * The AssetManager object is instantiated here and loads the necessary resources
+	 * needed for AppSimulation.
+	 */
 	@Override
 	public void initialize() {
 		super.initialize();
-		// General IO Processor
-		generalControlManager = new GeneralControlManager();
+		
+		try {
+			// Load all resources for this simulation
+			manager = new AssetManager();
+			manager.load(Globals.BGAUDIO_SS, Music.class); // splash screen music
+			manager.load(Globals.BGAUDIO_GS, Music.class); // game scene music
+			manager.load(Globals.BGAUDIO_ES, Music.class); // end scene music
+			manager.load(Globals.BGIMAGE_SS, Texture.class);
+			manager.load(Globals.IMAGE_BUTTON1, Texture.class);
+			manager.load(Globals.IMAGE_BUTTON2, Texture.class);
+			manager.finishLoading();
+		}catch(Exception ex) {
+			System.out.println("INIT ERROR - Unable to load resources, check resource paths.");
+			dispose();
+			System.exit(0);
+		}
 
-		// Load specific resources for this simulation
-		manager = new AssetManager();
-		manager.load(Globals.BGAUDIO_SS, Music.class); // splash screen music
-		manager.load(Globals.BGAUDIO_GS, Music.class); // game scene music
-		manager.load(Globals.BGAUDIO_ES, Music.class); // end scene music
-		manager.finishLoading();
+		
+		System.out.println(String.format("Simulation Name: %s", this.getClass().getName()));
+		System.out.println(String.format("Simulation: %s", super.getInitializationStatus()));
 
 	}
 
+	/**
+	 * This method is called after initialization of AppSimulation.
+	 * All AppSimulation Scenes are instantiated and AppSimulation Starting Scene is set.
+	 * GeneralControlManager is instantiated.
+	 */
 	@Override
 	public void start() {
 		super.start();
-		// Begin specific simulation logic
 
-		// instantiate scene instances
-		splashScene = new SplashScreen(manager, Globals.BGIMAGE_SS, Globals.BGAUDIO_SS);
-		gameScene = new GameScreen(manager, Globals.BGAUDIO_GS);
-		pauseScene = new PauseScreen(manager, Globals.BGAUDIO_GS);
-		endScene = new EndScreen(manager, Globals.BGAUDIO_ES);//changed to EndScreen, was previously set to pause but we didn't have a screen so I made one and renamed this
+		// Instantiate GeneralIOManager
+		generalControlManager = new GeneralControlManager();
+		
+		// Instantiate SceneManager & All AppSimulation Scenes
+		sceneManager = new SceneManager();
+		sceneManager.addScene(new SplashScreen(manager, manager.get(Globals.BGIMAGE_SS),Globals.BGAUDIO_SS));
+		sceneManager.addScene(new GameScreen(manager, Globals.BGAUDIO_GS));
+		sceneManager.addScene(new PauseScreen());
+		sceneManager.addScene(new EndScreen(manager, Globals.BGAUDIO_ES));
 
-		this.sceneManager = new SceneManager();
-		this.sceneManager.addScene(splashScene);
-		this.sceneManager.addScene(gameScene);
-		this.sceneManager.addScene(pauseScene);//this adds a scene into scenemanager list
-		this.sceneManager.addScene(endScene);
-
-		// Initial Scene
-		gameState = 0;
+		// Set Starting Scene
+		gameState = Globals.SPLASH_SCREEN;
 		sceneManager.setScene(Globals.SPLASH_SCREEN);
+		
+		System.out.println(String.format("Simulation Status: %s", super.getStartedStatus()));
 	}
 
+	/**
+	 * Updates AppSimulation
+	 */
 	@Override
 	public void update() {
-		this.sceneManager.updateScene();
+		sceneManager.updateScene();
 	}
 
+	/**
+	 * Renders AppSimulation
+	 */
 	@Override
 	public void render() {
 
-		// Enter key to move from splash screen to game
+		// Transition from SPLASH_SCREEN to GAME_SCREEN (ENTER key)
 		if (generalControlManager.pollEnterKey() && gameState == Globals.SPLASH_SCREEN) {
 			gameState = Globals.GAME_SCREEN;
-			this.sceneManager.setScene(gameState);
+			sceneManager.setScene(gameState);
 		}
-
-		// Pause key to toggle pause screen or play screen depends on where you are therefore the else if.
-		// YOu can use escape here to go back... if we want to keep things simple i can just remove it
-		// so that we can just use enter to continue
-		if (generalControlManager.pollPauseKey()) {
-			if (gameState == Globals.GAME_SCREEN) {
-				gameState = Globals.PAUSE_SCREEN;
-			} else if (gameState == Globals.PAUSE_SCREEN) {
-				gameState = Globals.GAME_SCREEN;
-			}
-			this.sceneManager.setScene(gameState);
-		}
-
-		// Enter key to continue from pause screen
-		if (generalControlManager.pollEnterKey() && (gameState == Globals.PAUSE_SCREEN || gameState == Globals.END_SCREEN)) {
-			gameState = Globals.GAME_SCREEN;
-			this.sceneManager.setScene(gameState);
-		}
-        // be it anywhere the backspace allows a reset to the menu
-		if (generalControlManager.pollBackspaceKey() && (gameState == Globals.GAME_SCREEN || gameState == Globals.PAUSE_SCREEN)) {
-			if (gameState == Globals.PAUSE_SCREEN) {
-				gameState = Globals.SPLASH_SCREEN;
-			} else {
-				gameState = Globals.SPLASH_SCREEN;
-			}
-			this.sceneManager.resetGameScene(manager);
-			this.sceneManager.setScene(gameState);
-		}
-
-		generalControlManager.checkKeyEvents();
-		// print key events in console
-		// Render the things in simulation
-		// rendering moved to within scene
-		this.sceneManager.renderScene();
-
-/* This was the prev code
-    	// press enter to move from splash screen to game
-    	if(generalControlManager.pollEnterKey() && gameState == Globals.SPLASH_SCREEN) {
-    		gameState = Globals.GAME_SCREEN;
-    		this.sceneManager.setScene(gameState);
-		}
-
-    	// press right or left arrow to end game
-    	if(generalControlManager.pollBackspaceKey() && gameState == Globals.GAME_SCREEN) {
-			gameState = Globals.END_SCREEN;
-			this.sceneManager.setScene(gameState);
-    	}
-
-    	// press escape key to go back to splash screen
-    	if(generalControlManager.pollPauseKey() && gameState == Globals.END_SCREEN) {
+		
+		// Transition from END_SCREEN to SPLASH_SCREEN (ESC key)
+		if (generalControlManager.pollEscapeKey() && gameState == Globals.END_SCREEN) {
 			gameState = Globals.SPLASH_SCREEN;
-			this.sceneManager.setScene(gameState);
-    	}
+			sceneManager.setScene(gameState);
+		}
 
-    	generalControlManager.checkKeyEvents();
-    	generalControlManager.checkClickEvents();
-    	// print key events in console
-    	// Render the things in simulation
-    	// rendering moved to within scene
-    	this.sceneManager.renderScene();
- */
+		// Transition from GAME_SCREEN to PAUSE_SCREEN and vice-versa (ESC key)
+		if (generalControlManager.pollEscapeKey() && (gameState == Globals.GAME_SCREEN || (gameState == Globals.PAUSE_SCREEN))) {
+			gameState = (gameState == Globals.GAME_SCREEN) ? Globals.PAUSE_SCREEN : Globals.GAME_SCREEN;
+			sceneManager.setScene(gameState);
+		}
+
+		// Transition from PAUSE_SCREEN/END_SCREEN to GAME_SCREEN and vice-versa (ENTER key)
+		if (generalControlManager.pollEnterKey() && (gameState == Globals.PAUSE_SCREEN || gameState == Globals.SPLASH_SCREEN)) {
+			gameState = Globals.GAME_SCREEN;
+			sceneManager.setScene(gameState);
+		}
+        // Transition from PAUSE_SCREEN/GAME_SCREEN to SPLASH_SCREEN (BACKSPACE key)
+		if (generalControlManager.pollBackspaceKey() && (gameState == Globals.GAME_SCREEN || gameState == Globals.PAUSE_SCREEN)) {
+			gameState = Globals.END_SCREEN;
+			sceneManager.resetGameScene(manager);
+			sceneManager.setScene(gameState);
+		}
+		
+		sceneManager.renderScene();
 	}
-
+	
+	/**
+	 * Disposal of AppSimulation and its superclass Resources
+	 */
 	@Override
 	public void dispose() {
 		super.dispose();
-		manager.dispose();
+		if (manager != null) manager.dispose();
+		if (sceneManager != null) sceneManager.dispose();
+		
+		System.out.println("AppSimulation Resources Disposed");
 	}
 
 

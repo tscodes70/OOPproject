@@ -23,10 +23,9 @@ public class GameScreen extends Scene {
     private EntityManager entityManager;
     private PlayerControlManager playerControlManager;
     private AIControlManager aiControlManager;
-    private CollisionManager collisonManager;
+    private CollisionManager collisionManager;
     private ButtonManager buttonManager;
     private ButtonControlManager buttonControlManager;
-    private Entity[] circles;
     
 	public GameScreen(AssetManager manager, String bgMusicName) {
 		super(manager, bgMusicName);
@@ -36,30 +35,24 @@ public class GameScreen extends Scene {
 		//Using texture render
 //        Entity aiEntity = new Entity("image/ai.png", 50, 50, 2, true);
 //        Entity playerEntity = new Entity("image/player.png", 50,50,2,false);
-		
-		//Using shapes render
-        Entity playerEntity = new Entity(100, 100, 2, 40, Color.BLUE, false, true);
         
-        Button button = new Button(Globals.IMAGE_BUTTON1, 20, 400, 0.6f);
-        Button button2 = new Button(Globals.IMAGE_BUTTON2, 20, 300, 0.6f);
-        
-        int defaultAiSpawn = (int)Math.floor(Math.random() * 15)+5;
-        circles = new Entity[defaultAiSpawn];
-        for (int i=0; i<circles.length; i++) {
-        	float positionX = (float) (Math.random() * Gdx.graphics.getWidth());
-        	float positionY = (float) (Math.random() * Gdx.graphics.getHeight());
-            circles[i] = new Entity(positionX ,positionY ,2,40,Color.RED, true, true);	
-        }
-		
-        
-        //Instantiate EM
+        //Instantiate EntityManager
 		entityManager = new EntityManager();
 		
-		//Adding into EntityList
-		entityManager.addEntity(playerEntity);
-		for (Entity circle : circles) {
-        	entityManager.addEntity(circle);
-        	}		
+		//Creation of Entities (Player Entity, AI Entities)
+		entityManager.addEntity(new Entity(100, 100, 2, 40, Color.BLUE, false, true));
+        for (int i=0; i<(int)Math.floor(Math.random() * Globals.INITIAL_MAX_SPAWN)+Globals.INITIAL_MIN_SPAWN; i++) {
+        	entityManager.addEntity(new Entity(
+            		(float) (Math.random() * Gdx.graphics.getWidth()),
+            		(float) (Math.random() * Gdx.graphics.getHeight()),
+            		Globals.DEFAULT_ENTITY_SPEED,
+            		Globals.DEFAULT_ENTITY_RADIUS,
+            		Globals.DEFAULT_AI_COLOR, 
+            		Globals.AI_CONTROL, 
+            		Globals.COLLIDABLE));	
+        }
+		
+		
 		//Instantiate AIControlManager
 		aiControlManager = new AIControlManager(entityManager.getEntityList());
 		
@@ -67,21 +60,24 @@ public class GameScreen extends Scene {
 		playerControlManager = new PlayerControlManager(entityManager.getEntityList());
 		
 		//Instantiate CollisionManager
-		collisonManager = new CollisionManager(entityManager.getEntityList());
+		collisionManager = new CollisionManager(entityManager.getEntityList());
 		
-		// create button manager
+		//Instantiate ButtonManager
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.addButton(button);
-		buttonManager.addButton(button2);
+		buttonManager.addButton(new Button(manager.get(Globals.IMAGE_BUTTON1), 20, 400, 0.6f));
+		buttonManager.addButton(new Button(manager.get(Globals.IMAGE_BUTTON2), 20, 300, 0.6f));
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList());
 	}
 	
+	/**
+	 * Renders objects in GameScreen
+	 */
 	@Override
 	public void render() {
-
-		// super.render();
+		float deltaTime = Gdx.graphics.getDeltaTime();
+		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
@@ -94,11 +90,10 @@ public class GameScreen extends Scene {
 		entityManager.drawEntities(shape);
 		shape.end();
 		
-		playerControlManager.checkKeyEvents();
-		aiControlManager.moveAIControlledEntities();
-		collisonManager.checkCollisions(entityManager);
-		
-		buttonControlManager.checkClickEvents(entityManager,aiControlManager,playerControlManager,collisonManager);
+		playerControlManager.movePlayer(deltaTime);
+		aiControlManager.moveAI(deltaTime);
+		collisionManager.checkCollisions(entityManager);
+		buttonControlManager.handleClickEvents(entityManager,aiControlManager,playerControlManager,collisionManager);
 
 		
 
@@ -106,6 +101,23 @@ public class GameScreen extends Scene {
 	
 	@Override
 	public void update() {
+
+	}
+	
+	/**
+	 * Disposes GameScreen and its superclass resources
+	 */
+	@Override
+	public void dispose() {
+		super.dispose();
+		batch.dispose();
+		shape.dispose();
+		playerControlManager.dispose();
+		aiControlManager.dispose();
+		collisionManager.dispose();
+		entityManager.dispose();
+		buttonManager.dispose();
+		buttonControlManager.dispose();
 
 	}
 	

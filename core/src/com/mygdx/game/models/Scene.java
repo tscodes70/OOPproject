@@ -13,16 +13,19 @@ public abstract class Scene {
 	
 	protected Sprite bgSprite;
 	protected SpriteBatch batch;
-	protected Texture bgTexture;
+	protected AssetManager manager;
 	protected Music bgMusic;
 	
-	protected AssetManager manager;
-	
-	public Scene(AssetManager manager, String spriteImageName, String bgMusicName) {
+	/**
+	 * Constructor for Scenes that contain Background Image and Music
+	 * @param manager
+	 * @param bgTexture
+	 * @param bgMusicName
+	 */
+	public Scene(AssetManager manager, Texture bgTexture, String bgMusicName) {
 		this.manager = manager;
 		
 		batch = new SpriteBatch();
-		bgTexture = new Texture(Gdx.files.internal(spriteImageName));
 		bgSprite = new Sprite(bgTexture);
 		bgSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
@@ -31,6 +34,12 @@ public abstract class Scene {
 		bgMusic.setVolume(0.15f);
 	}
 	
+	/**
+	 * Constructor for Scenes that only contain Background Music
+	 * @param manager
+	 * @param bgTexture
+	 * @param bgMusicName
+	 */
 	public Scene(AssetManager manager, String bgMusicName) {
 		this.manager = manager;
 		
@@ -39,61 +48,74 @@ public abstract class Scene {
 		bgMusic.setLooping(true);
 		bgMusic.setVolume(0.15f);
 	}
-
 	
-	//@Override
-	// render background texture, called by scene manager
+	/**
+	 * Constructor for Scenes that do not contain Background Image
+	 * and Music
+	 * @param manager
+	 * @param bgTexture
+	 * @param bgMusicName
+	 */
+	public Scene() {
+		batch = new SpriteBatch();
+	}
+
+	/**
+	 * Renders background texture, called by SceneManager Class
+	 */
 	public void render() {
-		// TODO Auto-generated method stub
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		batch.begin();
-		bgSprite.draw(batch);
-		batch.end();
+		this.batch.begin();
+		this.bgSprite.draw(batch);
+		this.batch.end();
+	}
+
+	/**
+	 * Displays Scene, called during scene transition to display active scene
+	 */
+	public void show() {
+		if(bgMusic != null) {
+			bgMusic.setPosition(0);
+			bgMusic.play();
+		}
 	}
 	
+	/**
+	 * Hides Scene, called during scene transition to hide non-active scenes
+	 */
+	public void hide() {
+		if(bgMusic != null) bgMusic.pause();
+	}
+	
+	/**
+	 * Pauses Scene, called during scene transition to pause scene
+	 */
+	public void pause() {
+		if(bgMusic != null) bgMusic.pause();
+	}
+	
+	/**
+	 * Resume Scene, called during scene transition to resume scene
+	 */
+	public void resume() {
+		if(bgMusic != null) bgMusic.play();
+	}
+	
+	/**
+	 * Update Scene
+	 */
 	public void update() {
 
 	}
-	//@Override
-	// logic to run when scene is made active
-	public void show() {
-		bgMusic.setPosition(0);
-		bgMusic.play();
-	}
-	
-	//@Override
-	// logic to run when scene is hidden
-	public void hide() {
-		bgMusic.pause();
-	}
-	
-	//@Override
-	// logic to run when scene is paused
-	public void pause() {
-		bgMusic.pause();
-		// TODO Auto-generated method stub
-	}
-	
-	//@Override
-	// logic to run when scene is resumed
-	public void resume() {
-		bgMusic.play();
-		// TODO Auto-generated method stub
-	}
 
-	//@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-	}
-	
-	//@Override
-	// Dispose of scene resources
+	/**
+	 * Dispose scene resources
+	 */
 	public void dispose() {
-		bgMusic.dispose();
-		bgTexture.dispose();
-		batch.dispose();
-		System.out.println("disposed");
+		if(bgMusic != null) bgMusic.dispose();
+		if(batch != null) batch.dispose();
+		if(manager != null) manager.dispose();
 	}
 }

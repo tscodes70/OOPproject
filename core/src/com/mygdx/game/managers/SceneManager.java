@@ -20,11 +20,18 @@ public class SceneManager {
 		this.scenes = new ArrayList<Scene>();
 	}
 	
+	/**
+	 * Adds a scene into SceneManager list
+	 * @param scene
+	 */
 	public void addScene(Scene scene) {
 		this.scenes.add(scene);
 	}
 	
-	// set a scene as the active scene
+	/**
+	 * Sets a scene from list as the active scene
+	 * @param sceneCode
+	 */
 	public void setScene(int sceneCode) {
 		if(sceneCode != this.currentSceneCode) {
 			this.currentSceneCode = sceneCode;
@@ -36,60 +43,44 @@ public class SceneManager {
 		}
 	}
 	
+	/**
+	 * Reinitializes the game scene
+	 * @param manager
+	 */
 	public void resetGameScene(AssetManager manager) {
 		Scene gameScene = scenes.get(Globals.GAME_SCREEN);
 		int gameSceneIndex = scenes.indexOf(gameScene);
 		scenes.set(gameSceneIndex, new GameScreen(manager, Globals.BGAUDIO_GS));
 	}
 	
-	//testing only!!
-//	public void toggleScene() {
-//		activeScene.dispose();
-//
-//		if(activeScene instanceof SplashScreen) {
-//			currentSceneCode = com.mygdx.game.globals.Constants.GAME_SCREEN;
-//			activeScene = scenes.get(currentSceneCode);
-//		} else if(activeScene instanceof GameScreen) {
-//			currentSceneCode = com.mygdx.game.globals.Constants.END_SCREEN;
-//			activeScene = scenes.get(currentSceneCode);
-//		} else if(activeScene instanceof EndScreen) {
-//			currentSceneCode = com.mygdx.game.globals.Constants.SPLASH_SCREEN;
-//			activeScene = scenes.get(currentSceneCode);
-//		}
-//		
-//		setScreen(activeScene);
-//	}
+	/**
+	 * Renders active Scene
+	 */
+	public void renderScene() { this.activeScene.render(); }
 	
-	public int getCurrentScene() {
-		return this.currentSceneCode;
-	}
+	/**
+	 * Updates active Scene
+	 */
+	public void updateScene() { this.activeScene.update(); }
 	
-	public void pauseCurrentScene() {
-		this.activeScene.pause();
-	}
+	/**
+	 * Pauses active Scene
+	 */
+	public void pauseCurrentScene() { this.activeScene.pause(); }
 	
-	public void resumeCurrentScene() {
-		this.activeScene.resume();
-	}
-	
-	//@Override
-//	public void render() {
-//	}
-	
-	// make the active scene render itself
-	// called by Simulation
-	public void renderScene() {
-		this.activeScene.render();
-	}
-	
-	public void updateScene() {
-		this.activeScene.update();
-	}
-	
-	// dispose of scenes
+	/**
+	 * Resumes active Scene
+	 */
+	public void resumeCurrentScene() { this.activeScene.resume(); }
+
+	/**
+	 * Disposal of SceneManager Resources
+	 */
 	public void dispose() {
-		for(Scene s: this.scenes) {
-			s.dispose();
-		}
+		for(Scene s: this.scenes) s.dispose();
+		System.out.println("SceneManager Resources Disposed");
 	}
+	
+	// Getter
+	public int getCurrentScene() { return this.currentSceneCode; }
 }

@@ -5,21 +5,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
+import com.mygdx.game.globals.Globals;
 //import com.badlogic.gdx.InputProcessor;
 import com.mygdx.game.interfaces.iInputOutput;
 
 
 public abstract class IOManager implements iInputOutput {
 	
-	private int kLeft = Keys.LEFT;
-	private int kRight = Keys.RIGHT;
-	private int kUp = Keys.UP;
-	private int kDown = Keys.DOWN;
-	private int kEsc = Keys.ESCAPE;
-	private int kEnter = Keys.ENTER;
-	private int kBackspace = Keys.BACKSPACE;
-	private int btnLeft = Buttons.LEFT;
-	private int btnRight = Buttons.RIGHT;
+	private int kLeft = Globals.KEYBIND_LEFT;
+	private int kRight = Globals.KEYBIND_RIGHT;
+	private int kUp = Globals.KEYBIND_UP;
+	private int kDown = Globals.KEYBIND_DOWN;
+	private int kEsc = Globals.KEYBIND_ESCAPE;
+	private int kEnter = Globals.KEYBIND_ENTER;
+	private int kBackspace = Globals.KEYBIND_BACKSPACE;
+	private int btnLeft = Globals.MOUSE_LEFT;
+	private int btnRight = Globals.MOUSE_RIGHT;
 
 	public IOManager() {
 	}
@@ -43,7 +44,7 @@ public abstract class IOManager implements iInputOutput {
 	}
 	
 	// For General Inputs
-	public boolean pollPauseKey() {
+	public boolean pollEscapeKey() {
 		if(Gdx.input.isKeyJustPressed(kEsc)) return true;
 		else return false;
 	}
@@ -69,6 +70,5 @@ public abstract class IOManager implements iInputOutput {
 	public int getMouseY() {
 		return Gdx.input.getY();
 	}
-	public abstract void checkKeyEvents();
-	public abstract void checkClickEvents(EntityManager entityManager,AIControlManager aiControlManager, PlayerControlManager playerControlManager, CollisionManager collisionManager);
+	
 }

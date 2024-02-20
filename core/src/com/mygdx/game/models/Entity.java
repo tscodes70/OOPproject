@@ -1,9 +1,7 @@
 package com.mygdx.game.models;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,7 +11,7 @@ import com.mygdx.game.interfaces.iMovable;
 public class Entity implements iMovable,iCollidable {
     private float positionX;
     private float positionY;
-    private int speed;
+    private float speed;
     private boolean aiControl;
     private boolean collidable;
     private Rectangle boundingBox;
@@ -42,15 +40,27 @@ public class Entity implements iMovable,iCollidable {
 //        this.aiControl = aiControl;
 //    }
 
+    /**
+     * Draw Shaped Entities using ShapeRenderer
+     * @param shape
+     */
     public void draw(ShapeRenderer shape) {
         shape.setColor(colour);
         shape.circle(getPositionX(), getPositionY(), getRadius());
     }
 
+    /**
+     * Draw Texture Entities using SpriteBatch
+     * @param batch
+     */
     public void draw(SpriteBatch batch) {
         batch.draw(tex, getPositionX(), getPositionY());
     }
 
+    /**
+     * Updates positions of entity and bounding box
+     * @param deltaTime
+     */
     public void update(float deltaTime) {
     	// Update position based on speed and direction
         positionX += speed * deltaTime;
@@ -60,46 +70,28 @@ public class Entity implements iMovable,iCollidable {
         boundingBox.setPosition(positionX, positionY);
     }
     
+    /**
+     * Disposal of entity
+     */
     public void dispose() {
-    	boundingBox = null;
+    	if(tex != null) tex.dispose();
     }
     
+    // Getters Setters
+    public Rectangle getBoundingBox() { return boundingBox; }
     
-    //Collision Stuff
-    public Rectangle getBoundingBox() {
-        return boundingBox;
-    }
-    public void updateBoundingBox() {
-        boundingBox.setPosition(positionX, positionY);
-    }
-    public boolean collidesWith(Entity other) {
-        return boundingBox.overlaps(other.getBoundingBox());
-    }
-
-    public float getPositionX() {
-        return positionX;
-    }
-
-    public void setPositionX(float positionX) {
-        this.positionX = positionX;
-    }
-
-    public float getPositionY() {
-        return positionY;
-    }
-
-    public void setPositionY(float positionY) {
-        this.positionY = positionY;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
+    public float getPositionX() { return positionX; }
+    
+    public void setPositionX(float positionX) { this.positionX = positionX; }
+    
+    public float getPositionY() { return positionY; }
+    
+    public void setPositionY(float positionY) {this.positionY = positionY;}
+    
+    public float getSpeed() { return speed; }
+    
+    public void setSpeed(float f) { this.speed = f; }
+    
     public float getRadius() { return radius; }
 
     public void setRadius(float radius) { this.radius = radius; }
@@ -116,12 +108,8 @@ public class Entity implements iMovable,iCollidable {
 
     public void setTex(Texture t) { tex = t; }
 
-	public boolean isCollidable() {
-		return collidable;
-	}
+	public boolean isCollidable() { return collidable; }
 
-	public void setCollidable(boolean collidable) {
-		this.collidable = collidable;
-	}
+	public void setCollidable(boolean collidable) { this.collidable = collidable; }
 
 }

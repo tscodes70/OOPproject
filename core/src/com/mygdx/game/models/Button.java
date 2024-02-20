@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.Texture;
 
-
 public class Button {
     private float positionX;
     private float positionY;
@@ -14,64 +13,52 @@ public class Button {
     private Rectangle boundingBox;
     private Texture tex;
 
-    public Button(String t, float positionX, float positionY, float scale) {
+    public Button(Texture tex, float positionX, float positionY, float scale) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.scale = scale; // scale the size of the texture
-        this.tex = new Texture(Gdx.files.internal(t));
+        this.tex = tex;
         this.boundingBox = new Rectangle(positionX, positionY, this.getWidth(), this.getHeight());
     }
 
+    /**
+     * Draws Texture Buttons using SpriteBatch
+     * @param batch
+     */
     public void draw(SpriteBatch batch) {
     	Sprite s = new Sprite(tex);
     	s.setScale(0.2f);
         batch.draw(tex, getPositionX(), getPositionY(), (int)(tex.getWidth() * scale), (int)(tex.getHeight() * scale));
     }
     
+    /**
+     * Disposal of Button Resources
+     */
     public void dispose() {
-    	boundingBox = null;
+    	if(tex!=null) tex.dispose();
     }
     
-    //Collision Stuff
-    public Rectangle getBoundingBox() {
-        return boundingBox;
-    }
-    public void updateBoundingBox() {
-        boundingBox.setPosition(positionX, positionY);
-    }
-    
-    public void leftClicked() {
-    	System.out.println("AI Spawned");
-    	
+    /**
+     * Updates position of bounding box
+     */
+    public void update() {
+    	boundingBox.setPosition(positionX, positionY);
     }
     
-    public void rightClicked() {
-    	System.out.println("AI Spawned right click");
-    }
+    // Setter Getters
+    public Rectangle getBoundingBox() { return boundingBox; }
     
-    public float getWidth() {
-    	return tex.getWidth() * scale;
-    }
+    public float getWidth() { return tex.getWidth() * scale; }
     
-    public float getHeight() {
-    	return tex.getHeight() * scale;
-    }
+    public float getHeight() { return tex.getHeight() * scale; }
 
-    public float getPositionX() {
-        return positionX;
-    }
+    public float getPositionX() { return positionX; }
 
-    public void setPositionX(float positionX) {
-        this.positionX = positionX;
-    }
+    public void setPositionX(float positionX) { this.positionX = positionX; }
 
-    public float getPositionY() {
-        return positionY;
-    }
+    public float getPositionY() { return positionY; }
 
-    public void setPositionY(float positionY) {
-        this.positionY = positionY;
-    }
+    public void setPositionY(float positionY) { this.positionY = positionY; }
 
     public Texture getTex() { return tex; }
 
