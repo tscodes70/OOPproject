@@ -13,6 +13,8 @@ public abstract class IOManager implements iInputOutput {
 	
 	private int kLeft = Keys.LEFT;
 	private int kRight = Keys.RIGHT;
+	private int kUp = Keys.UP;
+	private int kDown = Keys.DOWN;
 	private int kEsc = Keys.ESCAPE;
 	private int kEnter = Keys.ENTER;
 	private int kBackspace = Keys.BACKSPACE;
@@ -31,18 +33,26 @@ public abstract class IOManager implements iInputOutput {
 		if(Gdx.input.isKeyPressed(kRight)) return true;
 		else return false;
 	}
+	public boolean pollUpKey() {
+		if(Gdx.input.isKeyPressed(kUp)) return true;
+		else return false;
+	}
+	public boolean pollDownKey() {
+		if(Gdx.input.isKeyPressed(kDown)) return true;
+		else return false;
+	}
 	
 	// For General Inputs
 	public boolean pollPauseKey() {
-		if(Gdx.input.isKeyPressed(kEsc)) return true;
+		if(Gdx.input.isKeyJustPressed(kEsc)) return true;
 		else return false;
 	}
 	public boolean pollEnterKey() {
-		if(Gdx.input.isKeyPressed(kEnter)) return true;
+		if(Gdx.input.isKeyJustPressed(kEnter)) return true;
 		else return false;
 	}
 	public boolean pollBackspaceKey() {
-		if(Gdx.input.isKeyPressed(kBackspace)) return true;
+		if(Gdx.input.isKeyJustPressed(kBackspace)) return true;
 		else return false;
 	}
 	public boolean pollLeftMouseButton() {
@@ -60,5 +70,5 @@ public abstract class IOManager implements iInputOutput {
 		return Gdx.input.getY();
 	}
 	public abstract void checkKeyEvents();
-	public abstract void checkClickEvents();
+	public abstract void checkClickEvents(EntityManager entityManager,AIControlManager aiControlManager, PlayerControlManager playerControlManager, CollisionManager collisionManager);
 }

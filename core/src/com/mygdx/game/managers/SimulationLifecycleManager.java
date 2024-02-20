@@ -18,13 +18,6 @@ public class SimulationLifecycleManager {
         simulations.add(simulation);
     }
 
-	// called by spacepewpew
-    public void updateSimulation() {
-        for (Simulation simulation : simulations) {
-            simulation.update();
-        }
-    }
-    
     public void renderSimulation() {
         for (Simulation simulation : simulations) {
             if (!simulation.isStarted()) {
@@ -32,6 +25,7 @@ public class SimulationLifecycleManager {
                 simulation.start();
             }
             simulation.render();
+            simulation.update();
         }
     }
 

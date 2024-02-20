@@ -22,5 +22,8 @@ public class Globals {
     public static final String BGIMAGE_SS = String.format("%s/splash.jpg", IMAGE_PATH);
     public static final String BGIMAGE_GS = String.format("%s/badlogic.jpg", IMAGE_PATH);
 //    public static final String BGIMAGE_ES = String.format("%s/smth.jpg", IMAGE_PATH);
+    
+    public static final String IMAGE_BUTTON1 = String.format("%s/button1.png", IMAGE_PATH);
+    public static final String IMAGE_BUTTON2 = String.format("%s/button2.png", IMAGE_PATH);
 }
 

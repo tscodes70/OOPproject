@@ -4,7 +4,11 @@ package com.mygdx.game.managers;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.mygdx.game.globals.Globals;
+
 import com.mygdx.game.models.Scene;
+import com.mygdx.game.screens.GameScreen;
 
 public class SceneManager {
 	
@@ -30,6 +34,12 @@ public class SceneManager {
 			this.activeScene = this.scenes.get(this.currentSceneCode); // make the selected scene active
 			this.activeScene.show(); // must always be called after changing the active scene
 		}
+	}
+	
+	public void resetGameScene(AssetManager manager) {
+		Scene gameScene = scenes.get(Globals.GAME_SCREEN);
+		int gameSceneIndex = scenes.indexOf(gameScene);
+		scenes.set(gameSceneIndex, new GameScreen(manager, Globals.BGAUDIO_GS));
 	}
 	
 	//testing only!!
@@ -70,6 +80,10 @@ public class SceneManager {
 	// called by Simulation
 	public void renderScene() {
 		this.activeScene.render();
+	}
+	
+	public void updateScene() {
+		this.activeScene.update();
 	}
 	
 	// dispose of scenes

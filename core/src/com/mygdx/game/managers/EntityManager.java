@@ -33,6 +33,12 @@ public class EntityManager {
 			if (entity.getTex() == null) entity.draw(shape);
 		}
 	}
+	
+	public void update(float deltaTime) {
+	    for (Entity entity : entityList) {
+	        entity.update(deltaTime);
+	    }
+	}
 
 	public void moveEntities() {
 	}

@@ -41,11 +41,12 @@ public class Button {
     }
     
     public void leftClicked() {
-    	System.out.println("button left clicked");
+    	System.out.println("AI Spawned");
+    	
     }
     
     public void rightClicked() {
-    	System.out.println("button right clicked");
+    	System.out.println("AI Spawned right click");
     }
     
     public float getWidth() {

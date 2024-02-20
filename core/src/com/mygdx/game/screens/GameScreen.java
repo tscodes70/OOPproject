@@ -15,6 +15,7 @@ import com.mygdx.game.managers.PlayerControlManager;
 import com.mygdx.game.models.Button;
 import com.mygdx.game.models.Entity;
 import com.mygdx.game.models.Scene;
+import com.mygdx.game.globals.Globals;
 
 public class GameScreen extends Scene {	
 	private SpriteBatch batch;
@@ -39,10 +40,11 @@ public class GameScreen extends Scene {
 		//Using shapes render
         Entity playerEntity = new Entity(100, 100, 2, 40, Color.BLUE, false, true);
         
-        Button button = new Button("image/button1.png", 20, 400, 0.6f);
-        Button button2 = new Button("image/button2.png", 20, 300, 0.6f);
+        Button button = new Button(Globals.IMAGE_BUTTON1, 20, 400, 0.6f);
+        Button button2 = new Button(Globals.IMAGE_BUTTON2, 20, 300, 0.6f);
         
-        circles = new Entity[10];
+        int defaultAiSpawn = (int)Math.floor(Math.random() * 15)+5;
+        circles = new Entity[defaultAiSpawn];
         for (int i=0; i<circles.length; i++) {
         	float positionX = (float) (Math.random() * Gdx.graphics.getWidth());
         	float positionY = (float) (Math.random() * Gdx.graphics.getHeight());
@@ -78,6 +80,7 @@ public class GameScreen extends Scene {
 	
 	@Override
 	public void render() {
+
 		// super.render();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -92,9 +95,18 @@ public class GameScreen extends Scene {
 		shape.end();
 		
 		playerControlManager.checkKeyEvents();
-		buttonControlManager.checkClickEvents();
 		aiControlManager.moveAIControlledEntities();
 		collisonManager.checkCollisions(entityManager);
+		
+		buttonControlManager.checkClickEvents(entityManager,aiControlManager,playerControlManager,collisonManager);
+
+		
+
+	}
+	
+	@Override
+	public void update() {
+
 	}
 	
 	

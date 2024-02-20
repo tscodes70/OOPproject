@@ -64,8 +64,7 @@ public class AppSimulation extends Simulation {
 
 	@Override
 	public void update() {
-		System.out.println("update");
-
+		this.sceneManager.updateScene();
 	}
 
 	@Override
@@ -97,15 +96,15 @@ public class AppSimulation extends Simulation {
         // be it anywhere the backspace allows a reset to the menu
 		if (generalControlManager.pollBackspaceKey() && (gameState == Globals.GAME_SCREEN || gameState == Globals.PAUSE_SCREEN)) {
 			if (gameState == Globals.PAUSE_SCREEN) {
-				gameState = Globals.GAME_SCREEN;
+				gameState = Globals.SPLASH_SCREEN;
 			} else {
 				gameState = Globals.SPLASH_SCREEN;
 			}
+			this.sceneManager.resetGameScene(manager);
 			this.sceneManager.setScene(gameState);
 		}
 
 		generalControlManager.checkKeyEvents();
-		generalControlManager.checkClickEvents();
 		// print key events in console
 		// Render the things in simulation
 		// rendering moved to within scene

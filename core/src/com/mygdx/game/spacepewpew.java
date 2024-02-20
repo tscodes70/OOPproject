@@ -47,10 +47,6 @@ public class spacepewpew extends ApplicationAdapter {
 		slm.renderSimulation();
 
 	}
-	
-	public void update() {
-		slm.updateSimulation();
-	}
 
 	@Override
 	public void pause() {

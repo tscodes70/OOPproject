@@ -2,12 +2,15 @@ package com.mygdx.game.managers;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.badlogic.gdx.graphics.Color;
 import com.mygdx.game.models.Entity;
 
 // Manages AI-controlled entities
 public class AIControlManager { 
 	
     private List<Entity> aiEntityList;
+    private List<Entity> updatedEntityList;
     
     // Filters and store only AI-controlled entities
     public AIControlManager(List<Entity> entityList) {
@@ -34,6 +37,16 @@ public class AIControlManager {
                 }
                 entity.updateBoundingBox();
         }
+    }
+    
+    public void update(List<Entity> entityList) {
+    	updatedEntityList = new ArrayList<Entity>();
+        for (Entity entity : entityList) {
+            if (entity.isAiControl()) {
+                updatedEntityList.add(entity);
+            }
+        }
+        this.aiEntityList = updatedEntityList;
     }
 
 

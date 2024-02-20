@@ -28,7 +28,7 @@ public class GeneralControlManager extends IOManager {
 		if(super.pollEnterKey()) enter();
 		if(super.pollBackspaceKey()) backspace();
 	}
-	public void checkClickEvents() {
+	public void checkClickEvents(EntityManager entityManager, AIControlManager aiControlManager, PlayerControlManager playerControlManager, CollisionManager collisonManager) {
 		if(super.pollLeftMouseButton()) leftClick();
 		if(super.pollRightMouseButton()) rightClick();
 	}

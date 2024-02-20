@@ -9,6 +9,7 @@ import com.mygdx.game.models.Entity;
 public class PlayerControlManager extends IOManager {
 	
     private List<Entity> playerEntityList;
+    private List<Entity> updatedEntityList;
 
 	
 	public PlayerControlManager(List<Entity> entityList){
@@ -19,6 +20,16 @@ public class PlayerControlManager extends IOManager {
         	if(!entity.isAiControl()) playerEntityList.add(entity);
         }
 	}
+	
+	 public void update(List<Entity> entityList) {
+	    	updatedEntityList = new ArrayList<Entity>();
+	        for (Entity entity : entityList) {
+	            if (!entity.isAiControl()) {
+	                updatedEntityList.add(entity);
+	            }
+	        }
+	        this.playerEntityList = updatedEntityList;
+	    }
 
 	public void moveLeft() {
 		for (Entity entity : this.playerEntityList) {
@@ -28,7 +39,6 @@ public class PlayerControlManager extends IOManager {
 				entity.updateBoundingBox();
 			}
     	}
-//		System.out.println("Move Left");
 	}
 	
 	public void moveRight() {
@@ -39,17 +49,38 @@ public class PlayerControlManager extends IOManager {
 				entity.updateBoundingBox();
 			}
     	}
-//		System.out.println("Move Right");
+	}
+	
+	public void moveUp() {
+		for (Entity entity : this.playerEntityList) {
+			//Ensure entity is within right boundary of screen
+			if (entity.getPositionY() + entity.getSpeed() + entity.getRadius() <= Gdx.graphics.getWidth()) {
+				entity.setPositionY(entity.getPositionY() + entity.getSpeed());
+				entity.updateBoundingBox();
+			}
+    	}
+	}
+	
+	public void moveDown() {
+		for (Entity entity : this.playerEntityList) {
+			//Ensure entity is within right boundary of screen
+			if (entity.getPositionY() - entity.getSpeed() - entity.getRadius() <= Gdx.graphics.getWidth()) {
+				entity.setPositionY(entity.getPositionY() - entity.getSpeed());
+				entity.updateBoundingBox();
+			}
+    	}
 	}
 	
 	@Override
 	public void checkKeyEvents() {
 		if(super.pollLeftKey()) moveLeft();
 		if(super.pollRightKey()) moveRight();
+		if(super.pollUpKey()) moveUp();
+		if(super.pollDownKey()) moveDown();
 	}
 
 	@Override
-	public void checkClickEvents() {
+	public void checkClickEvents(EntityManager entityManager, AIControlManager aiControlManager, PlayerControlManager pcm, CollisionManager cm) {
 		
 	}
 }

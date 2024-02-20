@@ -52,11 +52,12 @@ public class Entity implements iMovable,iCollidable {
     }
 
     public void update(float deltaTime) {
-        // Update entity (psps im not sure waht to put here)
-    }
+    	// Update position based on speed and direction
+        positionX += speed * deltaTime;
+        positionY += speed * deltaTime;
 
-    public void render(SpriteBatch batch) {
-        // Render the entity (and here)
+        // Update bounding box position
+        boundingBox.setPosition(positionX, positionY);
     }
     
     public void dispose() {
@@ -74,26 +75,6 @@ public class Entity implements iMovable,iCollidable {
     public boolean collidesWith(Entity other) {
         return boundingBox.overlaps(other.getBoundingBox());
     }
-//    public void onCollision(Entity other) {
-//        // Collision Response
-//        System.out.println(this.getClass().getSimpleName() + " collided with " + other.getClass().getSimpleName());
-//        
-//    }
-
-//    public void moveEntity() {
-//        if (aiControl) {
-//            moveAiControlled();
-//        }
-//        else {
-//            movePlayerControlled();
-//        }
-//    }
-//
-//    @Override
-//    public void moveAiControlled() {}
-//
-//    @Override
-//    public void movePlayerControlled() {}
 
     public float getPositionX() {
         return positionX;

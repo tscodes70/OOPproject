@@ -53,6 +53,9 @@ public abstract class Scene {
 		batch.end();
 	}
 	
+	public void update() {
+
+	}
 	//@Override
 	// logic to run when scene is made active
 	public void show() {
