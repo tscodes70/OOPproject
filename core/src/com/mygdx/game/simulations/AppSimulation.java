@@ -93,7 +93,6 @@ public class AppSimulation extends Simulation {
 	public void start() {
 		super.start();
 		
-
 		// Instantiate KeyboardInput
 		keyboardDevice = new KeyboardInput();
 		keyboardDevice.add(LEFTARROWKEY);
@@ -110,6 +109,9 @@ public class AppSimulation extends Simulation {
 		mouseDevice.add(RIGHTCLICKBUTTON);
 		
 		// Instantiate IOManager
+		keyboardIO = new IOManager<KeyboardInput>();
+		mouseIO = new IOManager<MouseInput>();
+		
 		keyboardIO.add(keyboardDevice);
 		mouseIO.add(mouseDevice);
 		
