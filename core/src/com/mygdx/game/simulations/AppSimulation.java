@@ -92,10 +92,12 @@ public class AppSimulation extends Simulation {
 	public void start() {
 		super.start();
 		
+
 		// Instantiate IOManagers
 		keyboardDevice = new IOManager<>(new KeyboardInput());
 		mouseDevice = new IOManager<>(new MouseInput());
 
+		// Adding Keybinds
 		keyboardDevice.add(LEFTARROWKEY);
 		keyboardDevice.add(RIGHTARROWKEY);
 		keyboardDevice.add(UPARROWKEY);
@@ -106,7 +108,7 @@ public class AppSimulation extends Simulation {
 		
 		mouseDevice.add(LEFTCLICKBUTTON);
 		mouseDevice.add(RIGHTCLICKBUTTON);
-		
+
 		// Instantiate SceneManager & All AppSimulation Scenes
 		sceneManager = new SceneManager();
 		sceneManager.add(new SplashScreen(manager, manager.get(BGIMAGE_SS),BGAUDIO_SS));
