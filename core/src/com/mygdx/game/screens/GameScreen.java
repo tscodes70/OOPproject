@@ -11,6 +11,7 @@ import com.mygdx.game.managers.ButtonControlManager;
 import com.mygdx.game.managers.ButtonManager;
 import com.mygdx.game.managers.CollisionManager;
 import com.mygdx.game.managers.EntityManager;
+import com.mygdx.game.managers.IOManager;
 import com.mygdx.game.managers.PlayerControlManager;
 import com.mygdx.game.models.Button;
 import com.mygdx.game.models.Entity;
@@ -27,8 +28,8 @@ public class GameScreen extends Scene {
     private CollisionManager collisionManager;
     private ButtonManager buttonManager;
     private ButtonControlManager buttonControlManager;
-    private KeyboardInput keyboardDevice;
-    private MouseInput mouseDevice;
+    private IOManager<KeyboardInput> keyboardDevice;
+    private IOManager<MouseInput> mouseDevice;
     
 	private final String IMAGE_PATH = "image";
 
@@ -48,7 +49,7 @@ public class GameScreen extends Scene {
 	private final int INITIAL_MIN_SPAWN = 5;
 
     
-	public GameScreen(AssetManager manager, String bgMusicName, KeyboardInput keyboardDevice, MouseInput mouseDevice) {
+	public GameScreen(AssetManager manager, String bgMusicName, IOManager<KeyboardInput> keyboardDevice, IOManager<MouseInput> mouseDevice) {
 		super(manager, bgMusicName);
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();

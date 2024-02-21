@@ -7,14 +7,15 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.mygdx.game.models.Button;
 import com.mygdx.game.models.Entity;
+import com.mygdx.game.models.KeyboardInput;
 import com.mygdx.game.models.MouseInput;
 
-public class ButtonControlManager extends IOManager {
+public class ButtonControlManager {
 	
     private List<Button> buttonList;
     private Button spawnAIButton;
     private Button spawnPlayerButton;
-    private MouseInput mouseDevice;
+    private IOManager<MouseInput> mouseDevice;
     
 	private final int LEFTCLICKBUTTON = Buttons.LEFT;
 	private final int RIGHTCLICKBUTTON = Buttons.RIGHT;
@@ -31,7 +32,7 @@ public class ButtonControlManager extends IOManager {
      * Constructor that manages a list of Button instances
      * @param buttonList
      */
-	public ButtonControlManager(List<Button> buttonList,MouseInput mouseDevice){
+	public ButtonControlManager(List<Button> buttonList,IOManager<MouseInput> mouseDevice){
 		super();
 		this.buttonList = buttonList;
 		this.mouseDevice = mouseDevice;
@@ -50,8 +51,8 @@ public class ButtonControlManager extends IOManager {
 	 * @param collisionManager
 	 */
 	public void buttonClick(int clickedButton, EntityManager entityManager, AIControlManager aiControlManager, PlayerControlManager playerControlManager, CollisionManager collisionManager) {
-		float x = mouseDevice.getMouseX();
-		float y = Gdx.graphics.getHeight() - mouseDevice.getMouseY(); // texture y-axis coordinates are inverted
+		float x = mouseDevice.getinputOutputDevice().getMouseX();
+		float y = Gdx.graphics.getHeight() - mouseDevice.getinputOutputDevice().getMouseY(); // texture y-axis coordinates are inverted
 			
             if(spawnAIButton.getBoundingBox().contains(x, y)) {
                     	entityManager.add(new Entity(

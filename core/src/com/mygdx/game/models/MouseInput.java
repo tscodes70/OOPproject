@@ -1,26 +1,9 @@
 package com.mygdx.game.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.interfaces.iInputOutput;
 
 public class MouseInput implements iInputOutput{
-
-	private List<Integer> buttonCodeList;
-	
-	public MouseInput() {
-		buttonCodeList = new ArrayList<Integer>();
-	}
-	
-	public void add(int buttonCode) {
-		buttonCodeList.add(buttonCode);
-	}
-	
-	public void remove(int buttonCode) {
-		buttonCodeList.remove(buttonCode);
-	}
 	
 	public float getMouseX() { return (float)Gdx.input.getX(); }
 

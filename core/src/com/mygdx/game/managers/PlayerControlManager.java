@@ -15,7 +15,7 @@ public class PlayerControlManager implements iManager<Entity>, iMovable {
 	
     private List<Entity> playerEntityList;
     private List<Entity> updatedEntityList;
-    private KeyboardInput keyboardDevice;
+    private IOManager<KeyboardInput> keyboardDevice;
     
 	private final int LEFTKEY = Keys.LEFT;
 	private final int RIGHTKEY = Keys.RIGHT;
@@ -29,7 +29,7 @@ public class PlayerControlManager implements iManager<Entity>, iMovable {
 	 * that has variable aiControl=false.
 	 * @param entityList
 	 */
-	public PlayerControlManager(List<Entity> entityList, KeyboardInput keyboardDevice){
+	public PlayerControlManager(List<Entity> entityList, IOManager<KeyboardInput> keyboardDevice){
 		super();
 		this.keyboardDevice = keyboardDevice;
 		playerEntityList = new ArrayList<Entity>();

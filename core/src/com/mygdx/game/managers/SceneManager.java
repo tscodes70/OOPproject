@@ -74,7 +74,7 @@ public class SceneManager implements iManager<Scene>{
 	 * Reinitializes the game scene
 	 * @param manager
 	 */
-	public void resetGameScene(AssetManager manager, KeyboardInput keyboardDevice, MouseInput mouseDevice) {
+	public void resetGameScene(AssetManager manager, IOManager<KeyboardInput> keyboardDevice, IOManager<MouseInput> mouseDevice) {
 		Scene gameScene = sceneList.get(GAME_SCREEN);
 		int gameSceneIndex = sceneList.indexOf(gameScene);
 		sceneList.set(gameSceneIndex, new GameScreen(manager,BGAUDIO_GS,keyboardDevice,mouseDevice));
