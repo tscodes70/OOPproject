@@ -63,7 +63,7 @@ public class Entity {
      */
     public void update(float deltaTime) {
     	// Update position based on speed and direction
-        positionX += speed * deltaTime;
+//        positionX += speed * deltaTime;
         positionY += speed * deltaTime;
 
         // Update bounding box position
