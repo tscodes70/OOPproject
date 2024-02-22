@@ -26,44 +26,22 @@ public class spacepewpew extends ApplicationAdapter {
 		// Simulation Lifecycle
 		slm = new SimulationLifecycleManager();
 		slm.add(new AppSimulation());
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+		slm.initSimulations();
 	}
 
 	@Override
 	public void render() {
-		// TODO Auto-generated method stub
-		// for now only one simulation in the entire game
 		for (Simulation s : slm.getSimulations()) {
 			if(!s.isInitialized()) {
 				s.initialize();
 			}
-			slm.renderSimulation();
+			slm.renderSimulations();
 		}
 	}
 
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 		slm.dispose();
-//		batch.dispose();
-//		shape.dispose();
 	}
 
 }

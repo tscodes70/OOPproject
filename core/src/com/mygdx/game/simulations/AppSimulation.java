@@ -79,14 +79,14 @@ public class AppSimulation extends Simulation {
 
 		
 		System.out.println(String.format("Simulation Name: %s", this.getClass().getName()));
-		System.out.println(String.format("Simulation: %s", super.getInitializationStatus()));
+		System.out.println(String.format("Simulation Init Status: %s", super.getInitializationStatus()));
 
 	}
 
 	/**
 	 * This method is called after initialization of AppSimulation.
 	 * All AppSimulation Scenes are instantiated and AppSimulation Starting Scene is set.
-	 * GeneralControlManager is instantiated.
+	 * Device bindings are added
 	 */
 	@Override
 	public void start() {
@@ -120,7 +120,7 @@ public class AppSimulation extends Simulation {
 		gameState = SPLASH_SCREEN;
 		sceneManager.setScene(SPLASH_SCREEN);
 		
-		System.out.println(String.format("Simulation Status: %s", super.getStartedStatus()));
+		System.out.println(String.format("Simulation Run Status: %s", super.getStartedStatus()));
 	}
 
 	/**
@@ -175,6 +175,7 @@ public class AppSimulation extends Simulation {
 	 */
 	@Override
 	public void dispose() {
+		super.stop();
 		super.dispose();
 		if (manager != null) manager.dispose();
 		if (sceneManager != null) sceneManager.dispose();

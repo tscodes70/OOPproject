@@ -8,20 +8,6 @@ import com.mygdx.game.interfaces.iInputOutput;
 
 public class KeyboardInput implements iInputOutput {
 
-//	private List<Integer> keyCodeList;
-	
-//	public KeyboardInput() {
-//		keyCodeList = new ArrayList<Integer>();
-//	}
-//	
-//	public void add(int keyCode) {
-//		keyCodeList.add(keyCode);
-//	}
-//	
-//	public void remove(int keyCode) {
-//		keyCodeList.remove(keyCode);
-//	}
-	
 	@Override
 	public boolean pollInputHold(int keyCode) {
 		return Gdx.input.isKeyPressed(keyCode);

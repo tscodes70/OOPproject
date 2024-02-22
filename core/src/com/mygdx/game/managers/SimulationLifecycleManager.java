@@ -46,15 +46,26 @@ public class SimulationLifecycleManager implements iManager<Simulation> {
 	/**
 	 * Renders All Simulations
 	 */
-    public void renderSimulation() {
+    public void renderSimulations() {
         for (Simulation simulation : simulationList) {
-            if (!simulation.isStarted()) {
-                simulation.initialize();
-                simulation.start();
-            }
+            if (!simulation.isInitialized()) System.out.println(String.format("Simulation Init Status: %s", simulation.getStartedStatus()));
+            if (!simulation.isStarted()) System.out.println(String.format("Simulation Run Status: %s", simulation.getStartedStatus()));
+
             simulation.render();
             simulation.update();
         }
+    }
+    
+    /**
+	 * Initialize All Simulations
+	 */
+    public void initSimulations() {
+    	for (Simulation simulation : simulationList) {
+    		if (!simulation.isInitialized()) {
+    			simulation.initialize();
+    			simulation.start();
+    		}
+    	}
     }
 
     /**
