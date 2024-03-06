@@ -1,7 +1,7 @@
-package com.mygdx.game.models;
+package com.mygdx.gameengine.models;
 
 import com.badlogic.gdx.Gdx;
-import com.mygdx.game.interfaces.iInputOutput;
+import com.mygdx.gameengine.interfaces.iInputOutput;
 
 public class MouseInput implements iInputOutput{
 	

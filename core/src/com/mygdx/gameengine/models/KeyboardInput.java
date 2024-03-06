@@ -1,10 +1,10 @@
-package com.mygdx.game.models;
+package com.mygdx.gameengine.models;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.mygdx.game.interfaces.iInputOutput;
+import com.mygdx.gameengine.interfaces.iInputOutput;
 
 public class KeyboardInput implements iInputOutput {
 

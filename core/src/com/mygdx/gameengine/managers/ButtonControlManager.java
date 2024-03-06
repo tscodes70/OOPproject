@@ -1,14 +1,14 @@
-package com.mygdx.game.managers;
+package com.mygdx.gameengine.managers;
 
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
-import com.mygdx.game.models.Button;
-import com.mygdx.game.models.Entity;
-import com.mygdx.game.models.KeyboardInput;
-import com.mygdx.game.models.MouseInput;
+import com.mygdx.gameengine.models.Button;
+import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gameengine.models.KeyboardInput;
+import com.mygdx.gameengine.models.MouseInput;
 
 public class ButtonControlManager {
 	

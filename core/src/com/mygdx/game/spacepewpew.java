@@ -5,12 +5,12 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.mygdx.game.managers.SimulationLifecycleManager;
+import com.mygdx.gameengine.managers.SimulationLifecycleManager;
 //import com.mygdx.game.models.Simulation;
-import com.mygdx.game.simulations.AppSimulation;
-import com.mygdx.game.models.Entity;
-import com.mygdx.game.models.Simulation;
-import com.mygdx.game.managers.EntityManager;
+import com.mygdx.gamelayer.simulation.AppSimulation;
+import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gameengine.models.Simulation;
+import com.mygdx.gameengine.managers.EntityManager;
 import java.util.List;
 import java.util.ArrayList;
 

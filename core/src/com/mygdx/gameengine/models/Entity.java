@@ -1,12 +1,12 @@
-package com.mygdx.game.models;
+package com.mygdx.gameengine.models;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.game.interfaces.iCollidable;
-import com.mygdx.game.interfaces.iMovable;
+import com.mygdx.gameengine.interfaces.iCollidable;
+import com.mygdx.gameengine.interfaces.iMovable;
 
 public class Entity {
     private float positionX;

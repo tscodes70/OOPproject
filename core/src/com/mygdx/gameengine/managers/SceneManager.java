@@ -1,16 +1,16 @@
-package com.mygdx.game.managers;
+package com.mygdx.gameengine.managers;
 //import com.badlogic.gdx.Game;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.mygdx.game.interfaces.iManager;
-import com.mygdx.game.models.Entity;
-import com.mygdx.game.models.KeyboardInput;
-import com.mygdx.game.models.MouseInput;
-import com.mygdx.game.models.Scene;
-import com.mygdx.game.screens.GameScreen;
+import com.mygdx.gameengine.interfaces.iManager;
+import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gameengine.models.KeyboardInput;
+import com.mygdx.gameengine.models.MouseInput;
+import com.mygdx.gameengine.models.Scene;
+import com.mygdx.gamelayer.screens.GameScreen;
 
 public class SceneManager implements iManager<Scene>{
 	

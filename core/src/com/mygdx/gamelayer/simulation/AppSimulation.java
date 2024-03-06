@@ -1,20 +1,20 @@
-package com.mygdx.game.simulations;
+package com.mygdx.gamelayer.simulation;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.game.interfaces.iInputOutput;
-import com.mygdx.game.managers.IOManager;
-import com.mygdx.game.managers.SceneManager;
-import com.mygdx.game.models.KeyboardInput;
-import com.mygdx.game.models.MouseInput;
-import com.mygdx.game.models.Simulation;
-import com.mygdx.game.screens.EndScreen;
-import com.mygdx.game.screens.PauseScreen;
-import com.mygdx.game.screens.GameScreen;
-import com.mygdx.game.screens.SplashScreen;
+import com.mygdx.gameengine.interfaces.iInputOutput;
+import com.mygdx.gameengine.managers.IOManager;
+import com.mygdx.gameengine.managers.SceneManager;
+import com.mygdx.gameengine.models.KeyboardInput;
+import com.mygdx.gameengine.models.MouseInput;
+import com.mygdx.gameengine.models.Simulation;
+import com.mygdx.gamelayer.screens.EndScreen;
+import com.mygdx.gamelayer.screens.PauseScreen;
+import com.mygdx.gamelayer.screens.GameScreen;
+import com.mygdx.gamelayer.screens.SplashScreen;
 
 public class AppSimulation extends Simulation {
 	

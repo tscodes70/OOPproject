@@ -1,12 +1,12 @@
-package com.mygdx.game.managers;
+package com.mygdx.gameengine.managers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.mygdx.game.interfaces.iManager;
-import com.mygdx.game.models.Entity;
-import com.mygdx.game.models.Simulation;
+import com.mygdx.gameengine.interfaces.iManager;
+import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gameengine.models.Simulation;
 
 public class SimulationLifecycleManager implements iManager<Simulation> {
 	private List<Simulation> simulationList;

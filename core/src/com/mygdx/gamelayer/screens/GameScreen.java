@@ -1,4 +1,4 @@
-package com.mygdx.game.screens;
+package com.mygdx.gamelayer.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -6,18 +6,18 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.mygdx.game.managers.AIControlManager;
-import com.mygdx.game.managers.ButtonControlManager;
-import com.mygdx.game.managers.ButtonManager;
-import com.mygdx.game.managers.CollisionManager;
-import com.mygdx.game.managers.EntityManager;
-import com.mygdx.game.managers.IOManager;
-import com.mygdx.game.managers.PlayerControlManager;
-import com.mygdx.game.models.Button;
-import com.mygdx.game.models.Entity;
-import com.mygdx.game.models.KeyboardInput;
-import com.mygdx.game.models.MouseInput;
-import com.mygdx.game.models.Scene;
+import com.mygdx.gameengine.managers.AIControlManager;
+import com.mygdx.gameengine.managers.ButtonControlManager;
+import com.mygdx.gameengine.managers.ButtonManager;
+import com.mygdx.gameengine.managers.CollisionManager;
+import com.mygdx.gameengine.managers.EntityManager;
+import com.mygdx.gameengine.managers.IOManager;
+import com.mygdx.gameengine.managers.PlayerControlManager;
+import com.mygdx.gameengine.models.Button;
+import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gameengine.models.KeyboardInput;
+import com.mygdx.gameengine.models.MouseInput;
+import com.mygdx.gameengine.models.Scene;
 
 public class GameScreen extends Scene {	
 	private SpriteBatch batch;

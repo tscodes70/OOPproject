@@ -1,11 +1,11 @@
-package com.mygdx.game.managers;
+package com.mygdx.gameengine.managers;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mygdx.game.interfaces.iInputOutput;
-import com.mygdx.game.interfaces.iManager;
+import com.mygdx.gameengine.interfaces.iInputOutput;
+import com.mygdx.gameengine.interfaces.iManager;
 
 
 public class IOManager<T extends iInputOutput> {

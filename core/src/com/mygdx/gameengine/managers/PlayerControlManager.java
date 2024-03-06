@@ -1,4 +1,4 @@
-package com.mygdx.game.managers;
+package com.mygdx.gameengine.managers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,10 +6,10 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.mygdx.game.interfaces.iManager;
-import com.mygdx.game.interfaces.iMovable;
-import com.mygdx.game.models.Entity;
-import com.mygdx.game.models.KeyboardInput;
+import com.mygdx.gameengine.interfaces.iManager;
+import com.mygdx.gameengine.interfaces.iMovable;
+import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gameengine.models.KeyboardInput;
 
 public class PlayerControlManager implements iManager<Entity>, iMovable {
 	
