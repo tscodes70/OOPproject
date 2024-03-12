@@ -3,12 +3,12 @@ package com.mygdx.gameengine.managers;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mygdx.gameengine.interfaces.iManager;
+import com.badlogic.gdx.Gdx;
 import com.mygdx.gameengine.interfaces.iMovable;
 import com.mygdx.gameengine.models.Entity;
 
 // Manages AI-controlled entities
-public class AIControlManager implements iManager<Entity>, iMovable{ 
+public class AIControlManager implements iMovable{ 
 	
     private List<Entity> aiEntityList;
     private List<Entity> updatedEntityList;
@@ -58,12 +58,12 @@ public class AIControlManager implements iManager<Entity>, iMovable{
             entity.setPositionY(entity.getPositionY() - distanceToMove);
 
             // Check if entity has moved off-screen
-            if (entity.getPositionY() < 0) {
+            if (entity.getPositionY() < 220) {
                 // Reset entity's position to top of screen
-                entity.setPositionY(400);
-                if (entity.getSpeed() <= MAX_ENTITY_SPEED) {
-                   entity.setSpeed(entity.getSpeed() + 2);
-                }
+                entity.setPositionY(Gdx.graphics.getHeight());
+//                if (entity.getSpeed() <= MAX_ENTITY_SPEED) {
+//                   entity.setSpeed(entity.getSpeed() + 2);
+//                }
             }
             entity.update(deltaTime);
         }

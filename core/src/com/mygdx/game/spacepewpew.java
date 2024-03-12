@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -27,6 +28,7 @@ public class spacepewpew extends ApplicationAdapter {
 		slm = new SimulationLifecycleManager();
 		slm.add(new AppSimulation());
 		slm.initSimulations();
+
 	}
 
 	@Override

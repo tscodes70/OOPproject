@@ -15,6 +15,7 @@ import com.mygdx.gamelayer.screens.EndScreen;
 import com.mygdx.gamelayer.screens.PauseScreen;
 import com.mygdx.gamelayer.screens.GameScreen;
 import com.mygdx.gamelayer.screens.SplashScreen;
+import com.mygdx.gamelayer.screens.testScreen;
 
 public class AppSimulation extends Simulation {
 	
@@ -42,8 +43,8 @@ public class AppSimulation extends Simulation {
 	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
 	
 	private final String BGAUDIO_SS = String.format("%s/mii-channel.mp3", AUDIO_PATH);
-	private final String BGAUDIO_GS = String.format("%s/megalovania.mp3", AUDIO_PATH);
-	private final String BGAUDIO_ES = String.format("%s/bbq.mp3", AUDIO_PATH);
+	private final String BGAUDIO_GS = String.format("%s/burnt_toaster.mp3", AUDIO_PATH);
+	private final String BGAUDIO_ES = String.format("%s/victory_fanfare.mp3", AUDIO_PATH);
 	private final String BGIMAGE_SS = String.format("%s/splash.jpg", IMAGE_PATH);
 	
 	private final int SPLASH_SCREEN = 0;
@@ -112,7 +113,7 @@ public class AppSimulation extends Simulation {
 		// Instantiate SceneManager & All AppSimulation Scenes
 		sceneManager = new SceneManager();
 		sceneManager.add(new SplashScreen(manager, manager.get(BGIMAGE_SS),BGAUDIO_SS));
-		sceneManager.add(new GameScreen(manager, BGAUDIO_GS,keyboardDevice,mouseDevice));
+		sceneManager.add(new testScreen(manager, BGAUDIO_GS,keyboardDevice,mouseDevice));
 		sceneManager.add(new PauseScreen());
 		sceneManager.add(new EndScreen(manager, BGAUDIO_ES));
 

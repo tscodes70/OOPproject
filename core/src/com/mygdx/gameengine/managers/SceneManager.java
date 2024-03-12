@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.mygdx.gameengine.interfaces.iManager;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gameengine.models.KeyboardInput;
 import com.mygdx.gameengine.models.MouseInput;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gamelayer.screens.GameScreen;
 
-public class SceneManager implements iManager<Scene>{
+public class SceneManager{
 	
 	private List<Scene> sceneList;
 	private List<Scene> updatedSceneList;
@@ -21,7 +20,7 @@ public class SceneManager implements iManager<Scene>{
 	
 	private final int GAME_SCREEN = 1;
 	private final String AUDIO_PATH = "audio/music";
-	private final String BGAUDIO_GS = String.format("%s/megalovania.mp3", AUDIO_PATH);
+	private final String BGAUDIO_GS = String.format("%s/burnt_toaster.mp3", AUDIO_PATH);
 		
 	public SceneManager() {
 		this.sceneList = new ArrayList<Scene>();

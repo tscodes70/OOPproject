@@ -6,12 +6,11 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.mygdx.gameengine.interfaces.iManager;
 import com.mygdx.gameengine.interfaces.iMovable;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gameengine.models.KeyboardInput;
 
-public class PlayerControlManager implements iManager<Entity>, iMovable {
+public class PlayerControlManager implements iMovable {
 	
     private List<Entity> playerEntityList;
     private List<Entity> updatedEntityList;

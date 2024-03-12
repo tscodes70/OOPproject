@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.mygdx.gameengine.interfaces.iManager;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gameengine.models.Simulation;
 
-public class SimulationLifecycleManager implements iManager<Simulation> {
+public class SimulationLifecycleManager{
 	private List<Simulation> simulationList;
 	private List<Simulation> updatedSimulationList;
 	

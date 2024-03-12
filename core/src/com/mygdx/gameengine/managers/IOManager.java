@@ -8,7 +8,6 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.mygdx.gameengine.interfaces.iInputOutput;
-import com.mygdx.gameengine.interfaces.iManager;
 
 
 public class IOManager<T extends iInputOutput> {

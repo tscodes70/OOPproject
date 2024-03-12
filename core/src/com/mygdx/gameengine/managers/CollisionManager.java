@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mygdx.gameengine.interfaces.iCollidable;
-import com.mygdx.gameengine.interfaces.iManager;
 import com.mygdx.gameengine.models.Entity;
 
-public class CollisionManager implements iCollidable<EntityManager, Entity>, iManager<Entity>{
+public class CollisionManager implements iCollidable<EntityManager, Entity>{
 	private List<Entity> collidableList;
 	private List<Entity> updatedEntityList;
 	
