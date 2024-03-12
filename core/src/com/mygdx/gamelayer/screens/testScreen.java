@@ -12,13 +12,12 @@ import com.mygdx.gameengine.managers.ButtonControlManager;
 import com.mygdx.gameengine.managers.ButtonManager;
 import com.mygdx.gameengine.managers.CollisionManager;
 import com.mygdx.gameengine.managers.EntityManager;
-import com.mygdx.gameengine.managers.IOManager;
 import com.mygdx.gameengine.managers.PlayerControlManager;
-import com.mygdx.gameengine.models.Button;
 import com.mygdx.gameengine.models.Entity;
-import com.mygdx.gameengine.models.KeyboardInput;
-import com.mygdx.gameengine.models.MouseInput;
+import com.mygdx.gameengine.models.Keyboard;
+import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
+import com.mygdx.gameengine.models.Sound;
 
 public class testScreen extends Scene {	
 	private SpriteBatch batch;
@@ -29,8 +28,8 @@ public class testScreen extends Scene {
     private CollisionManager collisionManager;
     private ButtonManager buttonManager;
     private ButtonControlManager buttonControlManager;
-    private IOManager<KeyboardInput> keyboardDevice;
-    private IOManager<MouseInput> mouseDevice;
+    private Keyboard keyboardDevice;
+    private Mouse mouseDevice;
     
 	private final String IMAGE_PATH = "image";
 
@@ -52,8 +51,8 @@ public class testScreen extends Scene {
 	private BitmapFont font;
     private float countdownTime = 180f;
     
-	public testScreen(AssetManager manager, String bgMusicName, IOManager<KeyboardInput> keyboardDevice, IOManager<MouseInput> mouseDevice) {
-		super(manager, bgMusicName);
+	public testScreen(Sound bgMusic, Keyboard keyboardDevice, Mouse mouseDevice) {
+		super(bgMusic);
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
 		

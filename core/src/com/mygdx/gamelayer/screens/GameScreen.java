@@ -1,9 +1,9 @@
 package com.mygdx.gamelayer.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.gameengine.managers.AIControlManager;
@@ -11,13 +11,13 @@ import com.mygdx.gameengine.managers.ButtonControlManager;
 import com.mygdx.gameengine.managers.ButtonManager;
 import com.mygdx.gameengine.managers.CollisionManager;
 import com.mygdx.gameengine.managers.EntityManager;
-import com.mygdx.gameengine.managers.IOManager;
 import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.models.Button;
 import com.mygdx.gameengine.models.Entity;
-import com.mygdx.gameengine.models.KeyboardInput;
-import com.mygdx.gameengine.models.MouseInput;
+import com.mygdx.gameengine.models.Keyboard;
+import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
+import com.mygdx.gameengine.models.Sound;
 
 public class GameScreen extends Scene {	
 	private SpriteBatch batch;
@@ -28,8 +28,8 @@ public class GameScreen extends Scene {
     private CollisionManager collisionManager;
     private ButtonManager buttonManager;
     private ButtonControlManager buttonControlManager;
-    private IOManager<KeyboardInput> keyboardDevice;
-    private IOManager<MouseInput> mouseDevice;
+    private Keyboard keyboardDevice;
+    private Mouse mouseDevice;
     
 	private final String IMAGE_PATH = "image";
 
@@ -49,8 +49,8 @@ public class GameScreen extends Scene {
 	private final int INITIAL_MIN_SPAWN = 5;
 
     
-	public GameScreen(AssetManager manager, String bgMusicName, IOManager<KeyboardInput> keyboardDevice, IOManager<MouseInput> mouseDevice) {
-		super(manager, bgMusicName);
+	public GameScreen(Texture buttonSA, Texture buttonSP, Sound bgMusic, Keyboard keyboardDevice, Mouse mouseDevice) {
+		super(bgMusic);
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
 		
@@ -82,6 +82,16 @@ public class GameScreen extends Scene {
 		aiControlManager = new AIControlManager(entityManager.getEntityList());
 		
 		//Instantiate PlayerControlManager
+
+//		// Adding Keybinds for player will be done here
+//		keyboardDevice.add(LEFTARROWKEY);
+//		keyboardDevice.add(RIGHTARROWKEY);
+//		keyboardDevice.add(UPARROWKEY);
+//		keyboardDevice.add(DOWNARROWKEY);
+//		
+//		mouseDevice.add(LEFTCLICKBUTTON);
+//		mouseDevice.add(RIGHTCLICKBUTTON);
+		
 		playerControlManager = new PlayerControlManager(entityManager.getEntityList(),keyboardDevice);
 		
 		//Instantiate CollisionManager
@@ -91,8 +101,8 @@ public class GameScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(manager.get(IMAGE_SA), 20, 400, 0.6f));
-		buttonManager.add(new Button(manager.get(IMAGE_SP), 20, 300, 0.6f));
+		buttonManager.add(new Button(buttonSA, 20, 400, 0.6f));
+		buttonManager.add(new Button(buttonSP, 20, 300, 0.6f));
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}
 	

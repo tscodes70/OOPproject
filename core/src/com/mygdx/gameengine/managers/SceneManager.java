@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.mygdx.gameengine.interfaces.iOutput;
 import com.mygdx.gameengine.models.Entity;
-import com.mygdx.gameengine.models.KeyboardInput;
-import com.mygdx.gameengine.models.MouseInput;
+import com.mygdx.gameengine.models.Keyboard;
+import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
+import com.mygdx.gameengine.models.Sound;
 import com.mygdx.gamelayer.screens.GameScreen;
+import com.badlogic.gdx.graphics.Texture;
 
 public class SceneManager{
 	
@@ -18,12 +21,25 @@ public class SceneManager{
 	private int currentSceneCode = -1;
 	private Scene activeScene;
 	
+	private OutputManager<iOutput> oManager;
+	
 	private final int GAME_SCREEN = 1;
 	private final String AUDIO_PATH = "audio/music";
-	private final String BGAUDIO_GS = String.format("%s/burnt_toaster.mp3", AUDIO_PATH);
-		
-	public SceneManager() {
+	private final String BGAUDIO_GS_PATH = String.format("%s/burnt_toaster.mp3", AUDIO_PATH);
+	
+	private final String IMAGE_PATH = "image";
+
+	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
+	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
+	
+	// Lazy way (need change to use omanager)
+	private Sound bgGSMusic = new Sound(BGAUDIO_GS_PATH);
+	private Texture buttonSA = new Texture(IMAGE_SA);
+	private Texture buttonSP = new Texture(IMAGE_SP);
+	
+	public SceneManager(OutputManager<iOutput> oManager) {
 		this.sceneList = new ArrayList<Scene>();
+		this.oManager = oManager;
 	}
 	
 	/**
@@ -73,10 +89,10 @@ public class SceneManager{
 	 * Reinitializes the game scene
 	 * @param manager
 	 */
-	public void resetGameScene(AssetManager manager, IOManager<KeyboardInput> keyboardDevice, IOManager<MouseInput> mouseDevice) {
+	public void resetGameScene(Keyboard keyboardDevice, Mouse mouseDevice) {
 		Scene gameScene = sceneList.get(GAME_SCREEN);
 		int gameSceneIndex = sceneList.indexOf(gameScene);
-		sceneList.set(gameSceneIndex, new GameScreen(manager,BGAUDIO_GS,keyboardDevice,mouseDevice));
+		sceneList.set(gameSceneIndex, new GameScreen(buttonSA,buttonSP,bgGSMusic,keyboardDevice,mouseDevice));
 	}
 	
 	/**

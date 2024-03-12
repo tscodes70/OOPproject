@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.mygdx.gameengine.models.Scene;
+import com.mygdx.gameengine.models.Sound;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 
@@ -15,8 +16,8 @@ public class EndScreen extends Scene {
     private final String GLYPHMESSAGE = "Game ended, press Esc to return";
 
 	
-	public EndScreen(AssetManager manager, String bgMusicName) {
-		super(manager, bgMusicName);
+	public EndScreen(Sound bgMusic) {
+		super(bgMusic);
 		this.font = new BitmapFont();
 	    title = new GlyphLayout(font, GLYPHMESSAGE); //for getting width/height of text
 	}

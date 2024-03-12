@@ -1,13 +1,13 @@
 package com.mygdx.gameengine.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
-import com.mygdx.gameengine.interfaces.iInputOutput;
+import com.mygdx.gameengine.interfaces.iInput;
 
-public class KeyboardInput implements iInputOutput {
-
+public class Keyboard implements iInput {
+	
+	public Keyboard() {
+		
+	}
 	@Override
 	public boolean pollInputHold(int keyCode) {
 		return Gdx.input.isKeyPressed(keyCode);

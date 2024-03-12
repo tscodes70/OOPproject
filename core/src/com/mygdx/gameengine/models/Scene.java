@@ -10,51 +10,36 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Scene {
-	
-	protected Sprite bgSprite;
+
 	protected SpriteBatch batch;
-	protected AssetManager manager;
-	protected Music bgMusic;
+	protected Sound bgMusic;
+	protected Sprite bgImage;
 	
 	/**
 	 * Constructor for Scenes that contain Background Image and Music
-	 * @param manager
-	 * @param bgTexture
-	 * @param bgMusicName
+	 * @param bgMusic
+	 * @param bgImage
 	 */
-	public Scene(AssetManager manager, Texture bgTexture, String bgMusicName) {
-		this.manager = manager;
-		
+	public Scene(Sound bgMusic, Texture bgImage) {
+
 		batch = new SpriteBatch();
-		bgSprite = new Sprite(bgTexture);
-		bgSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		
-		bgMusic = manager.get(bgMusicName,Music.class);
-		bgMusic.setLooping(true);
-		bgMusic.setVolume(0.15f);
+		this.bgImage = new Sprite(bgImage);
+		this.bgImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		this.bgMusic = bgMusic;
 	}
 	
 	/**
 	 * Constructor for Scenes that only contain Background Music
-	 * @param manager
-	 * @param bgTexture
-	 * @param bgMusicName
+	 * @param bgMusic
 	 */
-	public Scene(AssetManager manager, String bgMusicName) {
-		this.manager = manager;
-		
+	public Scene(Sound bgMusic) {
 		batch = new SpriteBatch();
-		bgMusic = manager.get(bgMusicName,Music.class);
-		bgMusic.setLooping(true);
-		bgMusic.setVolume(0.15f);
+		this.bgMusic = bgMusic;
 	}
 	
 	/**
 	 * Constructor for Scenes that do not contain Background Image
 	 * and Music
-	 * @param manager
-	 * @param bgTexture
-	 * @param bgMusicName
 	 */
 	public Scene() {
 		batch = new SpriteBatch();
@@ -68,7 +53,7 @@ public abstract class Scene {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		this.batch.begin();
-		this.bgSprite.draw(batch);
+		this.bgImage.draw(batch);
 		this.batch.end();
 	}
 
@@ -77,8 +62,7 @@ public abstract class Scene {
 	 */
 	public void show() {
 		if(bgMusic != null) {
-			bgMusic.setPosition(0);
-			bgMusic.play();
+			bgMusic.output();
 		}
 	}
 	
@@ -100,7 +84,7 @@ public abstract class Scene {
 	 * Resume Scene, called during scene transition to resume scene
 	 */
 	public void resume() {
-		if(bgMusic != null) bgMusic.play();
+		if(bgMusic != null) bgMusic.output();
 	}
 	
 	/**
@@ -116,6 +100,5 @@ public abstract class Scene {
 	public void dispose() {
 		if(bgMusic != null) bgMusic.dispose();
 		if(batch != null) batch.dispose();
-		if(manager != null) manager.dispose();
 	}
 }

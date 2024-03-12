@@ -5,16 +5,15 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
 import com.mygdx.gameengine.interfaces.iMovable;
 import com.mygdx.gameengine.models.Entity;
-import com.mygdx.gameengine.models.KeyboardInput;
+import com.mygdx.gameengine.models.Keyboard;
 
 public class PlayerControlManager implements iMovable {
 	
     private List<Entity> playerEntityList;
     private List<Entity> updatedEntityList;
-    private IOManager<KeyboardInput> keyboardDevice;
+    private Keyboard keyboardDevice;
     
 	private final int LEFTKEY = Keys.LEFT;
 	private final int RIGHTKEY = Keys.RIGHT;
@@ -28,7 +27,7 @@ public class PlayerControlManager implements iMovable {
 	 * that has variable aiControl=false.
 	 * @param entityList
 	 */
-	public PlayerControlManager(List<Entity> entityList, IOManager<KeyboardInput> keyboardDevice){
+	public PlayerControlManager(List<Entity> entityList, Keyboard keyboardDevice){
 		super();
 		this.keyboardDevice = keyboardDevice;
 		playerEntityList = new ArrayList<Entity>();
