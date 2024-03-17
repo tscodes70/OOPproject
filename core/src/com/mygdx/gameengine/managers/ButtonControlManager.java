@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.mygdx.gameengine.models.Button;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gameengine.models.Mouse;
+import com.mygdx.gamelayer.simulation.AppSimulation;
 
 public class ButtonControlManager {
 	
@@ -35,54 +36,28 @@ public class ButtonControlManager {
 		super();
 		this.buttonList = buttonList;
 		this.mouseDevice = mouseDevice;
-		spawnAIButton = buttonList.get(0);
-		spawnPlayerButton = buttonList.get(1);
 	}
-
+	
 	/**
 	 * Main code for handling the logic of the clicked buttons.
 	 * Check which buttons is clicked, run its code and calls the update function for
 	 * each of the Manager Classes affected.
 	 * @param clickedButton
-	 * @param entityManager
-	 * @param aiControlManager
-	 * @param playerControlManager
-	 * @param collisionManager
 	 */
-	public void buttonClick(int clickedButton, EntityManager entityManager, AIControlManager aiControlManager, PlayerControlManager playerControlManager, CollisionManager collisionManager) {
+	// iterates through buttons, checks if click occurred within their bounding boxes
+	// game logic moved into their respective game scene
+	public Button buttonClick(int clickedButton) {
 		float x = mouseDevice.getMouseX();
 		float y = Gdx.graphics.getHeight() - mouseDevice.getMouseY(); // texture y-axis coordinates are inverted
-			
-            if(spawnAIButton.getBoundingBox().contains(x, y)) {
-                    	entityManager.add(new Entity(
-                    			(float) (Math.random() * Gdx.graphics.getWidth()),
-                    			(float) (Math.random() * Gdx.graphics.getHeight()),
-                    			DEFAULT_ENTITY_SPEED,
-                        		DEFAULT_ENTITY_RADIUS,
-                        		DEFAULT_AI_COLOR, 
-                        		AI_CONTROL, 
-                        		COLLIDABLE));
-                    	System.out.println("AI Spawned");
-            	}            		 
-            
-            if(spawnPlayerButton.getBoundingBox().contains(x, y)) {
-                    	entityManager.add(new Entity(
-                    			(float) (Math.random() * Gdx.graphics.getWidth()),
-                    			(float) (Math.random() * Gdx.graphics.getHeight()),
-                    			DEFAULT_ENTITY_SPEED,
-                        		DEFAULT_ENTITY_RADIUS,
-                        		DEFAULT_PLAYER_COLOR, 
-                        		!AI_CONTROL, 
-                        		COLLIDABLE));
-                    	System.out.println("Player Spawned");
-            }
-            
-        	List<Entity> entityList = entityManager.getEntityList();
-        	aiControlManager.update(entityList);
-        	playerControlManager.update(entityList);
-        	collisionManager.update(entityList);
-        }
-    
+		
+		// return the button if the click occurred inside its bounding box
+		for(Button b : buttonList) {
+			if (b.getBoundingBox().contains(x, y)) return b;
+		}
+		
+		return null;
+    }
+	
 	/**
 	 * Main onclick poll method
 	 * @param entityManager
@@ -90,8 +65,8 @@ public class ButtonControlManager {
 	 * @param playerControlManager
 	 * @param collisionManager
 	 */
-	public void handleClickEvents(EntityManager entityManager, AIControlManager aiControlManager, PlayerControlManager playerControlManager, CollisionManager collisionManager) {
-		if(mouseDevice.pollInputPress(LEFTCLICKBUTTON)) this.buttonClick(Buttons.LEFT,entityManager, aiControlManager, playerControlManager, collisionManager);
+	public Button handleClickEvents() {
+		return mouseDevice.pollInputPress(LEFTCLICKBUTTON) ? this.buttonClick(Buttons.LEFT) : null;
 	}
 	
 	/**
@@ -103,5 +78,4 @@ public class ButtonControlManager {
     	if(spawnPlayerButton != null)  spawnPlayerButton.dispose();
 		System.out.println("ButtonManager Resources Disposed");
     }
-
 }

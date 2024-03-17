@@ -1,0 +1,113 @@
+package com.mygdx.gamelayer.screens;
+
+import java.util.HashMap;
+import java.util.List;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.mygdx.gameengine.managers.AIControlManager;
+import com.mygdx.gameengine.managers.ButtonControlManager;
+import com.mygdx.gameengine.managers.ButtonManager;
+import com.mygdx.gameengine.managers.CollisionManager;
+import com.mygdx.gameengine.managers.EntityManager;
+import com.mygdx.gameengine.managers.PlayerControlManager;
+import com.mygdx.gameengine.managers.SceneManager;
+import com.mygdx.gameengine.models.Button;
+import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gameengine.models.Keyboard;
+import com.mygdx.gameengine.models.Mouse;
+import com.mygdx.gameengine.models.Scene;
+import com.mygdx.gameengine.models.Sound;
+import com.mygdx.gamelayer.simulation.AppSimulation;
+
+public class MainMenuScreen extends Scene {	
+	private SpriteBatch batch;
+    private ShapeRenderer shape;
+    private ButtonManager buttonManager;
+    private ButtonControlManager buttonControlManager;
+    private AppSimulation simulation;
+    
+	private final String IMAGE_PATH = "image";
+
+	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
+	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
+	
+    
+	public MainMenuScreen(HashMap<String, Texture> buttonTextures, Texture bgImage, Sound bgMusic, Mouse mouseDevice, AppSimulation simulation) {
+		super(bgMusic,bgImage);
+		batch = new SpriteBatch();
+		shape = new ShapeRenderer();
+		int screenWidth = Gdx.graphics.getWidth();
+
+		this.simulation = simulation;
+		
+		//Instantiate ButtonManager
+		buttonManager = new ButtonManager();
+		
+		// add buttons
+		buttonManager.add(new Button(buttonTextures.get("Start"), (screenWidth - buttonTextures.get("Start").getWidth()) / 2, 475, 0.9f, "SelectLevel"));
+		buttonManager.add(new Button(buttonTextures.get("Stats"), (screenWidth - buttonTextures.get("Stats").getWidth()) / 2, 375, 0.9f, "Stats"));
+		buttonManager.add(new Button(buttonTextures.get("Quit"), (screenWidth  - buttonTextures.get("Quit").getWidth()) / 2, 275, 0.9f, "Quit"));
+		
+		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
+	}
+	
+	/**
+	 * Renders objects in GameScreen
+	 */
+	@Override
+	public void render() {
+		float deltaTime = Gdx.graphics.getDeltaTime();
+		super.render();
+		
+		//Gdx.gl.glClearColor(0, 0, 0, 1);
+		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		batch.begin();
+		//entityManager.drawEntities(batch);
+		buttonManager.drawButtons(batch);
+		batch.end();
+		
+		super.fadeIn(0.25f, deltaTime);
+
+		Button clickedButton = buttonControlManager.handleClickEvents();
+		
+		if(clickedButton != null) {
+			switch(clickedButton.getAction()) {
+				case "SelectLevel":
+					// go to planet selection screen
+					simulation.chooseLevel();
+					break;
+				case "Stats":
+					simulation.showStats();
+					break;
+				case "Quit":
+					// exit application
+					Gdx.app.exit();
+					break;
+			}
+		}
+	}
+	
+	@Override
+	public void update() {
+
+	}
+	
+	/**
+	 * Disposes GameScreen and its superclass resources
+	 */
+	@Override
+	public void dispose() {
+		super.dispose();
+		batch.dispose();
+		shape.dispose();
+		buttonManager.dispose();
+		buttonControlManager.dispose();
+	}
+}
