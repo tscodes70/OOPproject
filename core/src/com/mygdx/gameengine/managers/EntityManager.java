@@ -52,16 +52,6 @@ public class EntityManager {
 	}
 	
 	/**
-	 * Updates of positions and data of all entities 
-	 * @param deltaTime
-	 */
-	public void update(float deltaTime) {
-	    for (Entity entity : entityList) {
-	        entity.update(deltaTime);
-	    }
-	}
-	
-	/**
 	 * Disposal of EntityManager Resources
 	 */
 	public void dispose() {

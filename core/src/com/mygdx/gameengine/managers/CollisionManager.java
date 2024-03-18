@@ -3,12 +3,18 @@ package com.mygdx.gameengine.managers;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mygdx.gameengine.interfaces.iAI;
 import com.mygdx.gameengine.interfaces.iCollidable;
+import com.mygdx.gameengine.interfaces.iPlayer;
 import com.mygdx.gameengine.models.Entity;
 
-public class CollisionManager implements iCollidable<EntityManager, Entity>{
-	private List<Entity> collidableList;
-	private List<Entity> updatedEntityList;
+public class CollisionManager{
+	private List<iCollidable> collidableList;
+	
+	
+	public CollisionManager() {
+		collidableList = new ArrayList<iCollidable>();
+	}
 	
 	/**
 	 * Constructor that takes a list of entities, extracts each entity
@@ -16,48 +22,50 @@ public class CollisionManager implements iCollidable<EntityManager, Entity>{
 	 * @param entityList
 	 */
 	public CollisionManager(List<Entity> entityList) {
+	    collidableList = new ArrayList<>();
+		extractCollidable(entityList);
+	}
+	
+	public void add(iCollidable collisionObj) {
+		collidableList.add(collisionObj);
+	}
+	
+	public void remove(iCollidable collisionObj) {
+		collidableList.remove(collisionObj);
+	}
+	
+	public void update(List<Entity> entityList) {
+		extractCollidable(entityList);
+	}
+	
+	public void extractCollidable(List<Entity> entityList) {
+		List<iCollidable> updatedCollidableList = new ArrayList<iCollidable>();
 		
-		collidableList = new ArrayList<Entity>();
-		
-		// Retrieve entities that are collidable
-		for(Entity entity : entityList) if(entity.isCollidable()) this.add(entity);
+		// Iterate over entities and add collidable ones to collidableList
+	    for (Entity entity : entityList) {
+	        if (entity instanceof iCollidable) {
+	            iCollidable collidableEntity = (iCollidable) entity;
+	            if (collidableEntity.isCollidable()) {
+	            	updatedCollidableList.add(collidableEntity);
+	            }
+	        }
+	    }
+	    
+	    System.out.print("Populate c list");
+	    collidableList = updatedCollidableList;
 	}
-	
-	public void add(Entity entity) {
-		collidableList.add(entity);
-	}
-	
-	public void remove(Entity entity) {
-		collidableList.remove(entity);
-		entity.dispose();
-	}
-	
-	/**
-	 * Retrieves updated entityList when entityList is modified
-	 * @param entityList
-	 */
-    public void update(List<Entity> entityList) {
-    	updatedEntityList = new ArrayList<Entity>();
-        for (Entity entity : entityList) {
-            if (entity.isCollidable()) {
-                updatedEntityList.add(entity);
-            }
-        }
-        this.collidableList = updatedEntityList;
-    }
 	
     /**
      * Method to check and detect collisions between entities,
      * Calls handleCollisions method to then resolve these detected collisions.
      * @param entityManager
      */
-    @Override
-	 public void checkCollisions(EntityManager entityManager) {
+	 public void checkCollisions(EntityManager entityManager, AIControlManager aiControlManager) {
 		 for (int i = 0; i < collidableList.size() - 1; i++) {
 	            for (int j = i + 1; j < collidableList.size(); j++) {
 
 	                if (collidableList.get(i).getBoundingBox().overlaps(collidableList.get(j).getBoundingBox())) {
-	                	handleCollisions(entityManager,collidableList.get(i),collidableList.get(j));
+	                	handleCollisions(entityManager, aiControlManager, collidableList.get(i),collidableList.get(j));
 	                	
 	                }
 	            }
@@ -73,21 +81,22 @@ public class CollisionManager implements iCollidable<EntityManager, Entity>{
 	  * @param x
 	  * @param y
 	  */
-    @Override
-	 public void handleCollisions(EntityManager entityManager, Entity x, Entity y) {
-		 if(x.isAiControl() && y.isAiControl()) {
+	 public void handleCollisions(EntityManager entityManager, AIControlManager aiControlManager, iCollidable x, iCollidable y) {
+		 if(x instanceof iAI && y instanceof iAI ) {
 //			 System.out.println("Collision Between 2 AIs - Allowed");
-		 }else if(!x.isAiControl() && !y.isAiControl()){
+		 }else if(x instanceof iPlayer && y instanceof iPlayer){
 //			 System.out.println("Collision Between 2 Players - Allowed");
 		 }else {
-			 if(x.isAiControl()) {
+			 if(x instanceof iAI) {
 				 this.remove(x);	//update collidableList to remove entity
-				 entityManager.remove(x);	//update entityManager to remove entity
+				 entityManager.remove((Entity) x);	//update entityManager to remove entity
+				 aiControlManager.remove((iAI) x);
 				 System.out.println("Collision Between Player & AI - AI Entity Removed");
 			 }
 			 else {
 				 this.remove(y);	//update collidableList to remove entity
-				 entityManager.remove(y);	//update entityManager to remove entity
+				 entityManager.remove((Entity) y);	//update entityManager to remove entity
+				 aiControlManager.remove((iAI) y);
 				 System.out.println("Collision Between Player & AI - AI Entity Removed");
 			 }
 		 }
@@ -99,9 +108,9 @@ public class CollisionManager implements iCollidable<EntityManager, Entity>{
 	  */
 	 
 	 public void dispose() {
-	    	for (Entity e : collidableList) e.dispose();
-	    	if(updatedEntityList != null) for (Entity e : updatedEntityList) e.dispose();
-			System.out.println("CollisionManager Resources Disposed");
+//	    	for (iCollidable e : collidableList) e.;
+//	    	if(updatedEntityList != null) for (Entity e : updatedEntityList) e.dispose();
+//			System.out.println("CollisionManager Resources Disposed");
 	    }
 	 
 	

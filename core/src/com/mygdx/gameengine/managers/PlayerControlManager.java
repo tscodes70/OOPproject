@@ -5,22 +5,19 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.mygdx.gameengine.interfaces.iAI;
+import com.mygdx.gameengine.interfaces.iCollidable;
 import com.mygdx.gameengine.interfaces.iMovable;
+import com.mygdx.gameengine.interfaces.iPlayer;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gameengine.models.Keyboard;
 
-public class PlayerControlManager implements iMovable {
+public class PlayerControlManager{
 	
-    private List<Entity> playerEntityList;
-    private List<Entity> updatedEntityList;
-    private Keyboard keyboardDevice;
+    private List<iPlayer> playerList;
     
-	private final int LEFTKEY = Keys.LEFT;
-	private final int RIGHTKEY = Keys.RIGHT;
-	private final int UPKEY = Keys.UP;
-	private final int DOWNKEY = Keys.DOWN;
-	
-	private final int DEFAULT_ENTITY_SPEED_MULTIPLIER = 100;
+
+    private Keyboard keyboardDevice;
 
 	/**
 	 * Constructor that takes a list of entities, extracts each entity
@@ -30,28 +27,26 @@ public class PlayerControlManager implements iMovable {
 	public PlayerControlManager(List<Entity> entityList, Keyboard keyboardDevice){
 		super();
 		this.keyboardDevice = keyboardDevice;
-		playerEntityList = new ArrayList<Entity>();
+		playerList = new ArrayList<iPlayer>();
 		
-		for(Entity entity : entityList) {
-        	if(!entity.isAiControl()) playerEntityList.add(entity);
-        }
+		extractPlayer(entityList);
 	}
 	
 	/**
      * Adds a Player entity into PlayerControlManager list
      * @param entity
      */
-	public void add(Entity entity) {
-		playerEntityList.add(entity);
+	public void add(iPlayer player) {
+		playerList.add(player);
 	}
 	
 	/**
      * Removes a Player entity from PlayerControlManager list
      * @param entity
      */
-	public void remove(Entity entity) {
-		playerEntityList.remove(entity);
-		entity.dispose();
+	public void remove(iPlayer player) {
+		playerList.remove(player);
+		player.dispose();
 	}
 	
 	/**
@@ -59,96 +54,43 @@ public class PlayerControlManager implements iMovable {
      * @param entityList
      */
 	 public void update(List<Entity> entityList) {
-	    	updatedEntityList = new ArrayList<Entity>();
-	        for (Entity entity : entityList) {
-	            if (!entity.isAiControl()) {
-	                updatedEntityList.add(entity);
-	            }
-	        }
-	        this.playerEntityList = updatedEntityList;
-	    }
-
-	 /**
-	  * Moves Player towards the left by the set default speed
-	  * @param deltaTime
-	  */
-	 public void moveLeft(float deltaTime) {
-		    for (Entity entity : this.playerEntityList) {
-		        float distanceToMove = entity.getSpeed() * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
-
-		        // Ensure entity is within left boundary of screen
-		        if (entity.getPositionX() - distanceToMove - entity.getRadius() >= 0) {
-		            entity.setPositionX(entity.getPositionX() - distanceToMove);
-		            entity.update(deltaTime);
+			extractPlayer(entityList);
+	 }
+	 
+	 public void extractPlayer(List<Entity> entityList) {
+			List<iPlayer> updatedPlayerList = new ArrayList<iPlayer>();
+			
+			// Iterate over entities and add playable ones to playerList
+		    for (Entity entity : entityList) {
+		        if (entity instanceof iPlayer) {
+		        	iPlayer playableEntity = (iPlayer) entity;
+		            if (playableEntity.isPlayable()) {
+		            	updatedPlayerList.add(playableEntity);
+		            }
 		        }
 		    }
-		}
+		    playerList = updatedPlayerList;
+	 }
 
-	 /**
-	  * Moves Player towards the right by the set default speed
-	  * @param deltaTime
-	  */
-	 public void moveRight(float deltaTime) {
-		    for (Entity entity : this.playerEntityList) {
-		        float distanceToMove = entity.getSpeed() * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
-
-		        // Ensure entity is within right boundary of screen
-		        if (entity.getPositionX() + distanceToMove + entity.getRadius() <= Gdx.graphics.getWidth()) {
-		            entity.setPositionX(entity.getPositionX() + distanceToMove);
-		            entity.update(deltaTime);		        
-		            }
-		    }
-		}
-
-	 /**
-	  * Moves Player towards the top by the set default speed
-	  * @param deltaTime
-	  */
-	 public void moveUp(float deltaTime) {
-		    for (Entity entity : this.playerEntityList) {
-		        float distanceToMove = entity.getSpeed() * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
-
-		        // Ensure entity is within top boundary of screen
-		        if (entity.getPositionY() + distanceToMove + entity.getRadius() <= Gdx.graphics.getHeight()) {  // Adjusted boundary check
-		            entity.setPositionY(entity.getPositionY() + distanceToMove);
-		            entity.update(deltaTime);		       
-		            }
-		    }
-		}
-
-	 /**
-	  * Moves Player towards the bottom by the set default speed
-	  * @param deltaTime
-	  */
-	 public void moveDown(float deltaTime) {
-		    for (Entity entity : this.playerEntityList) {
-		        float distanceToMove = entity.getSpeed() * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
-
-		        // Ensure entity is within bottom boundary of screen
-		        if (entity.getPositionY() - distanceToMove - entity.getRadius() >= 0) {
-		            entity.setPositionY(entity.getPositionY() - distanceToMove);
-		            entity.update(deltaTime);		        }
-		    }
-		}
-	
 	 /**
 	  * Main movement handler methods that calls movement methods
 	  * based on respective movement key presses
 	  * @param deltaTime
 	  */
 	public void move(float deltaTime) {
-		if(keyboardDevice.pollInputHold(LEFTKEY)) moveLeft(deltaTime);
-		if(keyboardDevice.pollInputHold(RIGHTKEY)) moveRight(deltaTime);
-		if(keyboardDevice.pollInputHold(UPKEY)) moveUp(deltaTime);
-		if(keyboardDevice.pollInputHold(DOWNKEY)) moveDown(deltaTime);
+		for (iPlayer player : playerList) {
+		if(keyboardDevice.pollInputHold(player.getLeftKeybind())) player.moveLeft(deltaTime);
+		if(keyboardDevice.pollInputHold(player.getRightKeybind())) player.moveRight(deltaTime);
+		if(keyboardDevice.pollInputHold(player.getUpKeybind())) player.moveUp(deltaTime);
+		if(keyboardDevice.pollInputHold(player.getDownKeybind())) player.moveDown(deltaTime);
+		}
 	}
 	
 	/**
 	 *  Disposal of PlayerControlManager Resources
 	 */
 	public void dispose() {
-		for (Entity e : playerEntityList) e.dispose();
-		if(updatedEntityList != null) for (Entity e : updatedEntityList) e.dispose();
+		for (iPlayer p : playerList) p.dispose();
 		System.out.println("PlayerControlManager Resources Disposed");
 	}
 

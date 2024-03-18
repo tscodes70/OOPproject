@@ -3,6 +3,7 @@ package com.mygdx.gamelayer.screens;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -26,6 +27,8 @@ import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
+import com.mygdx.gamelayer.models.Debris;
+import com.mygdx.gamelayer.models.Player;
 import com.mygdx.gamelayer.simulation.AppSimulation;
 
 public class GameScreen extends Scene {	
@@ -53,6 +56,7 @@ public class GameScreen extends Scene {
 	private final Color DEFAULT_PLAYER_COLOR = Color.BLUE;
 	private final Color DEFAULT_AI_COLOR = Color.RED;
 	private final boolean COLLIDABLE = true;
+	private final boolean PLAYABLE = true;
 	private final boolean AI_CONTROL = true;
 	
 	private final int INITIAL_MAX_SPAWN = 15;
@@ -87,15 +91,27 @@ public class GameScreen extends Scene {
 		entityManager = new EntityManager();
 		
 		//Creation of Entities (Player Entity, AI Entities)
-		entityManager.add(new Entity(DEFAULT_PLAYER_X, DEFAULT_PLAYER_Y, DEFAULT_ENTITY_SPEED, DEFAULT_ENTITY_RADIUS, DEFAULT_PLAYER_COLOR, false, true));
+		entityManager.add(new Player(
+				DEFAULT_PLAYER_X, 
+				DEFAULT_PLAYER_Y, 
+				DEFAULT_ENTITY_SPEED, 
+				DEFAULT_ENTITY_RADIUS, 
+				DEFAULT_PLAYER_COLOR,
+				PLAYABLE,
+				COLLIDABLE,
+				
+				Keys.LEFT,
+				Keys.RIGHT,
+				Keys.UP,
+				Keys.DOWN));
         for (int i=0; i<(int)Math.floor(Math.random() * INITIAL_MAX_SPAWN)+INITIAL_MIN_SPAWN; i++) {
-        	entityManager.add(new Entity(
+        	entityManager.add(new Debris(
             		(float) (Math.random() * Gdx.graphics.getWidth()),
             		(float) (Math.random() * Gdx.graphics.getHeight()),
             		DEFAULT_ENTITY_SPEED,
             		DEFAULT_ENTITY_RADIUS,
-            		DEFAULT_AI_COLOR, 
-            		AI_CONTROL, 
+            		DEFAULT_AI_COLOR,
+            		AI_CONTROL,
             		COLLIDABLE));	
         }
         
@@ -168,7 +184,7 @@ public class GameScreen extends Scene {
 			// only start executing game logic when the scene transition is complete
 			playerControlManager.move(deltaTime);
 			aiControlManager.move(deltaTime);
-			collisionManager.checkCollisions(entityManager);
+			collisionManager.checkCollisions(entityManager,aiControlManager);
 			
 			// test test
 			// hardcoded to go to level cleared screen after 10s of gameplay

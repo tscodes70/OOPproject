@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.mygdx.gameengine.interfaces.iAI;
 import com.mygdx.gameengine.interfaces.iMovable;
+import com.mygdx.gameengine.interfaces.iPlayer;
 import com.mygdx.gameengine.models.Entity;
 
 // Manages AI-controlled entities
-public class AIControlManager implements iMovable{ 
+public class AIControlManager{ 
 	
-    private List<Entity> aiEntityList;
-    private List<Entity> updatedEntityList;
-    
-	private final int MAX_ENTITY_SPEED = 10;
-	private final int DEFAULT_ENTITY_SPEED_MULTIPLIER = 100;
+    private List<iAI> aiList;
     
     /**
      * Constructor that takes a list of entities, extracts each entity
@@ -22,28 +20,40 @@ public class AIControlManager implements iMovable{
      * @param entityList
      */
     public AIControlManager(List<Entity> entityList) {
-        aiEntityList = new ArrayList<Entity>();
-        
-        for(Entity entity : entityList) {
-        	if(entity.isAiControl()) aiEntityList.add(entity);
-        }
+    	aiList = new ArrayList<iAI>();
+    	extractAI(entityList);
     }
     
     /**
      * Adds an AI entity into AIControlManager list
      * @param entity
      */
-    public void add(Entity entity) {
-    	aiEntityList.add(entity);
+    public void add(iAI ai) {
+    	aiList.add(ai);
     }
     
     /**
      * Removes an AI entity from the AIControlManager list
      * @param entity
      */
-    public void remove(Entity entity) {
-    	aiEntityList.remove(entity);
-    	entity.dispose();
+    public void remove(iAI ai) {
+    	aiList.remove(ai);
+    	ai.dispose();
+    }
+    
+    public void extractAI(List<Entity> entityList) {
+		List<iAI> updatedAIList = new ArrayList<iAI>();
+		
+		// Iterate over entities and add playable ones to playerList
+	    for (Entity entity : entityList) {
+	        if (entity instanceof iAI) {
+	        	iAI aiEntity = (iAI) entity;
+	            if (aiEntity.isAIControl()) {
+	            	updatedAIList.add(aiEntity);
+	            }
+	        }
+	    }
+	    aiList = updatedAIList;
     }
     
     /**
@@ -52,21 +62,7 @@ public class AIControlManager implements iMovable{
      * @param deltaTime
      */
     public void move(float deltaTime) {
-        for (Entity entity : this.aiEntityList) {
-            // Move entity vertically proportionally to deltaTime and speed
-            float distanceToMove = entity.getSpeed() * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
-            entity.setPositionY(entity.getPositionY() - distanceToMove);
-
-            // Check if entity has moved off-screen
-            if (entity.getPositionY() < 220) {
-                // Reset entity's position to top of screen
-                entity.setPositionY(Gdx.graphics.getHeight());
-//                if (entity.getSpeed() <= MAX_ENTITY_SPEED) {
-//                   entity.setSpeed(entity.getSpeed() + 2);
-//                }
-            }
-            entity.update(deltaTime);
-        }
+        for (iAI ai : aiList) ai.update(deltaTime);
     }
     
     /**
@@ -74,30 +70,23 @@ public class AIControlManager implements iMovable{
      * @param entityList
      */
     public void update(List<Entity> entityList) {
-    	updatedEntityList = new ArrayList<Entity>();
-        for (Entity entity : entityList) {
-            if (entity.isAiControl()) {
-                updatedEntityList.add(entity);
-            }
-        }
-        this.aiEntityList = updatedEntityList;
+    	extractAI(entityList);
     }
 
     /**
      * Disposing of AIControlManager Resources
      */
     public void dispose() {
-    	for (Entity e : aiEntityList) e.dispose();
-    	if(updatedEntityList != null) for (Entity e : updatedEntityList) e.dispose();
+    	for (iAI a : aiList) a.dispose();
 		System.out.println("AIControlManager Resources Disposed");
     }
 
     // Getter Setters
-	public List<Entity> getAiEntityList() {
-		return aiEntityList;
+	public List<iAI> getAiEntityList() {
+		return aiList;
 	}
-	public void setAiEntityList(List<Entity> aiEntityList) {
-		this.aiEntityList = aiEntityList;
+	public void setAiEntityList(List<iAI> aiEntityList) {
+		this.aiList = aiEntityList;
 	}
     
 }
