@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.mygdx.gamelayer.simulation.AppSimulation;
 import com.mygdx.gameengine.interfaces.iOutput;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
-import com.mygdx.gamelayer.screens.GameScreen;
+import com.mygdx.gamelayer.screens.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 
 public class SceneManager{
@@ -23,7 +25,12 @@ public class SceneManager{
 	
 	private OutputManager<iOutput> oManager;
 	
-	private final int GAME_SCREEN = 1;
+	private final int LEVEL_INFO_SCREEN = 2;
+
+	private final int GAME_SCREEN = 3;
+	
+	private final int END_SCREEN = 5;
+
 	private final String AUDIO_PATH = "audio/music";
 	private final String BGAUDIO_GS_PATH = String.format("%s/burnt_toaster.mp3", AUDIO_PATH);
 	
@@ -89,10 +96,31 @@ public class SceneManager{
 	 * Reinitializes the game scene
 	 * @param manager
 	 */
-	public void resetGameScene(Keyboard keyboardDevice, Mouse mouseDevice) {
+	public void resetGameScene(String planetName, Texture planetImage, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
 		Scene gameScene = sceneList.get(GAME_SCREEN);
 		int gameSceneIndex = sceneList.indexOf(gameScene);
-		sceneList.set(gameSceneIndex, new GameScreen(buttonSA,buttonSP,bgGSMusic,keyboardDevice,mouseDevice));
+//		sceneList.set(gameSceneIndex, new GameScreen(buttonSA,buttonSP,bgGSMusic,keyboardDevice,mouseDevice));
+		sceneList.set(gameSceneIndex, new GameScreen(planetName, planetImage, bgGSMusic,keyboardDevice,mouseDevice, simulation));
+	}
+	
+	// enter the selected level for the game
+	public void setGameLevel(String planetName, Texture planetImage, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
+		Scene gameScene = sceneList.get(GAME_SCREEN);
+		int gameSceneIndex = sceneList.indexOf(gameScene);
+		sceneList.set(gameSceneIndex, new GameScreen(planetName, planetImage, bgGSMusic, keyboardDevice,mouseDevice, simulation));
+	}
+	
+	// go to the info screen for the selected level
+	public void setLevelInfo(String planet, Keyboard keyboardDevice, Mouse mouseDevice) {
+		PlanetInfoScreen levelInfoScene = (PlanetInfoScreen)sceneList.get(LEVEL_INFO_SCREEN);
+		levelInfoScene.setChosenLevel(planet);
+		setScene(LEVEL_INFO_SCREEN);
+	}
+	
+	// set which planet to display in the level cleared screen
+	public void setLevelClearedInfo(String planetName, Texture planetImage) {
+		LevelClearedScreen levelClearedScene = (LevelClearedScreen)sceneList.get(END_SCREEN);
+		levelClearedScene.setLevel(planetName, planetImage);
 	}
 	
 	/**

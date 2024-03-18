@@ -1,6 +1,7 @@
 package com.mygdx.gamelayer.screens;
 
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.mygdx.gameengine.models.Scene;
@@ -31,8 +32,7 @@ public class EndScreen extends Scene {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		batch.begin();
-		font.draw(super.batch, GLYPHMESSAGE, 
-				(Gdx.graphics.getWidth() / 2f) - (title.width * (1.5f/2)), (Gdx.graphics.getHeight() / 2f) - (title.height * (1.5f/2)));
+		font.draw(super.batch, GLYPHMESSAGE, super.centeredXPos(title.width), (Gdx.graphics.getHeight() / 2f) - (title.height * (1.5f/2)));
 		font.getData().setScale(1.5f); // increase font size
 		batch.end();
 	}

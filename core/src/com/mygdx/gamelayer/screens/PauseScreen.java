@@ -1,24 +1,38 @@
 
 package com.mygdx.gamelayer.screens;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Align;
 import com.mygdx.gameengine.models.Scene;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 
 public class PauseScreen extends Scene {
-
     private BitmapFont font;
     private GlyphLayout title;
-    
-    private final String GLYPHMESSAGE = "Paused, Enter/ESC to return. Backspace to end demo";
+    private ShapeRenderer overlay;
+    private final String GLYPHMESSAGE = "This game is paused. Press Enter/ESC to resume or Backspace to exit game.";
     
     public PauseScreen() {
         super();
-        this.font = new BitmapFont();
-        title = new GlyphLayout(font, GLYPHMESSAGE); //for getting width/height of text
+        // translucent shape that acts as overlay
+        this.overlay = new ShapeRenderer();
+		overlay.setColor(0,0,0,0.0125f);
+		// dynamically generate bitmap font of our desired size so it doesn't look pixelated
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 24;
+		font = generator.generateFont(parameter);
+		generator.dispose(); // don't forget to dispose to avoid memory leaks!
+        title = new GlyphLayout(); //for getting width/height of text
+        title.setText(font, GLYPHMESSAGE, Color.CLEAR, 600f, Align.center, true);
     }
 
     /**
@@ -26,13 +40,23 @@ public class PauseScreen extends Scene {
 	 */
     @Override
     public void render() {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        //Gdx.gl.glClearColor(0, 0, 0, 0.9f);
+        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    	
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_ONE, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		
+		// draw the transparent background overlay
+		overlay.begin(ShapeRenderer.ShapeType.Filled);
+		overlay.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		overlay.end();
+		
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+		
+		// draw the pause screen message
         batch.begin();
-        font.draw(super.batch, GLYPHMESSAGE,
-                (Gdx.graphics.getWidth() / 2f) - (title.width * (1.5f/2)), (Gdx.graphics.getHeight() / 2f) - (title.height * (1.5f/2)));
-        font.getData().setScale(1.5f); // increase font size
+		font.draw(super.batch, GLYPHMESSAGE,  super.centeredXPos(title.width),(Gdx.graphics.getHeight() / 2f) - (title.height / 2f), 600f, Align.center, true);
+
         batch.end();
     }
 
