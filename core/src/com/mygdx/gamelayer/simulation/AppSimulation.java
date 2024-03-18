@@ -33,6 +33,8 @@ public class AppSimulation extends Simulation {
 	
 	private Sound bgSSMusic, bgGSMusic, bgESMusic;
 	
+	private Texture buttonSA, buttonSP;
+	
 	private final int ENTERKEY = Keys.ENTER;
 	private final int BACKSPACEKEY = Keys.BACKSPACE;
 	private final int ESCAPEKEY = Keys.ESCAPE;
@@ -60,12 +62,8 @@ public class AppSimulation extends Simulation {
 	private final int GAME_SCREEN = 1;
 	private final int PAUSE_SCREEN = 2;
 	private final int END_SCREEN = 3;
-	
-	// Lazy way (need change to use omanager)
-	private Texture buttonSA = new Texture(IMAGE_SA);
-	private Texture buttonSP = new Texture(IMAGE_SP);
-	
 
+	
 
 	/**
 	 * This method is called upon initialization of the AppSimulation.
@@ -92,6 +90,9 @@ public class AppSimulation extends Simulation {
 			oManager.add(BGAUDIO_SS_PATH,bgSSMusic);
 			oManager.add(BGAUDIO_GS_PATH,bgGSMusic);
 			oManager.add(BGAUDIO_ES_PATH,bgESMusic);
+			
+			buttonSA = new Texture(IMAGE_SA);
+			buttonSP = new Texture(IMAGE_SP);
 			
 			ioManager = new IOManager(iManager,oManager);
 			
