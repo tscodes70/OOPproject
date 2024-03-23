@@ -12,6 +12,8 @@ import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
+import com.mygdx.gamelayer.models.Planet;
+import com.mygdx.gamelayer.models.SpaceTexture;
 import com.mygdx.gamelayer.screens.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -34,16 +36,9 @@ public class SceneManager{
 	private final String AUDIO_PATH = "audio/music";
 	private final String BGAUDIO_GS_PATH = String.format("%s/burnt_toaster.mp3", AUDIO_PATH);
 	
-	private final String IMAGE_PATH = "image";
-
-	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
-	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
-	
 	// Lazy way (need change to use omanager)
 	private Sound bgGSMusic = new Sound(BGAUDIO_GS_PATH);
-	private Texture buttonSA = new Texture(IMAGE_SA);
-	private Texture buttonSP = new Texture(IMAGE_SP);
-	
+
 	public SceneManager(OutputManager<iOutput> oManager) {
 		this.sceneList = new ArrayList<Scene>();
 		this.oManager = oManager;
@@ -96,22 +91,22 @@ public class SceneManager{
 	 * Reinitializes the game scene
 	 * @param manager
 	 */
-	public void resetGameScene(String planetName, Texture planetImage, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
+	public void resetGameScene(Planet planet, SpaceTexture playerModel, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
 		Scene gameScene = sceneList.get(GAME_SCREEN);
 		int gameSceneIndex = sceneList.indexOf(gameScene);
 //		sceneList.set(gameSceneIndex, new GameScreen(buttonSA,buttonSP,bgGSMusic,keyboardDevice,mouseDevice));
-		sceneList.set(gameSceneIndex, new GameScreen(planetName, planetImage, bgGSMusic,keyboardDevice,mouseDevice, simulation));
+		sceneList.set(gameSceneIndex, new GameScreen(planet, playerModel, bgGSMusic,keyboardDevice,mouseDevice, simulation));
 	}
 	
 	// enter the selected level for the game
-	public void setGameLevel(String planetName, Texture planetImage, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
+	public void setGameLevel(Planet planet, SpaceTexture playerModel, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
 		Scene gameScene = sceneList.get(GAME_SCREEN);
 		int gameSceneIndex = sceneList.indexOf(gameScene);
-		sceneList.set(gameSceneIndex, new GameScreen(planetName, planetImage, bgGSMusic, keyboardDevice,mouseDevice, simulation));
+		sceneList.set(gameSceneIndex, new GameScreen(planet, playerModel, bgGSMusic, keyboardDevice,mouseDevice, simulation));
 	}
 	
 	// go to the info screen for the selected level
-	public void setLevelInfo(String planet, Keyboard keyboardDevice, Mouse mouseDevice) {
+	public void setLevelInfo(Planet planet,  Keyboard keyboardDevice, Mouse mouseDevice) {
 		PlanetInfoScreen levelInfoScene = (PlanetInfoScreen)sceneList.get(LEVEL_INFO_SCREEN);
 		levelInfoScene.setChosenLevel(planet);
 		setScene(LEVEL_INFO_SCREEN);
@@ -153,4 +148,30 @@ public class SceneManager{
 	
 	// Getter
 	public int getCurrentScene() { return this.currentSceneCode; }
+
+	public List<Scene> getSceneList() {
+		return sceneList;
+	}
+
+	public void setSceneList(List<Scene> sceneList) {
+		this.sceneList = sceneList;
+	}
+
+	public int getCurrentSceneCode() {
+		return currentSceneCode;
+	}
+
+	public void setCurrentSceneCode(int currentSceneCode) {
+		this.currentSceneCode = currentSceneCode;
+	}
+
+	public OutputManager<iOutput> getoManager() {
+		return oManager;
+	}
+
+	public void setoManager(OutputManager<iOutput> oManager) {
+		this.oManager = oManager;
+	}
+	
+	
 }

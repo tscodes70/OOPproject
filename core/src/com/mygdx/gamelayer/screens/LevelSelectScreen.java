@@ -14,6 +14,7 @@ import com.mygdx.gameengine.managers.ButtonControlManager;
 import com.mygdx.gameengine.managers.ButtonManager;
 import com.mygdx.gameengine.managers.CollisionManager;
 import com.mygdx.gameengine.managers.EntityManager;
+import com.mygdx.gameengine.managers.OutputManager;
 import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.managers.SceneManager;
 import com.mygdx.gameengine.models.Button;
@@ -22,6 +23,7 @@ import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
+import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.simulation.AppSimulation;
 
 public class LevelSelectScreen extends Scene {	
@@ -31,13 +33,10 @@ public class LevelSelectScreen extends Scene {
     private ButtonControlManager buttonControlManager;
     private AppSimulation simulation;
     private float fadeInOverlayOpacity = 1.0f;
-	private final String IMAGE_PATH = "image";
-
-	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
-	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
     
+    private HashMap<String, Planet> planetHashmap;
 	
-	public LevelSelectScreen(HashMap<String, Texture> buttonTextures, Texture bgImage, Sound bgMusic, Mouse mouseDevice, AppSimulation simulation) {
+	public LevelSelectScreen(HashMap<String, Texture> buttonTextures, HashMap<String, Planet> planetHashmap, Texture bgImage, Sound bgMusic, Mouse mouseDevice, AppSimulation simulation) {
 		super(bgMusic,bgImage);
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
@@ -49,14 +48,14 @@ public class LevelSelectScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Mercury"), (screenWidth - buttonTextures.get("Mercury").getWidth()) / 2, 775, 0.9f, "ViewLevelInfo"));
-		buttonManager.add(new Button(buttonTextures.get("Venus"), (screenWidth - buttonTextures.get("Venus").getWidth()) / 2, 700, 0.9f, "ViewLevelInfo"));
-		buttonManager.add(new Button(buttonTextures.get("Earth"), (screenWidth  - buttonTextures.get("Earth").getWidth()) / 2, 625, 0.9f, "ViewLevelInfo"));
-		buttonManager.add(new Button(buttonTextures.get("Mars"), (screenWidth  - buttonTextures.get("Mars").getWidth()) / 2, 550, 0.9f, "ViewLevelInfo"));
+		buttonManager.add(new Button(buttonTextures.get("Mercury"), 325, 775, 0.2f, "ViewLevelInfo"));
+		buttonManager.add(new Button(buttonTextures.get("Venus"), 325, 700, 0.2f, "ViewLevelInfo"));
+		buttonManager.add(new Button(buttonTextures.get("Earth"), 325, 625, 0.2f, "ViewLevelInfo"));
+		buttonManager.add(new Button(buttonTextures.get("Mars"), 325, 550, 0.2f, "ViewLevelInfo"));
 		
 		// buttons for additional levels go here
 		
-		buttonManager.add(new Button(buttonTextures.get("Back"), (screenWidth  - buttonTextures.get("Back").getWidth()) / 2, 125, 0.9f, "ReturnToMain"));
+		buttonManager.add(new Button(buttonTextures.get("Back"), 325, 125, 0.2f, "ReturnToMain"));
 
 		// set button data (planet name)
 		buttonManager.getButtonList().get(0).addData("planet", "Mercury");
@@ -65,6 +64,7 @@ public class LevelSelectScreen extends Scene {
 		buttonManager.getButtonList().get(3).addData("planet", "Mars");
 
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
+		this.planetHashmap = planetHashmap;
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class LevelSelectScreen extends Scene {
 			switch(clickedButton.getAction()) {
 				case "ViewLevelInfo":
 					// go to planet info screen
-					simulation.showLevelInfo((String)clickedButton.getData().get("planet"));
+					simulation.showLevelInfo(planetHashmap.get((String)clickedButton.getData().get("planet")));
 					break;
 				case "ReturnToMain":
 					// go back to main menu

@@ -13,17 +13,23 @@ public class Planet extends Entity implements iCollidable,iStatic {
 	private float maxHP;
 	private boolean collidable;
 	private Rectangle boundingBox;
+	private String name;
+	private String info;
 
 	public Planet(
-			Texture texture,
+			String name,
+			SpaceTexture texture,
 			float positionX, 
 			float positionY, 
+			float gravity,
 			float width, 
 			float height,
 			boolean collidable) {
 		super(texture,positionX, positionY, width, height);
 		this.boundingBox = new Rectangle(positionX, positionY, width, height);
 		this.collidable = collidable;
+		this.name = name;
+		this.info = String.format("This is a description of %s.", name);
 	}
 
 // Getter Setter
@@ -61,6 +67,22 @@ public class Planet extends Entity implements iCollidable,iStatic {
 	public void update(float deltatime) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getInfo() {
+		return info;
+	}
+
+	public void setInfo(String info) {
+		this.info = info;
 	}
 
 	

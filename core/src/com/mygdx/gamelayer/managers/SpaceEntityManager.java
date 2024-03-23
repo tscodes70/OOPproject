@@ -22,6 +22,9 @@ public class SpaceEntityManager extends EntityManager{
 				if(entity instanceof Planet) {
 					entity.draw(batch, entity.getWidth(), entity.getHeight());
 				}
+			    if (entity instanceof Player) {
+			        entity.draw(batch, entity.getWidth(), entity.getHeight());
+			    }
 				
 			}
 		}
@@ -39,13 +42,16 @@ public class SpaceEntityManager extends EntityManager{
 			        entity.draw(shape);
 			    }
 			    if (entity instanceof Player) {
-			        entity.draw(shape);
+			    	// stats bar
 			        ((Player)entity).getHealthBar().draw(shape);
 			        ((Player)entity).getStaminaBar().draw(shape);
 			    }
+
 			    if (entity instanceof Projectile) {
 			        entity.draw(shape);
 			    }
+			    
+
 			}
 		}
 	}

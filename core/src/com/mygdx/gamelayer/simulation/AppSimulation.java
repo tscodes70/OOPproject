@@ -2,6 +2,7 @@ package com.mygdx.gamelayer.simulation;
 
 import java.util.HashMap;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,6 +16,8 @@ import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Simulation;
 import com.mygdx.gameengine.models.Sound;
+import com.mygdx.gamelayer.models.Planet;
+import com.mygdx.gamelayer.models.SpaceTexture;
 import com.mygdx.gamelayer.screens.*;
 public class AppSimulation extends Simulation {
 	
@@ -28,7 +31,17 @@ public class AppSimulation extends Simulation {
 	
 	private Sound bgSSMusic, bgGSMusic, bgESMusic;
 	
-	private Texture buttonSA, buttonSP;
+	private SpaceTexture playerModel, debrisModel, startButtonModel, statsButtonModel, quitButtonModel;
+	private SpaceTexture mercuryButtonModel, venusButtonModel, earthButtonModel, marsButtonModel, backButtonModel, continueButtonModel;
+	private SpaceTexture bgSSImage, bgLSSImage, bgLCImage, bgStatsImage, bgGSImage;
+	private SpaceTexture mercuryPlanetModel, venusPlanetModel, earthPlanetModel, marsPlanetModel;
+	
+	private Planet mercuryPlanet,venusPlanet,earthPlanet, marsPlanet;
+	
+	private float planetPositionX,planetPositionY,planetWidth,planetHeight;
+	private boolean planetCollidable;
+
+	private final boolean COLLIDABLE = true;
 	
 	private final int ENTERKEY = Keys.ENTER;
 	private final int BACKSPACEKEY = Keys.BACKSPACE;
@@ -43,22 +56,23 @@ public class AppSimulation extends Simulation {
 	
 	private final String IMAGE_PATH = "image";
 	private final String AUDIO_PATH = "audio/music";
-
-	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
-	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
+	
+	// Player & Debris resources
+	private final String IMAGE_PLAYER_PATH = String.format("%s/player.png", IMAGE_PATH);
+//	private final String IMAGE_DEBRIS_PATH = String.format("%s/spawnplayer.png", IMAGE_PATH);
 	
 	// generic menu buttons
-	private final String IMAGE_START_PATH = String.format("%s/start.png", IMAGE_PATH);
-	private final String IMAGE_STATS_PATH = String.format("%s/stats.png", IMAGE_PATH);
-	private final String IMAGE_QUIT_PATH = String.format("%s/quit.png", IMAGE_PATH);
-	private final String IMAGE_BACK_PATH = String.format("%s/back.png", IMAGE_PATH);
-	private final String IMAGE_CONTINUE_PATH = String.format("%s/continue.png", IMAGE_PATH);
+	private final String IMAGE_STARTBUTTON_PATH = String.format("%s/start_button.png", IMAGE_PATH);
+	private final String IMAGE_STATSBUTTON_PATH = String.format("%s/stats_button.png", IMAGE_PATH);
+	private final String IMAGE_QUITBUTTON_PATH = String.format("%s/quit_button.png", IMAGE_PATH);
+	private final String IMAGE_BACKBUTTON_PATH = String.format("%s/back_button.png", IMAGE_PATH);
+	private final String IMAGE_CONTINUEBUTTON_PATH = String.format("%s/continue_button.png", IMAGE_PATH);
 
 	// planet select button image paths
-	private final String IMAGE_MERCURY_PATH = String.format("%s/mercury.png", IMAGE_PATH);
-	private final String IMAGE_VENUS_PATH = String.format("%s/venus.png", IMAGE_PATH);
-	private final String IMAGE_EARTH_PATH = String.format("%s/earth.png", IMAGE_PATH);
-	private final String IMAGE_MARS_PATH = String.format("%s/mars.png", IMAGE_PATH);
+	private final String IMAGE_MERCURY_PATH = String.format("%s/mercury_button.png", IMAGE_PATH);
+	private final String IMAGE_VENUS_PATH = String.format("%s/venus_button.png", IMAGE_PATH);
+	private final String IMAGE_EARTH_PATH = String.format("%s/earth_button.png", IMAGE_PATH);
+	private final String IMAGE_MARS_PATH = String.format("%s/mars_button.png", IMAGE_PATH);
 	private final String BGAUDIO_SS_PATH = String.format("%s/mii-channel.mp3", AUDIO_PATH);
 	private final String BGAUDIO_GS_PATH = String.format("%s/burnt_toaster.mp3", AUDIO_PATH);
 	private final String BGAUDIO_ES_PATH = String.format("%s/victory_fanfare.mp3", AUDIO_PATH);
@@ -68,10 +82,15 @@ public class AppSimulation extends Simulation {
 	private final String BGIMAGE_LSS_PATH = String.format("%s/choose_planet.png", IMAGE_PATH);
 	private final String BGIMAGE_LC_PATH = String.format("%s/level_cleared.png", IMAGE_PATH);
 	private final String BGIMAGE_STATS_PATH = String.format("%s/statsbg.png", IMAGE_PATH);
+	private final String BGIMAGE_GAME_PATH = String.format("%s/gamebg.png", IMAGE_PATH);
 
 
 	// default planet image for game screen
 	private final String IMAGE_PLANET_MERCURY_PATH = String.format("%s/mercury_planet.png", IMAGE_PATH);
+	private final String IMAGE_PLANET_VENUS_PATH = String.format("%s/venus_planet.png", IMAGE_PATH);
+	private final String IMAGE_PLANET_EARTH_PATH = String.format("%s/earth_planet.png", IMAGE_PATH);
+	private final String IMAGE_PLANET_MARS_PATH = String.format("%s/mars_planet.png", IMAGE_PATH);
+
 
 	// indexes of the screens
 	private final int SPLASH_SCREEN = 0;
@@ -88,6 +107,9 @@ public class AppSimulation extends Simulation {
 	private HashMap<String, Texture> planetInfoButtons;
 	private HashMap<String, Texture> levelClearedButtons;
 	private HashMap<String, Texture> statsButtons;
+	
+	// Planet Hashmap
+	private HashMap<String, Planet> planetHashmap;
 
 	/**
 	 * This method is called upon initialization of the AppSimulation.
@@ -111,42 +133,93 @@ public class AppSimulation extends Simulation {
 			bgSSMusic = new Sound(BGAUDIO_SS_PATH);
 			bgGSMusic = new Sound(BGAUDIO_GS_PATH);
 			bgESMusic = new Sound(BGAUDIO_ES_PATH);
-			oManager.add(BGAUDIO_SS_PATH,bgSSMusic);
-			oManager.add(BGAUDIO_GS_PATH,bgGSMusic);
-			oManager.add(BGAUDIO_ES_PATH,bgESMusic);
 			
-			buttonSA = new Texture(IMAGE_SA);
-			buttonSP = new Texture(IMAGE_SP);
+			// background image textures (NOT ADDED INTO OMANAGER YET)
+			bgSSImage = new SpaceTexture(BGIMAGE_SS_PATH);
+			bgLSSImage = new SpaceTexture(BGIMAGE_LSS_PATH);
+			bgLCImage = new SpaceTexture(BGIMAGE_LC_PATH);
+			bgStatsImage = new SpaceTexture(BGIMAGE_STATS_PATH);
+			bgGSImage = new SpaceTexture(BGIMAGE_GAME_PATH);
+			
+			startButtonModel = new SpaceTexture(IMAGE_STARTBUTTON_PATH);
+			statsButtonModel = new SpaceTexture(IMAGE_STATSBUTTON_PATH);
+			quitButtonModel = new SpaceTexture(IMAGE_QUITBUTTON_PATH);
+			backButtonModel = new SpaceTexture(IMAGE_BACKBUTTON_PATH);
+			continueButtonModel = new SpaceTexture(IMAGE_CONTINUEBUTTON_PATH);
+			
+			playerModel = new SpaceTexture(IMAGE_PLAYER_PATH);
+//			debrisModel = new SpaceTexture(IMAGE_DEBRIS_PATH);
+			
+			mercuryButtonModel = new SpaceTexture(IMAGE_MERCURY_PATH);
+			venusButtonModel = new SpaceTexture(IMAGE_VENUS_PATH);
+			earthButtonModel = new SpaceTexture(IMAGE_EARTH_PATH);
+			marsButtonModel = new SpaceTexture(IMAGE_MARS_PATH);
+			
+			mercuryPlanetModel = new SpaceTexture(IMAGE_PLANET_MERCURY_PATH);
+			venusPlanetModel = new SpaceTexture(IMAGE_PLANET_VENUS_PATH);
+			earthPlanetModel = new SpaceTexture(IMAGE_PLANET_EARTH_PATH);
+			marsPlanetModel = new SpaceTexture(IMAGE_PLANET_MARS_PATH);
+			
+			oManager.add("SSBGMusic",bgSSMusic);
+			oManager.add("GSBGMusic",bgGSMusic);
+			oManager.add("ESBGMusic",bgESMusic);
+			
+			oManager.add("PlayerTexture", playerModel);
+			oManager.add("DebrisTexture", debrisModel);
+			
+			oManager.add("StartButtonTexture", startButtonModel);
+			oManager.add("StatsButtonTexture", statsButtonModel);
+			oManager.add("QuitButtonTexture", quitButtonModel);
+			oManager.add("BackButtonTexture", backButtonModel);
+			oManager.add("ContinueButtonTexture", continueButtonModel);
+			
+			oManager.add("MercuryButtonTexture", mercuryButtonModel);
+			oManager.add("VenusButtonTexture", venusButtonModel);
+			oManager.add("EarthButtonTexture", earthButtonModel);
+			oManager.add("MarsButtonTexture", marsButtonModel);
+			
+			oManager.add("MercuryPlanetTexture", mercuryPlanetModel);
+			oManager.add("VenusPlanetTexture", venusPlanetModel);
+			oManager.add("EarthPlanetTexture", earthPlanetModel);
+			oManager.add("MarsPlanetTexture", marsPlanetModel);
 			
 			ioManager = new IOManager(iManager,oManager);
+			
+			// Planet Dimenensions
+			planetPositionX = 0;
+			planetPositionY = -(Gdx.graphics.getWidth() / 2f);
+			planetWidth = Gdx.graphics.getWidth();
+			planetHeight = 0.75f * ((float)Gdx.graphics.getWidth() /  (float)Gdx.graphics.getHeight()) * (float)Gdx.graphics.getHeight();
+			planetCollidable = COLLIDABLE;
+			
 			
 			// hashmaps of button textures to pass to their respective scenes
 			// main menu buttons
 			menuButtons = new HashMap<String, Texture>();
-			menuButtons.put("Start", new Texture(IMAGE_START_PATH));
-			menuButtons.put("Stats", new Texture(IMAGE_STATS_PATH));
-			menuButtons.put("Quit", new Texture(IMAGE_QUIT_PATH));
+			menuButtons.put("Start", (Texture)ioManager.getOutputManager().retrieve("StartButtonTexture"));
+			menuButtons.put("Stats", (Texture)ioManager.getOutputManager().retrieve("StatsButtonTexture"));
+			menuButtons.put("Quit", (Texture)ioManager.getOutputManager().retrieve("QuitButtonTexture"));
 
 			// planet selection buttons
 			levelButtons = new HashMap<String, Texture>();
-			levelButtons.put("Mercury", new Texture(IMAGE_MERCURY_PATH));
-			levelButtons.put("Venus", new Texture(IMAGE_VENUS_PATH));
-			levelButtons.put("Earth", new Texture(IMAGE_EARTH_PATH));
-			levelButtons.put("Mars", new Texture(IMAGE_MARS_PATH));
-			levelButtons.put("Back", new Texture(IMAGE_BACK_PATH));
+			levelButtons.put("Mercury", (Texture)ioManager.getOutputManager().retrieve("MercuryButtonTexture"));
+			levelButtons.put("Venus", (Texture)ioManager.getOutputManager().retrieve("VenusButtonTexture"));
+			levelButtons.put("Earth", (Texture)ioManager.getOutputManager().retrieve("EarthButtonTexture"));
+			levelButtons.put("Mars", (Texture)ioManager.getOutputManager().retrieve("MarsButtonTexture"));
+			levelButtons.put("Back", (Texture)ioManager.getOutputManager().retrieve("QuitButtonTexture"));
 
 			// planet info screen buttons
 			planetInfoButtons = new HashMap<String, Texture>();
-			planetInfoButtons.put("Start", new Texture(IMAGE_START_PATH));
-			planetInfoButtons.put("Back", new Texture(IMAGE_BACK_PATH));
+			planetInfoButtons.put("Start", (Texture)ioManager.getOutputManager().retrieve("StartButtonTexture"));
+			planetInfoButtons.put("Back", (Texture)ioManager.getOutputManager().retrieve("BackButtonTexture"));
 
 			// level cleared screen buttons
 			levelClearedButtons = new HashMap<String, Texture>();
-			levelClearedButtons.put("Continue", new Texture(IMAGE_CONTINUE_PATH));
+			levelClearedButtons.put("Continue", (Texture)ioManager.getOutputManager().retrieve("ContinueButtonTexture"));
 			
 			// stats screen buttons
 			statsButtons = new HashMap<String,Texture>();
-			statsButtons.put("Back", new Texture(IMAGE_BACK_PATH));
+			statsButtons.put("Back", (Texture)ioManager.getOutputManager().retrieve("BackButtonTexture"));
 
 		} catch(Exception ex) {
 			System.out.println("INIT ERROR - Unable to load resources, check resource paths.");
@@ -170,19 +243,57 @@ public class AppSimulation extends Simulation {
 		// Instantiate SceneManager & All AppSimulation Scenes
 		sceneManager = new SceneManager(oManager);
 		
-		// background image textures
-		Texture bgSSImage = new Texture(BGIMAGE_SS_PATH);
-		Texture bgLSSImage = new Texture(BGIMAGE_LSS_PATH);
-		Texture planetImage = new Texture(IMAGE_PLANET_MERCURY_PATH); // default planet image for game screen
-		Texture bgLCImage = new Texture(BGIMAGE_LC_PATH);
-		Texture bgStatsImage = new Texture(BGIMAGE_STATS_PATH);
+		// Creating Planets
+		mercuryPlanet = new Planet(
+				"Mercury",
+				(SpaceTexture)ioManager.getOutputManager().retrieve("MercuryPlanetTexture"), 
+				planetPositionX,
+				planetPositionY,
+				1.5f, //gravity
+				planetWidth, 
+				planetHeight, 
+				planetCollidable);
+		venusPlanet = new Planet(
+				"Venus",
+				(SpaceTexture)ioManager.getOutputManager().retrieve("VenusPlanetTexture"), 
+				planetPositionX,
+				planetPositionY,
+				1.5f,
+				planetWidth, 
+				planetHeight, 
+				planetCollidable);
+		earthPlanet = new Planet(
+				"Earth",
+				(SpaceTexture)ioManager.getOutputManager().retrieve("EarthPlanetTexture"), 
+				planetPositionX,
+				planetPositionY,
+				1.5f,
+				planetWidth, 
+				planetHeight, 
+				planetCollidable);
+		marsPlanet = new Planet(
+				"Mars",
+				(SpaceTexture)ioManager.getOutputManager().retrieve("MarsPlanetTexture"), 
+				planetPositionX,
+				planetPositionY,
+				1.5f,
+				planetWidth, 
+				planetHeight, 
+				planetCollidable);
+		
+		// Planet Hashmap
+		planetHashmap = new HashMap<String, Planet>();
+		planetHashmap.put("Mercury",mercuryPlanet);
+		planetHashmap.put("Venus",venusPlanet);
+		planetHashmap.put("Earth",earthPlanet);
+		planetHashmap.put("Mars",marsPlanet);
 
 		// a reference to appsimulation is passed to scenes so that they can request changes of game state
 		sceneManager.add(new MainMenuScreen(menuButtons, bgSSImage, bgSSMusic ,mouseDevice, this));
-		sceneManager.add(new LevelSelectScreen(levelButtons, bgLSSImage, bgSSMusic ,mouseDevice, this));
+		sceneManager.add(new LevelSelectScreen(levelButtons, planetHashmap, bgLSSImage, bgSSMusic ,mouseDevice, this));
 		sceneManager.add(new PlanetInfoScreen(planetInfoButtons, bgLSSImage, bgSSMusic ,mouseDevice, this));
 		//sceneManager.add(new SplashScreen(bgSSMusic,bgSSImage));
-		sceneManager.add(new GameScreen("Mercury", planetImage, bgGSMusic,keyboardDevice,mouseDevice, this));
+		sceneManager.add(new GameScreen(mercuryPlanet, playerModel,bgGSMusic,keyboardDevice,mouseDevice, this));
 //		sceneManager.add(new GameScreen(buttonSA,buttonSP,bgGSMusic,keyboardDevice,mouseDevice));
 		sceneManager.add(new PauseScreen());
 		sceneManager.add(new LevelClearedScreen(levelClearedButtons, bgLCImage, bgESMusic, mouseDevice, this));
@@ -250,16 +361,16 @@ public class AppSimulation extends Simulation {
 	}
 	
 	// start the game
-	public void setGameLevel(String planetName, String planetImagePath) {
+	public void setGameLevel(Planet planet) {
 		gameState = GAME_SCREEN;
-		sceneManager.setGameLevel(planetName, new Texture(planetImagePath), keyboardDevice, mouseDevice, this);
+		sceneManager.setGameLevel(planet, playerModel, keyboardDevice, mouseDevice, this);
 		sceneManager.setScene(gameState);
 	}
 	
 	// display planet info
-	public void showLevelInfo(String planetName) {
+	public void showLevelInfo(Planet planet) {
 		gameState = LEVEL_INFO_SCREEN;
-		sceneManager.setLevelInfo(planetName, keyboardDevice, mouseDevice);
+		sceneManager.setLevelInfo(planet, keyboardDevice, mouseDevice);
 		sceneManager.setScene(gameState);
 	}
 	

@@ -17,12 +17,16 @@ public class OutputManager <T extends iOutput> {
 			outputList = new HashMap<>();
 		}
 		
-		public void add(String filePath, T outputType) {
-			if (outputList.get(filePath) == null) outputList.put(filePath,outputType);
+		public void add(String key, T outputType) {
+			if (outputList.get(key) == null) outputList.put(key,outputType);
 		}
 
 		public void remove(String filePath) {
 			outputList.remove(filePath);
+		}
+		
+		public T retrieve(String key) {
+			return outputList.get(key);
 		}
 
 		//using hashmap so to dispose all of it you'll need to use this instead

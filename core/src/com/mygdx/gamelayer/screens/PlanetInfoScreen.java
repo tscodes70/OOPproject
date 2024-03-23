@@ -28,6 +28,7 @@ import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
+import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.simulation.AppSimulation;
 
 public class PlanetInfoScreen extends Scene {	
@@ -36,24 +37,11 @@ public class PlanetInfoScreen extends Scene {
     private ButtonManager buttonManager;
     private ButtonControlManager buttonControlManager;
     private AppSimulation simulation;
-    private String planetName;
-    private String planetImagePath;
-    private String planetDescription;
+    private Planet planet;
     
     private BitmapFont planetNameFont, descriptionFont;
     private GlyphLayout planetNameGlyph, descriptionGlyph;
 	private final String IMAGE_PATH = "image";
-
-	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
-	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
-	
-	// planet image paths
-	private final String IMAGE_PLANET_MERCURY = String.format("%s/mercury_planet.png", IMAGE_PATH);
-	private final String IMAGE_PLANET_VENUS = String.format("%s/venus_planet.png", IMAGE_PATH);
-	private final String IMAGE_PLANET_EARTH = String.format("%s/earth_planet.png", IMAGE_PATH);
-	private final String IMAGE_PLANET_MARS = String.format("%s/mars_planet.png", IMAGE_PATH);
-
-	private HashMap<String, String[]> planetInfoMapping;
 	
 	// y coordinates of the description text
 	private final float DESCRIPTION_Y_POS = 725f;
@@ -78,28 +66,12 @@ public class PlanetInfoScreen extends Scene {
 		
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
-        // mapping of planet name to their respective image paths and description
-        planetInfoMapping = new HashMap<String, String[]>();
-        
-        planetInfoMapping.put("Mercury", new String[] { IMAGE_PLANET_MERCURY, "This is a description of Mercury. " 
-        						+ "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus ac lectus in varius. Pellentesque euismod dui ut leo fermentum."});
-        
-        planetInfoMapping.put("Venus", new String[] { IMAGE_PLANET_VENUS, "This is a description of Venus. "
-        						+ "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus ac lectus in varius. Pellentesque euismod dui ut leo fermentum." });
-        
-        // newlines to test dynamic text positioning
-        planetInfoMapping.put("Earth", new String[] { IMAGE_PLANET_EARTH, "This is a longer description of Earth. \n\n\n\n\n\n\n\n"
-        						+ "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus ac lectus in varius. Pellentesque euismod dui ut leo fermentum." });
-        
-        planetInfoMapping.put("Mars", new String[] { IMAGE_PLANET_MARS, "This is a description of Mars. "
-								+ "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus ac lectus in varius. Pellentesque euismod dui ut leo fermentum." });
-
 		//Instantiate ButtonManager
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Start"), (screenWidth - buttonTextures.get("Start").getWidth()) / 2, 175, 0.9f, "Start"));
-		buttonManager.add(new Button(buttonTextures.get("Back"), (screenWidth  - buttonTextures.get("Back").getWidth()) / 2, 75, 0.9f, "SelectLevel"));
+		buttonManager.add(new Button(buttonTextures.get("Start"), 325, 175, 0.2f, "Start"));
+		buttonManager.add(new Button(buttonTextures.get("Back"), 325, 75, 0.2f, "SelectLevel"));
 		
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}
@@ -119,10 +91,10 @@ public class PlanetInfoScreen extends Scene {
 		buttonManager.drawButtons(batch);
 		
 		// draw planet name
-		planetNameFont.draw(batch, planetName, super.centeredXPos(planetNameGlyph.width), 825f);
+		planetNameFont.draw(batch, planet.getName(), super.centeredXPos(planetNameGlyph.width), 825f);
 		
 		// draw wrapped text for planet description
-		descriptionFont.draw(batch, planetDescription,  super.centeredXPos(600f), DESCRIPTION_Y_POS, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, planet.getInfo(),  super.centeredXPos(600f), DESCRIPTION_Y_POS, TEXTAREA_WIDTH, Align.left, true);
 		
 		// vertical position of these elements are dynamic based on height of the description text
 		descriptionFont.draw(batch, "Buffs: placeholder", super.centeredXPos(600f), DESCRIPTION_Y_POS - descriptionGlyph.height - 40f, TEXTAREA_WIDTH, Align.left, true);
@@ -139,7 +111,7 @@ public class PlanetInfoScreen extends Scene {
 			switch(clickedButton.getAction()) {
 				case "Start":
 					// start game
-					simulation.setGameLevel(planetName, planetImagePath);
+					simulation.setGameLevel(planet);
 					break;
 				case "SelectLevel":
 					// go back to planet selection
@@ -150,14 +122,12 @@ public class PlanetInfoScreen extends Scene {
 	}
 	
 	// set which planet's info to display
-	public void setChosenLevel(String planetName) {
-		this.planetName = planetName;
-		planetImagePath = planetInfoMapping.get(planetName)[0];
-		planetDescription = planetInfoMapping.get(planetName)[1];
+	public void setChosenLevel(Planet planet) {
+		this.planet = planet;
 		
-        planetNameGlyph = new GlyphLayout(planetNameFont, planetName); //for getting width/height of text	
+        planetNameGlyph = new GlyphLayout(planetNameFont, planet.getName()); //for getting width/height of text	
         descriptionGlyph = new GlyphLayout();
-        descriptionGlyph.setText(descriptionFont, planetDescription, Color.CLEAR, 600f, Align.left, true);
+        descriptionGlyph.setText(descriptionFont, planet.getInfo(), Color.CLEAR, 600f, Align.left, true);
 	}
 	
 	@Override

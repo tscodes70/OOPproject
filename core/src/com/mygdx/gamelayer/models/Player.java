@@ -2,6 +2,7 @@ package com.mygdx.gamelayer.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.mygdx.gameengine.interfaces.iCollidable;
@@ -46,6 +47,39 @@ public class Player extends Entity implements iCollidable, iPlayer {
 		this.playable = playable;
 		this.collidable = collidable;
 		this.boundingBox = new Rectangle(positionX-radius, positionY-radius, radius * 2, radius * 2);
+		this.speedMultiplier = speedMultiplier;
+		
+		this.leftKeybind = leftKeybind;
+		this.rightKeybind = rightKeybind;
+		this.upKeybind = upKeybind;
+		this.downKeybind = downKeybind;
+		
+		// HP and Stamina
+		this.healthBar = new StatsBar(positionX-45, positionY-60, Color.GREEN, Color.RED, 100, 10, 30, 100);
+		this.staminaBar = new StatsBar(positionX-45, positionY-70, Color.YELLOW, Color.GRAY, 100, 10, 50, 100);
+
+	}
+	
+	public Player(
+			float positionX, 
+			float positionY, 
+			int speedMultiplier, 
+			float width,
+			float height,
+			Texture texture, 
+			boolean playable, 
+			boolean collidable,
+			
+			int leftKeybind,
+			int rightKeybind,
+			int upKeybind,
+			int downKeybind) {
+		
+		super(texture, positionX, positionY, width, height);
+
+		this.playable = playable;
+		this.collidable = collidable;
+		this.boundingBox = new Rectangle(positionX, positionY, width, height);
 		this.speedMultiplier = speedMultiplier;
 		
 		this.leftKeybind = leftKeybind;

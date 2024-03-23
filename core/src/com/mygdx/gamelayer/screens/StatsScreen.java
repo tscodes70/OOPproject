@@ -68,7 +68,7 @@ public class StatsScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Back"), (screenWidth  - buttonTextures.get("Back").getWidth()) / 2, 75, 0.9f, "ReturnToMain"));
+		buttonManager.add(new Button(buttonTextures.get("Back"), 325, 75, 0.2f, "ReturnToMain"));
 		
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}

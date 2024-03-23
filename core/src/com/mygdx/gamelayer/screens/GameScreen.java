@@ -36,6 +36,7 @@ import com.mygdx.gamelayer.models.Debris;
 import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.Player;
 import com.mygdx.gamelayer.models.Projectile;
+import com.mygdx.gamelayer.models.SpaceTexture;
 import com.mygdx.gamelayer.models.StatsBar;
 import com.mygdx.gamelayer.simulation.AppSimulation;
 
@@ -52,16 +53,14 @@ public class GameScreen extends Scene {
     private Keyboard keyboardDevice;
     private Mouse mouseDevice;
     
-	private final String IMAGE_PATH = "image";
-
-	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
-	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
+    private Planet planet;
 	
 	private final int DEFAULT_ENTITY_SPEED = 2;
-	private final int DEFAULT_ENTITY_RADIUS = 40;
+	private final int DEFAULT_ENTITY_RADIUS = 40; // remove
+	private final int DEFAULT_ENTITY_WIDTH = 80;
+	private final int DEFAULT_ENTITY_HEIGHT = 80;
 	private final int DEFAULT_PLAYER_X = 400;
 	private final int DEFAULT_PLAYER_Y = 250;
-	private final Color DEFAULT_PLAYER_COLOR = Color.BLUE;
 	private final Color DEFAULT_AI_COLOR = Color.RED;
 	private final boolean COLLIDABLE = true;
 	private final boolean PLAYABLE = true;
@@ -74,18 +73,13 @@ public class GameScreen extends Scene {
 	private GlyphLayout countdown;
     private float countdownTime = 180f;
     private float delay;
-    private Texture planet; // test
-    private String planetName;
-    private float gravity;
+
     private int playerPoints = 100;//Initial points
-    
-    // map planet to their respective gravity values for movement
-    private HashMap<String, Float> planetGravityMapping;
     
     private Player player1;
     private float projectileSpawnTimer = 0;
     
-	public GameScreen(String planetName, Texture planetImage, Sound bgMusic, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
+	public GameScreen(Planet planet, SpaceTexture playerModel, Sound bgMusic, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
 		super(bgMusic);
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
@@ -93,10 +87,7 @@ public class GameScreen extends Scene {
 		this.keyboardDevice = keyboardDevice;
 		this.mouseDevice = mouseDevice;
 		this.simulation = simulation;
-		this.planet = planetImage;
-		this.planetName = planetName;
-		
-		planet.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		this.planet = planet;
 		//Using texture render
 //        Entity aiEntity = new Entity("image/ai.png", 50, 50, 2, true);
 //        Entity playerEntity = new Entity("image/player.png", 50,50,2,false);
@@ -110,8 +101,9 @@ public class GameScreen extends Scene {
 				DEFAULT_PLAYER_X, 
 				DEFAULT_PLAYER_Y, 
 				DEFAULT_ENTITY_SPEED, 
-				DEFAULT_ENTITY_RADIUS, 
-				DEFAULT_PLAYER_COLOR,
+				DEFAULT_ENTITY_WIDTH, 
+				DEFAULT_ENTITY_HEIGHT,
+				playerModel,
 				PLAYABLE,
 				COLLIDABLE,
 				
@@ -132,20 +124,7 @@ public class GameScreen extends Scene {
             		COLLIDABLE));	
         }
         
-        spaceEntityManager.add(new Planet(
-        		planet, 
-        		(float)0, 
-        		-(Gdx.graphics.getWidth() / 2f), 
-        		(float)Gdx.graphics.getWidth(), 
-        		0.75f * ((float)Gdx.graphics.getWidth() /  (float)Gdx.graphics.getHeight()) * (float)Gdx.graphics.getHeight(),
-        		COLLIDABLE));
-        
-		// set the planet gravity for use in movement controls
-        planetGravityMapping = new HashMap<String, Float>();
-        planetGravityMapping.put("Mercury", 0.38f);
-        planetGravityMapping.put("Venus", 0.904f);
-        planetGravityMapping.put("Earth", 1f);
-        planetGravityMapping.put("Mars", 0.38f);
+        spaceEntityManager.add(planet);
         
         font = new BitmapFont();
         
@@ -156,9 +135,6 @@ public class GameScreen extends Scene {
 		countdownFont = generator.generateFont(parameter);
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
         countdown = new GlyphLayout(countdownFont, "3"); //for getting width/height of text
-        
-        // set gravity according to selected planet
-		this.gravity = planetGravityMapping.get(planetName);
 
 		//Instantiate AIControlManager
 		spaceAIControlManager = new SpaceAIControlManager(spaceEntityManager.getEntityList());
@@ -229,7 +205,7 @@ public class GameScreen extends Scene {
 			// test test
 			// hardcoded to go to level cleared screen after 10s of gameplay
 			if((int)countdownTime == 0) {
-				simulation.levelCleared(planetName, planet);
+				simulation.levelCleared(planet.getName(), planet.getTex());
 			}
 		}
 	}
@@ -252,7 +228,7 @@ public class GameScreen extends Scene {
 
 	    // Check if it's time to spawn a projectile (every second)
 	    if (projectileSpawnTimer >= 0.5) {
-	        spaceEntityManager.add(new Projectile(player1.getPositionX(), player1.getPositionY() + 50, 10, 50, Color.GREEN, true, true, 4));
+	        spaceEntityManager.add(new Projectile(player1.getPositionX()+35, player1.getPositionY() + 50, 10, 50, Color.GREEN, true, true, 4));
 	        spaceAIControlManager.update(spaceEntityManager.getEntityList());
 	        projectileSpawnTimer -= 0.5; // Reset the timer for next second
 	    }

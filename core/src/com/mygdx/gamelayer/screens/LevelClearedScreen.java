@@ -72,7 +72,7 @@ public class LevelClearedScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Continue"), (screenWidth - buttonTextures.get("Continue").getWidth()) / 2, 125, 0.9f, "Continue"));
+		buttonManager.add(new Button(buttonTextures.get("Continue"), 325, 125, 0.2f, "Continue"));
 		
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}
