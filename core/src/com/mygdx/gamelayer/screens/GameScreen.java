@@ -77,6 +77,7 @@ public class GameScreen extends Scene {
     private Texture planet; // test
     private String planetName;
     private float gravity;
+    private int playerPoints = 100;//Initial points
     
     // map planet to their respective gravity values for movement
     private HashMap<String, Float> planetGravityMapping;
@@ -203,7 +204,10 @@ public class GameScreen extends Scene {
 		
 		batch.begin();
         font.draw(batch, "Time: " + (int) countdownTime, 10, Gdx.graphics.getHeight() - 10);
-        	spaceEntityManager.drawEntities(batch);
+        	spaceEntityManager.drawEntities(batch);     	
+        //to display points on screen
+        font.draw(batch, "Points: \n" + playerPoints, 10, Gdx.graphics.getHeight() - 50);
+        
 		batch.end();
 		
 		// fade in effect should be called after everything else
