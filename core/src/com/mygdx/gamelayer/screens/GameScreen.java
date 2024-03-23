@@ -36,6 +36,7 @@ import com.mygdx.gamelayer.models.Debris;
 import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.Player;
 import com.mygdx.gamelayer.models.Projectile;
+import com.mygdx.gamelayer.models.StatsBar;
 import com.mygdx.gamelayer.simulation.AppSimulation;
 
 public class GameScreen extends Scene {	
@@ -102,6 +103,7 @@ public class GameScreen extends Scene {
         //Instantiate EntityManager
 		spaceEntityManager = new SpaceEntityManager();
 		
+
 		//Creation of Entities (Player Entity, AI Entities)
 		player1 = new Player(
 				DEFAULT_PLAYER_X, 

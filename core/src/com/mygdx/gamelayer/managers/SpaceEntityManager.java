@@ -34,7 +34,19 @@ public class SpaceEntityManager extends EntityManager{
 	@Override
 	public void drawEntities(ShapeRenderer shape) {
 		for (Entity entity : super.getEntityList()) {
-			if (entity.getTex() == null && (entity instanceof Debris || entity instanceof Player || entity instanceof Projectile))entity.draw(shape);
+			if (entity.getTex() == null) {
+			    if (entity instanceof Debris) {
+			        entity.draw(shape);
+			    }
+			    if (entity instanceof Player) {
+			        entity.draw(shape);
+			        ((Player)entity).getHealthBar().draw(shape);
+			        ((Player)entity).getStaminaBar().draw(shape);
+			    }
+			    if (entity instanceof Projectile) {
+			        entity.draw(shape);
+			    }
+			}
 		}
 	}
 	

@@ -10,10 +10,8 @@ import com.mygdx.gameengine.models.Entity;
 
 public class Player extends Entity implements iCollidable, iPlayer {
 	
-	private float currentHP;
-	private float maxHP;
-	private float currentStamina;
-	private float maxStamina;
+	private StatsBar healthBar;
+	private StatsBar staminaBar;
 	private float staminaRegenRate;
 	private boolean playable;
 	private boolean collidable;
@@ -54,11 +52,22 @@ public class Player extends Entity implements iCollidable, iPlayer {
 		this.rightKeybind = rightKeybind;
 		this.upKeybind = upKeybind;
 		this.downKeybind = downKeybind;
+		
+		// HP and Stamina
+		this.healthBar = new StatsBar(positionX-45, positionY-60, Color.GREEN, Color.RED, 100, 10, 30, 100);
+		this.staminaBar = new StatsBar(positionX-45, positionY-70, Color.YELLOW, Color.GRAY, 100, 10, 50, 100);
+
 	}
 	
     public void update(float deltaTime) {
         // Update bounding box position
         boundingBox.setPosition(super.getPositionX()-super.getRadius(), super.getPositionY()-super.getRadius());
+    
+        // Update stats bar position
+        healthBar.setPositionX(super.getPositionX()-45);
+        healthBar.setPositionY(super.getPositionY()-60);
+        staminaBar.setPositionX(super.getPositionX()-45);
+        staminaBar.setPositionY(super.getPositionY()-70);
     }
     
 
@@ -124,14 +133,6 @@ public class Player extends Entity implements iCollidable, iPlayer {
     
 
 // Getter Setter
-	public float getCurrentHP() { return currentHP; }
-	public void setCurrentHP(float currentHP) { this.currentHP = currentHP; }
-	public float getMaxHP() { return maxHP; }
-	public void setMaxHP(float maxHP) { this.maxHP = maxHP;}
-	public float getCurrentStamina() { return currentStamina; }
-	public void setCurrentStamina(float currentStamina) { this.currentStamina = currentStamina; }
-	public float getMaxStamina() { return maxStamina; }
-	public void setMaxStamina(float maxStamina) { this.maxStamina = maxStamina; }
 	public float getStaminaRegenRate() { return staminaRegenRate; }
 	public void setStaminaRegenRate(float staminaRegenRate) { this.staminaRegenRate = staminaRegenRate; }
 	public int getLeftKeybind() {return leftKeybind;}
@@ -143,7 +144,24 @@ public class Player extends Entity implements iCollidable, iPlayer {
 	public int getDownKeybind() {return downKeybind;}
 	public void setDownKeybind(int downKeybind) {this.downKeybind = downKeybind;}
 	
-// my brain thinking how to incorporate imovable
+	
+public StatsBar getHealthBar() {
+		return healthBar;
+	}
+
+	public void setHealthBar(StatsBar healthBar) {
+		this.healthBar = healthBar;
+	}
+
+	public StatsBar getStaminaBar() {
+		return staminaBar;
+	}
+
+	public void setStaminaBar(StatsBar staminaBar) {
+		this.staminaBar = staminaBar;
+	}
+
+	// my brain thinking how to incorporate imovable
 	public int getSpeedMultiplier() {
 		return speedMultiplier;
 	}
