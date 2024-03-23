@@ -58,7 +58,7 @@ public class GameScreen extends Scene {
 	private final int DEFAULT_ENTITY_SPEED = 2;
 	private final int DEFAULT_ENTITY_RADIUS = 40; // remove
 	private final int DEFAULT_ENTITY_WIDTH = 80;
-	private final int DEFAULT_ENTITY_HEIGHT = 80;
+	private final int DEFAULT_ENTITY_HEIGHT = 100;
 	private final int DEFAULT_PLAYER_X = 400;
 	private final int DEFAULT_PLAYER_Y = 250;
 	private final Color DEFAULT_AI_COLOR = Color.RED;
@@ -79,8 +79,8 @@ public class GameScreen extends Scene {
     private Player player1;
     private float projectileSpawnTimer = 0;
     
-	public GameScreen(Planet planet, SpaceTexture playerModel, Sound bgMusic, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
-		super(bgMusic);
+	public GameScreen(Planet planet, SpaceTexture playerModel, SpaceTexture bgTexture, Sound bgMusic, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
+		super(bgMusic, bgTexture);
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
 
@@ -151,15 +151,13 @@ public class GameScreen extends Scene {
 	 */
 	@Override
 	public void render() {
+		super.render();
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		update(deltaTime);
 
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
 		shape.begin(ShapeRenderer.ShapeType.Filled);
 			spaceEntityManager.drawEntities(shape);
-			// Show hitboxes
+////			 Show hitboxes
 //			for(Entity entity: spaceEntityManager.getEntityList()) {
 //				if(entity instanceof Planet) {
 //					Rectangle x = ((Planet) entity).getBoundingBox();

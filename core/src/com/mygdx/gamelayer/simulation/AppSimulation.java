@@ -293,7 +293,7 @@ public class AppSimulation extends Simulation {
 		sceneManager.add(new LevelSelectScreen(levelButtons, planetHashmap, bgLSSImage, bgSSMusic ,mouseDevice, this));
 		sceneManager.add(new PlanetInfoScreen(planetInfoButtons, bgLSSImage, bgSSMusic ,mouseDevice, this));
 		//sceneManager.add(new SplashScreen(bgSSMusic,bgSSImage));
-		sceneManager.add(new GameScreen(mercuryPlanet, playerModel,bgGSMusic,keyboardDevice,mouseDevice, this));
+		sceneManager.add(new GameScreen(mercuryPlanet, playerModel, bgGSImage, bgGSMusic,keyboardDevice,mouseDevice, this));
 //		sceneManager.add(new GameScreen(buttonSA,buttonSP,bgGSMusic,keyboardDevice,mouseDevice));
 		sceneManager.add(new PauseScreen());
 		sceneManager.add(new LevelClearedScreen(levelClearedButtons, bgLCImage, bgESMusic, mouseDevice, this));
@@ -363,7 +363,7 @@ public class AppSimulation extends Simulation {
 	// start the game
 	public void setGameLevel(Planet planet) {
 		gameState = GAME_SCREEN;
-		sceneManager.setGameLevel(planet, playerModel, keyboardDevice, mouseDevice, this);
+		sceneManager.setGameLevel(planet, playerModel, bgGSImage, keyboardDevice, mouseDevice, this);
 		sceneManager.setScene(gameState);
 	}
 	

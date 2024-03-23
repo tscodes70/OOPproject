@@ -3,6 +3,7 @@ package com.mygdx.gamelayer.models;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.mygdx.gameengine.interfaces.iCollidable;
@@ -88,8 +89,8 @@ public class Player extends Entity implements iCollidable, iPlayer {
 		this.downKeybind = downKeybind;
 		
 		// HP and Stamina
-		this.healthBar = new StatsBar(positionX-45, positionY-60, Color.GREEN, Color.RED, 100, 10, 30, 100);
-		this.staminaBar = new StatsBar(positionX-45, positionY-70, Color.YELLOW, Color.GRAY, 100, 10, 50, 100);
+		this.healthBar = new StatsBar(positionX, positionY, Color.GREEN, Color.RED, 80, 5, 30, 100);
+		this.staminaBar = new StatsBar(positionX, positionY-5, Color.YELLOW, Color.GRAY, 80, 5, 50, 100);
 
 	}
 	
@@ -98,12 +99,11 @@ public class Player extends Entity implements iCollidable, iPlayer {
         boundingBox.setPosition(super.getPositionX()-super.getRadius(), super.getPositionY()-super.getRadius());
     
         // Update stats bar position
-        healthBar.setPositionX(super.getPositionX()-45);
-        healthBar.setPositionY(super.getPositionY()-60);
-        staminaBar.setPositionX(super.getPositionX()-45);
-        staminaBar.setPositionY(super.getPositionY()-70);
+        healthBar.setPositionX(super.getPositionX());
+        healthBar.setPositionY(super.getPositionY());
+        staminaBar.setPositionX(super.getPositionX());
+        staminaBar.setPositionY(super.getPositionY()-5);
     }
-    
 
 	 /**
 	  * Moves Player towards the left by the set default speed
