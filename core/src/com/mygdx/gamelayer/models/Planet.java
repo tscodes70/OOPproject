@@ -1,13 +1,13 @@
 package com.mygdx.gamelayer.models;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Shape2D;
 import com.mygdx.gameengine.interfaces.iCollidable;
-import com.mygdx.gameengine.interfaces.iEntity;
-import com.mygdx.gameengine.interfaces.iMovable;
 import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gamelayer.interfaces.iStatic;
 
-public class Planet extends Entity implements iCollidable {
+public class Planet extends Entity implements iCollidable,iStatic {
 	
 	private float currentHP;
 	private float maxHP;
@@ -15,13 +15,14 @@ public class Planet extends Entity implements iCollidable {
 	private Rectangle boundingBox;
 
 	public Planet(
+			Texture texture,
 			float positionX, 
 			float positionY, 
-			float radius, 
-			Color colour,
+			float width, 
+			float height,
 			boolean collidable) {
-		super(positionX, positionY, radius, colour);
-		this.boundingBox = new Rectangle(positionX, positionY, radius * 2, radius * 2);
+		super(texture,positionX, positionY, width, height);
+		this.boundingBox = new Rectangle(positionX, positionY, width, height);
 		this.collidable = collidable;
 	}
 
@@ -35,25 +36,32 @@ public class Planet extends Entity implements iCollidable {
 	@Override
 	public boolean isCollidable() {
 		// TODO Auto-generated method stub
-		return false;
+		return collidable;
 	}
 
 	@Override
 	public void setCollidable(boolean collidable) {
 		// TODO Auto-generated method stub
-		
+		this.collidable = collidable;
 	}
 
 	@Override
 	public Rectangle getBoundingBox() {
 		// TODO Auto-generated method stub
-		return null;
+		return boundingBox;
 	}
-
+	
 	@Override
 	public void setBoundingBox(Rectangle boundingBox) {
 		// TODO Auto-generated method stub
+		this.boundingBox = boundingBox;
+	}
+
+	@Override
+	public void update(float deltatime) {
+		// TODO Auto-generated method stub
 		
 	}
+
 	
 }

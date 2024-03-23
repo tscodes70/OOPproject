@@ -5,6 +5,10 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gamelayer.models.Debris;
+import com.mygdx.gamelayer.models.Planet;
+import com.mygdx.gamelayer.models.Player;
+import com.mygdx.gamelayer.models.Projectile;
 
 public class EntityManager {
     private List<Entity> entityList;
@@ -37,7 +41,9 @@ public class EntityManager {
      */
 	public void drawEntities(SpriteBatch batch) {
 		for (Entity entity : this.entityList) {
-			if (entity.getTex() != null) entity.draw(batch);
+			if (entity.getTex() != null) {
+				entity.draw(batch, entity.getWidth(), entity.getHeight());
+			}
 		}
 	}
 	

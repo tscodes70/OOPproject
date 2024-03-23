@@ -72,7 +72,15 @@ public class CollisionManager{
 	        }
 	    }
 	 
-	 /**
+	 public List<iCollidable> getCollidableList() {
+		return collidableList;
+	}
+
+	public void setCollidableList(List<iCollidable> collidableList) {
+		this.collidableList = collidableList;
+	}
+
+	/**
 	  * Resolves collisions between 2 Entities, for this demonstration, 
 	  * AI collision with AI is allowed.
 	  * Player collision with Player is allowed.
@@ -82,24 +90,21 @@ public class CollisionManager{
 	  * @param y
 	  */
 	 public void handleCollisions(EntityManager entityManager, AIControlManager aiControlManager, iCollidable x, iCollidable y) {
-		 if(x instanceof iAI && y instanceof iAI ) {
-//			 System.out.println("Collision Between 2 AIs - Allowed");
-		 }else if(x instanceof iPlayer && y instanceof iPlayer){
-//			 System.out.println("Collision Between 2 Players - Allowed");
-		 }else {
-			 if(x instanceof iAI) {
-				 this.remove(x);	//update collidableList to remove entity
-				 entityManager.remove((Entity) x);	//update entityManager to remove entity
-				 aiControlManager.remove((iAI) x);
-				 System.out.println("Collision Between Player & AI - AI Entity Removed");
-			 }
-			 else {
-				 this.remove(y);	//update collidableList to remove entity
-				 entityManager.remove((Entity) y);	//update entityManager to remove entity
-				 aiControlManager.remove((iAI) y);
-				 System.out.println("Collision Between Player & AI - AI Entity Removed");
-			 }
-		 }
+//		 if(x instanceof iAI && y instanceof iAI ) {
+////			 System.out.println("Collision Between 2 AIs - Allowed");
+//		 }else if(x instanceof iPlayer && y instanceof iPlayer){
+////			 System.out.println("Collision Between 2 Players - Allowed");
+//		 }else if (x instanceof iAI && y instanceof iPlayer){
+//				 this.remove(x);	//update collidableList to remove entity
+//				 entityManager.remove((Entity) x);	//update entityManager to remove entity
+//				 aiControlManager.remove((iAI) x);
+//				 System.out.println("Collision Between Player & AI - AI Entity Removed");
+//		 }else if (x instanceof iPlayer && y instanceof iAI) {
+//				 this.remove(y);	//update collidableList to remove entity
+//				 entityManager.remove((Entity) y);	//update entityManager to remove entity
+//				 aiControlManager.remove((iAI) y);
+//				 System.out.println("Collision Between Player & AI - AI Entity Removed");
+//		 }
 
 	 }
 	 

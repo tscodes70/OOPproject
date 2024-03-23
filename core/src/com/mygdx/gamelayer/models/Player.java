@@ -3,6 +3,7 @@ package com.mygdx.gamelayer.models;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Shape2D;
 import com.mygdx.gameengine.interfaces.iCollidable;
 import com.mygdx.gameengine.interfaces.iPlayer;
 import com.mygdx.gameengine.models.Entity;
@@ -46,7 +47,7 @@ public class Player extends Entity implements iCollidable, iPlayer {
 
 		this.playable = playable;
 		this.collidable = collidable;
-		this.boundingBox = new Rectangle(positionX, positionY, radius * 2, radius * 2);
+		this.boundingBox = new Rectangle(positionX-radius, positionY-radius, radius * 2, radius * 2);
 		this.speedMultiplier = speedMultiplier;
 		
 		this.leftKeybind = leftKeybind;
@@ -57,7 +58,7 @@ public class Player extends Entity implements iCollidable, iPlayer {
 	
     public void update(float deltaTime) {
         // Update bounding box position
-        boundingBox.setPosition(super.getPositionX(), super.getPositionY());
+        boundingBox.setPosition(super.getPositionX()-super.getRadius(), super.getPositionY()-super.getRadius());
     }
     
 
@@ -114,7 +115,7 @@ public class Player extends Entity implements iCollidable, iPlayer {
 		        float distanceToMove = speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
 
 		        // Ensure entity is within bottom boundary of screen
-		        if (super.getPositionY() - distanceToMove - super.getRadius() >= 0) {
+		        if (super.getPositionY() - distanceToMove - super.getRadius() >= 200) {
 		        	super.setPositionY(super.getPositionY() - distanceToMove);
 		        	update(deltaTime);		        }
 		    }

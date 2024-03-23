@@ -2,7 +2,9 @@ package com.mygdx.gamelayer.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Shape2D;
 import com.mygdx.gameengine.interfaces.iAI;
 import com.mygdx.gameengine.interfaces.iCollidable;
 import com.mygdx.gameengine.interfaces.iMovable;
@@ -27,7 +29,7 @@ public class Debris extends Entity implements iCollidable, iAI, iMovable{
 			boolean aiControl, 
 			boolean collidable) {
 		super(positionX, positionY, radius, colour);
-		this.boundingBox = new Rectangle(positionX, positionY, radius * 2, radius * 2);
+		this.boundingBox = new Rectangle(positionX-radius, positionY-radius, radius * 2, radius * 2);
 		this.speedMultiplier = speedMultiplier;
 		this.aiControl = aiControl;
 		this.collidable = collidable;
@@ -39,7 +41,7 @@ public class Debris extends Entity implements iCollidable, iAI, iMovable{
 		move(deltaTime);
 
         // Update bounding box position
-        boundingBox.setPosition(super.getPositionX(), super.getPositionY());
+        boundingBox.setPosition(super.getPositionX()-super.getRadius(), super.getPositionY()-super.getRadius());
     }
 	
 	public void move(float deltaTime) {
@@ -96,12 +98,12 @@ public class Debris extends Entity implements iCollidable, iAI, iMovable{
 		this.collidable = collidable;	
 	}
 
-	@Override
+
 	public Rectangle getBoundingBox() {
 		return boundingBox;
 	}
 
-	@Override
+
 	public void setBoundingBox(Rectangle boundingBox) {
 		this.boundingBox = boundingBox;
 	}

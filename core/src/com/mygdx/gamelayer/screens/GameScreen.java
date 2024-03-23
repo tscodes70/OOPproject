@@ -16,6 +16,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.gameengine.managers.AIControlManager;
 import com.mygdx.gameengine.managers.ButtonControlManager;
 import com.mygdx.gameengine.managers.ButtonManager;
@@ -27,17 +29,22 @@ import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
+import com.mygdx.gamelayer.managers.SpaceAIControlManager;
+import com.mygdx.gamelayer.managers.SpaceCollisionManager;
+import com.mygdx.gamelayer.managers.SpaceEntityManager;
 import com.mygdx.gamelayer.models.Debris;
+import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.Player;
+import com.mygdx.gamelayer.models.Projectile;
 import com.mygdx.gamelayer.simulation.AppSimulation;
 
 public class GameScreen extends Scene {	
 	private SpriteBatch batch;
     private ShapeRenderer shape;
-    private EntityManager entityManager;
+    private SpaceEntityManager spaceEntityManager;
     private PlayerControlManager playerControlManager;
-    private AIControlManager aiControlManager;
-    private CollisionManager collisionManager;
+    private SpaceAIControlManager spaceAIControlManager;
+    private SpaceCollisionManager spaceCollisionManager;
     private ButtonManager buttonManager;
     private ButtonControlManager buttonControlManager;
     private AppSimulation simulation;
@@ -69,8 +76,13 @@ public class GameScreen extends Scene {
     private Texture planet; // test
     private String planetName;
     private float gravity;
+    
     // map planet to their respective gravity values for movement
     private HashMap<String, Float> planetGravityMapping;
+    
+    private Player player1;
+    private float projectileSpawnTimer = 0;
+    
 	public GameScreen(String planetName, Texture planetImage, Sound bgMusic, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
 		super(bgMusic);
 		batch = new SpriteBatch();
@@ -88,10 +100,10 @@ public class GameScreen extends Scene {
 //        Entity playerEntity = new Entity("image/player.png", 50,50,2,false);
         
         //Instantiate EntityManager
-		entityManager = new EntityManager();
+		spaceEntityManager = new SpaceEntityManager();
 		
 		//Creation of Entities (Player Entity, AI Entities)
-		entityManager.add(new Player(
+		player1 = new Player(
 				DEFAULT_PLAYER_X, 
 				DEFAULT_PLAYER_Y, 
 				DEFAULT_ENTITY_SPEED, 
@@ -103,17 +115,27 @@ public class GameScreen extends Scene {
 				Keys.LEFT,
 				Keys.RIGHT,
 				Keys.UP,
-				Keys.DOWN));
+				Keys.DOWN);
+		spaceEntityManager.add(player1);
+		
         for (int i=0; i<(int)Math.floor(Math.random() * INITIAL_MAX_SPAWN)+INITIAL_MIN_SPAWN; i++) {
-        	entityManager.add(new Debris(
+        	spaceEntityManager.add(new Debris(
             		(float) (Math.random() * Gdx.graphics.getWidth()),
-            		(float) (Math.random() * Gdx.graphics.getHeight()),
+            		(float)(Gdx.graphics.getWidth() + (float)(Math.random() * 600)),
             		DEFAULT_ENTITY_SPEED,
             		DEFAULT_ENTITY_RADIUS,
             		DEFAULT_AI_COLOR,
             		AI_CONTROL,
             		COLLIDABLE));	
         }
+        
+        spaceEntityManager.add(new Planet(
+        		planet, 
+        		(float)0, 
+        		-(Gdx.graphics.getWidth() / 2f), 
+        		(float)Gdx.graphics.getWidth(), 
+        		0.75f * ((float)Gdx.graphics.getWidth() /  (float)Gdx.graphics.getHeight()) * (float)Gdx.graphics.getHeight(),
+        		COLLIDABLE));
         
 		// set the planet gravity for use in movement controls
         planetGravityMapping = new HashMap<String, Float>();
@@ -136,13 +158,13 @@ public class GameScreen extends Scene {
 		this.gravity = planetGravityMapping.get(planetName);
 
 		//Instantiate AIControlManager
-		aiControlManager = new AIControlManager(entityManager.getEntityList());
+		spaceAIControlManager = new SpaceAIControlManager(spaceEntityManager.getEntityList());
 		
 		//Instantiate PlayerControlManager
-		playerControlManager = new PlayerControlManager(entityManager.getEntityList(), keyboardDevice);
+		playerControlManager = new PlayerControlManager(spaceEntityManager.getEntityList(), keyboardDevice);
 		
 		//Instantiate CollisionManager
-		collisionManager = new CollisionManager(entityManager.getEntityList());
+		spaceCollisionManager = new SpaceCollisionManager(spaceEntityManager.getEntityList());
 	}
 	
 	/**
@@ -157,17 +179,29 @@ public class GameScreen extends Scene {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		shape.begin(ShapeRenderer.ShapeType.Filled);
-		entityManager.drawEntities(shape);
+			spaceEntityManager.drawEntities(shape);
+			// Show hitboxes
+//			for(Entity entity: spaceEntityManager.getEntityList()) {
+//				if(entity instanceof Planet) {
+//					Rectangle x = ((Planet) entity).getBoundingBox();
+//					shape.setColor(Color.CYAN);
+//					shape.rect(x.getX(), x.getY(), x.getWidth(), x.getHeight());
+//				}else if(entity instanceof Player) {
+//					Rectangle x = ((Player) entity).getBoundingBox();
+//					shape.setColor(Color.CYAN);
+//					shape.rect(x.getX(), x.getY(), x.getWidth(), x.getHeight());
+//				}else if(entity instanceof Debris) {
+//					Rectangle x = ((Debris) entity).getBoundingBox();
+//					shape.setColor(Color.CYAN);
+//					shape.rect(x.getX(), x.getY(), x.getWidth(), x.getHeight());
+//				}
+//			}
 		shape.end();
 
 		
 		batch.begin();
         font.draw(batch, "Time: " + (int) countdownTime, 10, Gdx.graphics.getHeight() - 10);
-        
-        // test draw planet image
-        batch.draw(planet, 0, -(Gdx.graphics.getWidth() / 2f), Gdx.graphics.getWidth(), 
-        		0.75f * ((float)Gdx.graphics.getWidth() /  (float)Gdx.graphics.getHeight()) * (float)Gdx.graphics.getHeight());
-        
+        	spaceEntityManager.drawEntities(batch);
 		batch.end();
 		
 		// fade in effect should be called after everything else
@@ -183,12 +217,12 @@ public class GameScreen extends Scene {
 		} else {
 			// only start executing game logic when the scene transition is complete
 			playerControlManager.move(deltaTime);
-			aiControlManager.move(deltaTime);
-			collisionManager.checkCollisions(entityManager,aiControlManager);
+			spaceAIControlManager.move(deltaTime);
+			spaceCollisionManager.checkCollisions(spaceEntityManager,spaceAIControlManager);
 			
 			// test test
 			// hardcoded to go to level cleared screen after 10s of gameplay
-			if((int)countdownTime <= 170) {
+			if((int)countdownTime == 0) {
 				simulation.levelCleared(planetName, planet);
 			}
 		}
@@ -203,12 +237,26 @@ public class GameScreen extends Scene {
         }
 		
 		// start decreasing the main counter once delay over
-		if(delay == 0) countdownTime -= deltaTime;
+		if(delay == 0) {
+			countdownTime -= deltaTime;
+		}
+		
+	    // Accumulate time for spawning projectiles
+	    projectileSpawnTimer += deltaTime;
 
+	    // Check if it's time to spawn a projectile (every second)
+	    if (projectileSpawnTimer >= 0.5) {
+	        spaceEntityManager.add(new Projectile(player1.getPositionX(), player1.getPositionY() + 50, 10, 50, Color.GREEN, true, true, 4));
+	        spaceAIControlManager.update(spaceEntityManager.getEntityList());
+	        projectileSpawnTimer -= 0.5; // Reset the timer for next second
+	    }
+
+		
         if (countdownTime <= 0) {
             countdownTime = 0; // Prevent negative countdown time
             // Handle countdown completion, e.g., end the game or take appropriate action
         }
+        
 	}
 	
 	// set the delay for fade in effect
@@ -229,8 +277,8 @@ public class GameScreen extends Scene {
 		font.dispose();
 		countdownFont.dispose();
 		playerControlManager.dispose();
-		aiControlManager.dispose();
-		collisionManager.dispose();
-		entityManager.dispose();
+		spaceAIControlManager.dispose();
+		spaceCollisionManager.dispose();
+		spaceEntityManager.dispose();
 	}
 }
