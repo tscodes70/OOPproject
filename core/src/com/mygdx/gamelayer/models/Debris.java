@@ -1,6 +1,7 @@
 package com.mygdx.gamelayer.models;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -11,6 +12,8 @@ import com.mygdx.gameengine.interfaces.iMovable;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gamelayer.interfaces.iDebris;
 
+import java.util.Random;
+
 public class Debris extends Entity implements iDebris{
 	private float currentHP;
 	private float maxHP;
@@ -20,6 +23,13 @@ public class Debris extends Entity implements iDebris{
 	private int speedMultiplier;
 	
 	private final int DEFAULT_ENTITY_SPEED_MULTIPLIER = 100;
+	
+	private Random random = new Random(); // Create a Random object to generate random numbers
+
+	private float swing = 300;
+	private int horizontalDirection = 1;
+	private float horizontalSpeed = 0.5f;
+	private float screenWidth = Gdx.graphics.getWidth();
 
 	public Debris(
 			float positionX, 
@@ -47,10 +57,28 @@ public class Debris extends Entity implements iDebris{
 	
 	public void move(float deltaTime) {
         // Move entity vertically proportionally to deltaTime and speed
-        float distanceToMove = speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
-        super.setPositionY(super.getPositionY() - distanceToMove);
+//        float distanceToMove = speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
+//        super.setPositionY(super.getPositionY() - distanceToMove);
+		float verticalDistance = speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
+		super.setPositionY(super.getPositionY() - verticalDistance);
+		
+		// Calculate new position based on current direction and speed
+		float horizontalDistance = horizontalSpeed * deltaTime * horizontalDirection * swing;
+		float newPositionX = super.getPositionX() + horizontalDistance;
+		
+	    // Boundary checks to reverse direction at screen edges
+		if (newPositionX < 0 || newPositionX > screenWidth) {
+			horizontalDirection *= -1; // Reverse direction
+			
+			// Adjust newPositionX to ensure it's within bounds, preventing overshoot
+			if (newPositionX < 0) newPositionX = 0;
+			if (newPositionX > screenWidth) newPositionX = screenWidth;
+		}
+		
+		// Update position
+		super.setPositionX(newPositionX);
 	}
-
+	
 // Getter Setter
 	public float getCurrentHP() {
 		return currentHP;
