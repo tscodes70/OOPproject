@@ -120,7 +120,7 @@ public class GameScreen extends Scene {
 		
         for (int i=0; i<(int)Math.floor(Math.random() * INITIAL_MAX_SPAWN)+INITIAL_MIN_SPAWN; i++) {
         	spaceEntityManager.add(new Debris(
-            		(float) (Math.random() * Gdx.graphics.getWidth()),
+        			(float) (Math.random() * (Gdx.graphics.getWidth() - 200) + 100),
             		(float)(Gdx.graphics.getHeight() + (float)(Math.random() * 600)),
             		DEFAULT_ENTITY_SPEED,
             		DEFAULT_ENTITY_RADIUS,
@@ -248,7 +248,7 @@ public class GameScreen extends Scene {
 	    if (debrisSpawnTimer >= 1 && countdownTime > 0) {
 	    	for (int i=0; i<(int)Math.floor(Math.random() * INITIAL_MAX_SPAWN)+INITIAL_MIN_SPAWN; i++) {
 	        	spaceEntityManager.add(new Debris(
-	            		(float) (Math.random() * Gdx.graphics.getWidth()),
+	        			(float) (Math.random() * (Gdx.graphics.getWidth() - 200) + 100),
 	            		(float)(Gdx.graphics.getHeight() + (float)(Math.random() * 600)),
 	            		DEFAULT_ENTITY_SPEED,
 	            		DEFAULT_ENTITY_RADIUS,
