@@ -37,10 +37,8 @@ public class Entity {
 
     // For Texture Entities
     public Entity(Texture texture, float positionX, float positionY, float width, float height) {
-        
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear); // Optional: set texture filtering for better quality
         texture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge); // Optional: set texture wrapping
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear); // Optional: set texture filtering
         this.texture = texture;
         this.positionX = positionX;
         this.positionY = positionY;

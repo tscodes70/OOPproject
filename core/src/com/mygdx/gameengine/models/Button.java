@@ -18,7 +18,7 @@ public class Button {
     private HashMap<String, Object> data;
     private String action;
     public Button(Texture tex, float positionX, float positionY, float scale, String action) {
-        this.positionX = positionX;
+	    this.positionX = positionX;
         this.positionY = positionY;
         this.scale = scale; // scale the size of the texture
         this.tex = tex;
@@ -28,6 +28,18 @@ public class Button {
         this.boundingBox = new Rectangle(positionX, positionY, this.getWidth(), this.getHeight());
     }
 
+    // constructor for centered button omits x coordinates parameter
+    public Button(Texture tex, float positionY, float scale, String action) {
+        this.positionX = centeredXPos(tex.getWidth() * scale);
+        this.positionY = positionY;
+        this.scale = scale; // scale the size of the texture
+        this.tex = tex;
+        tex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        this.action = action;
+        this.data = new HashMap<String, Object>();
+        this.boundingBox = new Rectangle(positionX, positionY, this.getWidth(), this.getHeight());
+    }
+    
     /**
      * Draws Texture Buttons using SpriteBatch
      * @param batch
@@ -49,6 +61,11 @@ public class Button {
     public void update() {
     	boundingBox.setPosition(positionX, positionY);
     }
+    
+    // helper method to center button horizontally
+    public float centeredXPos(float width) {
+		return ((float)Gdx.graphics.getWidth() / 2) - ((float)width / 2);
+	}
     
     // Setter Getters
     public Rectangle getBoundingBox() { return boundingBox; }

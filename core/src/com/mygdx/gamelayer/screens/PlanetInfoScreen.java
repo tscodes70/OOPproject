@@ -58,20 +58,24 @@ public class PlanetInfoScreen extends Scene {
 		// dynamically generate bitmap font of our desired size so it doesn't look pixelated
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 56;
+		parameter.size = 45;
 		planetNameFont = generator.generateFont(parameter); // font size 12 pixels
-		
-		parameter.size = 22;
+		planetNameFont.getData().setScale(1.25f);
+		planetNameFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
+		parameter.size = 20;
 		descriptionFont = generator.generateFont(parameter);
-		
+		descriptionFont.getData().setScale(1.1f);
+		descriptionFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
 		//Instantiate ButtonManager
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Start"), 325, 175, 0.2f, "Start"));
-		buttonManager.add(new Button(buttonTextures.get("Back"), 325, 75, 0.2f, "SelectLevel"));
+		buttonManager.add(new Button(buttonTextures.get("Start"), 175, 0.2f, "Start"));
+		buttonManager.add(new Button(buttonTextures.get("Back"), 75, 0.2f, "SelectLevel"));
 		
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}

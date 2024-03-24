@@ -48,20 +48,28 @@ public class LevelSelectScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Mercury"), 325, 775, 0.2f, "ViewLevelInfo"));
-		buttonManager.add(new Button(buttonTextures.get("Venus"), 325, 700, 0.2f, "ViewLevelInfo"));
-		buttonManager.add(new Button(buttonTextures.get("Earth"), 325, 625, 0.2f, "ViewLevelInfo"));
-		buttonManager.add(new Button(buttonTextures.get("Mars"), 325, 550, 0.2f, "ViewLevelInfo"));
-		
+		buttonManager.add(new Button(buttonTextures.get("Mercury"), 775, 0.2f, "ViewLevelInfo"));
+		buttonManager.add(new Button(buttonTextures.get("Venus"), 700, 0.2f, "ViewLevelInfo"));
+		buttonManager.add(new Button(buttonTextures.get("Earth"), 625, 0.2f, "ViewLevelInfo"));
+		buttonManager.add(new Button(buttonTextures.get("Mars"), 550, 0.2f, "ViewLevelInfo"));
+		buttonManager.add(new Button(buttonTextures.get("Jupiter"), 475, 0.2f, "ViewLevelInfo"));
+		buttonManager.add(new Button(buttonTextures.get("Saturn"), 400, 0.2f, "ViewLevelInfo"));
+		buttonManager.add(new Button(buttonTextures.get("Uranus"), 325, 0.2f, "ViewLevelInfo"));
+		buttonManager.add(new Button(buttonTextures.get("Neptune"), 250, 0.2f, "ViewLevelInfo"));
+
 		// buttons for additional levels go here
 		
-		buttonManager.add(new Button(buttonTextures.get("Back"), 325, 125, 0.2f, "ReturnToMain"));
+		buttonManager.add(new Button(buttonTextures.get("Back"), 125, 0.2f, "ReturnToMain"));
 
 		// set button data (planet name)
 		buttonManager.getButtonList().get(0).addData("planet", "Mercury");
 		buttonManager.getButtonList().get(1).addData("planet", "Venus");
 		buttonManager.getButtonList().get(2).addData("planet", "Earth");
 		buttonManager.getButtonList().get(3).addData("planet", "Mars");
+		buttonManager.getButtonList().get(4).addData("planet", "Jupiter");
+		buttonManager.getButtonList().get(5).addData("planet", "Saturn");
+		buttonManager.getButtonList().get(6).addData("planet", "Uranus");
+		buttonManager.getButtonList().get(7).addData("planet", "Neptune");
 
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 		this.planetHashmap = planetHashmap;

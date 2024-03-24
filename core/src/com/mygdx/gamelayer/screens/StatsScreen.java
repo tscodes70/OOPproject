@@ -61,14 +61,14 @@ public class StatsScreen extends Scene {
 
 		parameter.size = 22;
 		descriptionFont = generator.generateFont(parameter);
-		
+
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
 		//Instantiate ButtonManager
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Back"), 325, 75, 0.2f, "ReturnToMain"));
+		buttonManager.add(new Button(buttonTextures.get("Back"), 75, 0.2f, "ReturnToMain"));
 		
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}

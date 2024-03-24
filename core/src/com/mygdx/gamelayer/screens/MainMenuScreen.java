@@ -50,9 +50,9 @@ public class MainMenuScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Start"), 325, 475, 0.2f, "SelectLevel"));
-		buttonManager.add(new Button(buttonTextures.get("Stats"), 325, 375, 0.2f, "Stats"));
-		buttonManager.add(new Button(buttonTextures.get("Quit"), 325, 275, 0.2f, "Quit"));
+		buttonManager.add(new Button(buttonTextures.get("Start"), 475, 0.2f, "SelectLevel"));
+		buttonManager.add(new Button(buttonTextures.get("Stats"), 375, 0.2f, "Stats"));
+		buttonManager.add(new Button(buttonTextures.get("Quit"), 275, 0.2f, "Quit"));
 		
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}
