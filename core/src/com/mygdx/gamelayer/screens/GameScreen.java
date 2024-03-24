@@ -55,14 +55,20 @@ public class GameScreen extends Scene {
     
     private Planet planet;
 	
+	private final int DEFAULT_PLAYER_X = 400;
+	private final int DEFAULT_PLAYER_Y = 250;
 	private final int DEFAULT_PLAYER_SPEED = 3;
-	private final int DEFAULT_ENTITY_SPEED = 1;
+	
+
 	private final int DEFAULT_PROJECTILE_SPEED = 5;
+	private final int DEFAULT_PROJECTILE_WIDTH = 5;
+	private final int DEFAULT_PROJECTILE_HEIGHT = 30;
+	
 	private final int DEFAULT_ENTITY_RADIUS = 40; // remove
 	private final int DEFAULT_ENTITY_WIDTH = 80;
 	private final int DEFAULT_ENTITY_HEIGHT = 100;
-	private final int DEFAULT_PLAYER_X = 400;
-	private final int DEFAULT_PLAYER_Y = 250;
+	private final int DEFAULT_ENTITY_SPEED = 1;
+
 	private final Color DEFAULT_AI_COLOR = Color.RED;
 	private final boolean COLLIDABLE = true;
 	private final boolean PLAYABLE = true;
@@ -91,13 +97,9 @@ public class GameScreen extends Scene {
 		this.mouseDevice = mouseDevice;
 		this.simulation = simulation;
 		this.planet = planet;
-		//Using texture render
-//        Entity aiEntity = new Entity("image/ai.png", 50, 50, 2, true);
-//        Entity playerEntity = new Entity("image/player.png", 50,50,2,false);
         
         //Instantiate EntityManager
 		spaceEntityManager = new SpaceEntityManager();
-		
 
 		//Creation of Entities (Player Entity, AI Entities)
 		player1 = new Player(
@@ -119,7 +121,7 @@ public class GameScreen extends Scene {
         for (int i=0; i<(int)Math.floor(Math.random() * INITIAL_MAX_SPAWN)+INITIAL_MIN_SPAWN; i++) {
         	spaceEntityManager.add(new Debris(
             		(float) (Math.random() * Gdx.graphics.getWidth()),
-            		(float)(Gdx.graphics.getWidth() + (float)(Math.random() * 600)),
+            		(float)(Gdx.graphics.getHeight() + (float)(Math.random() * 600)),
             		DEFAULT_ENTITY_SPEED,
             		DEFAULT_ENTITY_RADIUS,
             		DEFAULT_AI_COLOR,
@@ -222,25 +224,25 @@ public class GameScreen extends Scene {
             delay = 0; // Prevent negative countdown time
             // Handle countdown completion, e.g., end the game or take appropriate action
         }
-		
+
 		// start decreasing the main counter once delay over
 		if(delay == 0) {
 			countdownTime -= deltaTime;
+		    // Accumulate time for spawning 
+		    projectileSpawnTimer += deltaTime;
+		    debrisSpawnTimer += deltaTime;
 		}
-		
-	    // Accumulate time for spawning projectiles
-	    projectileSpawnTimer += deltaTime;
-	    debrisSpawnTimer += deltaTime;
 
-	    // Check if it's time to spawn a projectile (every second)
-	    if (projectileSpawnTimer >= 0.2) {
-	        spaceEntityManager.add(new Projectile(player1.getPositionX()+35, player1.getPositionY() + 50, 10, 50, Color.GREEN, true, true, DEFAULT_PROJECTILE_SPEED));
+	    // Spawn projectiles
+	    if (projectileSpawnTimer >= 0.2 && countdownTime > 0) {
+	        spaceEntityManager.add(new Projectile(player1.getPositionX()+35, player1.getPositionY() + 50, DEFAULT_PROJECTILE_WIDTH, DEFAULT_PROJECTILE_HEIGHT, Color.GREEN, true, true, DEFAULT_PROJECTILE_SPEED));
 	        spaceAIControlManager.update(spaceEntityManager.getEntityList());
 	        spaceCollisionManager.update(spaceEntityManager.getEntityList());
 	        projectileSpawnTimer -= 0.2; // Reset the timer for next second
 	    }
 	    
-	    if (debrisSpawnTimer >= 1) {
+	    // Spawn debris
+	    if (debrisSpawnTimer >= 1 && countdownTime > 0) {
 	    	for (int i=0; i<(int)Math.floor(Math.random() * INITIAL_MAX_SPAWN)+INITIAL_MIN_SPAWN; i++) {
 	        	spaceEntityManager.add(new Debris(
 	            		(float) (Math.random() * Gdx.graphics.getWidth()),
@@ -256,11 +258,8 @@ public class GameScreen extends Scene {
 	        debrisSpawnTimer -= 1;
 	    }
 
-		
-        if (countdownTime <= 0) {
-            countdownTime = 0; // Prevent negative countdown time
-            // Handle countdown completion, e.g., end the game or take appropriate action
-        }
+	    // Prevent negative countdown time
+        if (countdownTime <= 0) countdownTime = 0;
         
 	}
 	

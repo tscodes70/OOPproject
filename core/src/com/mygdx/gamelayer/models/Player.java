@@ -129,7 +129,7 @@ public class Player extends Entity implements iCollidable, iPlayer {
 		        float distanceToMove = speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
 
 		        // Ensure entity is within right boundary of screen
-		        if (super.getPositionX() + distanceToMove + super.getRadius() <= Gdx.graphics.getWidth()) {
+		        if (super.getPositionX() + distanceToMove + super.getRadius() <= Gdx.graphics.getWidth()-super.getWidth()) {
 		        	super.setPositionX(super.getPositionX() + distanceToMove);
 		        	update(deltaTime);		        
 		            }
