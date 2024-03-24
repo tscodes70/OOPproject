@@ -40,6 +40,8 @@ public class StatsScreen extends Scene {
     private BitmapFont descriptionFont;
 	private final String IMAGE_PATH = "image";
 
+	private final String RETURN_TO_MAIN = "ReturnToMain";
+	
 	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
 	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
 	
@@ -68,7 +70,7 @@ public class StatsScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Back"), 75, 0.2f, "ReturnToMain"));
+		buttonManager.add(new Button(buttonTextures.get("Back"), 75, 0.2f, RETURN_TO_MAIN));
 		
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}
@@ -100,7 +102,7 @@ public class StatsScreen extends Scene {
 		Button clickedButton = buttonControlManager.handleClickEvents();
 		if(clickedButton != null) {
 			switch(clickedButton.getAction()) {
-				case "ReturnToMain":
+				case RETURN_TO_MAIN:
 					simulation.returnToMainMenu();
 			}
 		}

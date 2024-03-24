@@ -43,7 +43,9 @@ public class LevelClearedScreen extends Scene {
     private GlyphLayout planetNameGlyph, messageGlyph;
     private String GLYPHMESSAGE = "has been successfully defended from pollution!";
 	private final String IMAGE_PATH = "image";
-
+	
+	private final String CONTINUE = "continue";
+	
 	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
 	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
 
@@ -76,7 +78,7 @@ public class LevelClearedScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Continue"), 125, 0.2f, "Continue"));
+		buttonManager.add(new Button(buttonTextures.get("Continue"), 125, 0.2f, CONTINUE));
 		
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}
@@ -116,7 +118,7 @@ public class LevelClearedScreen extends Scene {
 		Button clickedButton = buttonControlManager.handleClickEvents();
 		if(clickedButton != null) {
 			switch(clickedButton.getAction()) {
-				case "Continue":
+				case CONTINUE:
 					// go back to level selection
 					simulation.chooseLevel();
 					break;
