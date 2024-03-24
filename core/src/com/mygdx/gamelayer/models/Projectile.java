@@ -7,8 +7,9 @@ import com.mygdx.gameengine.interfaces.iAI;
 import com.mygdx.gameengine.interfaces.iCollidable;
 import com.mygdx.gameengine.interfaces.iMovable;
 import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gamelayer.interfaces.iProjectile;
 
-public class Projectile extends Entity implements iCollidable, iMovable, iAI {
+public class Projectile extends Entity implements iProjectile {
 	
 	private boolean collidable;
 	private Rectangle boundingBox;

@@ -5,9 +5,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.mygdx.gameengine.interfaces.iCollidable;
 import com.mygdx.gameengine.models.Entity;
-import com.mygdx.gamelayer.interfaces.iStatic;
+import com.mygdx.gamelayer.interfaces.iPlanet;
 
-public class Planet extends Entity implements iCollidable,iStatic {
+public class Planet extends Entity implements iPlanet {
 	
 	private float currentHP;
 	private float maxHP;

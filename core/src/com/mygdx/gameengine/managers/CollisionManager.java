@@ -50,8 +50,6 @@ public class CollisionManager{
 	            }
 	        }
 	    }
-	    
-	    System.out.print("Populate c list");
 	    collidableList = updatedCollidableList;
 	}
 	

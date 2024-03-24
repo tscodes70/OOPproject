@@ -103,6 +103,7 @@ public class Player extends Entity implements iCollidable, iPlayer {
         healthBar.setPositionY(super.getPositionY());
         staminaBar.setPositionX(super.getPositionX());
         staminaBar.setPositionY(super.getPositionY()-5);
+       
     }
 
 	 /**

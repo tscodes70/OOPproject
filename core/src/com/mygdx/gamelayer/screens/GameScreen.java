@@ -55,7 +55,9 @@ public class GameScreen extends Scene {
     
     private Planet planet;
 	
-	private final int DEFAULT_ENTITY_SPEED = 2;
+	private final int DEFAULT_PLAYER_SPEED = 3;
+	private final int DEFAULT_ENTITY_SPEED = 1;
+	private final int DEFAULT_PROJECTILE_SPEED = 5;
 	private final int DEFAULT_ENTITY_RADIUS = 40; // remove
 	private final int DEFAULT_ENTITY_WIDTH = 80;
 	private final int DEFAULT_ENTITY_HEIGHT = 100;
@@ -66,8 +68,8 @@ public class GameScreen extends Scene {
 	private final boolean PLAYABLE = true;
 	private final boolean AI_CONTROL = true;
 	
-	private final int INITIAL_MAX_SPAWN = 15;
-	private final int INITIAL_MIN_SPAWN = 5;
+	private final int INITIAL_MAX_SPAWN = 8;
+	private final int INITIAL_MIN_SPAWN = 3;
 	
 	private BitmapFont font, countdownFont;
 	private GlyphLayout countdown;
@@ -78,6 +80,7 @@ public class GameScreen extends Scene {
     
     private Player player1;
     private float projectileSpawnTimer = 0;
+    private float debrisSpawnTimer = 0;
     
 	public GameScreen(Planet planet, SpaceTexture playerModel, SpaceTexture bgTexture, Sound bgMusic, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
 		super(bgMusic, bgTexture);
@@ -100,7 +103,7 @@ public class GameScreen extends Scene {
 		player1 = new Player(
 				DEFAULT_PLAYER_X, 
 				DEFAULT_PLAYER_Y, 
-				DEFAULT_ENTITY_SPEED, 
+				DEFAULT_PLAYER_SPEED, 
 				DEFAULT_ENTITY_WIDTH, 
 				DEFAULT_ENTITY_HEIGHT,
 				playerModel,
@@ -157,7 +160,7 @@ public class GameScreen extends Scene {
 
 		shape.begin(ShapeRenderer.ShapeType.Filled);
 			spaceEntityManager.drawEntities(shape);
-////			 Show hitboxes
+//			 Show hitboxes
 //			for(Entity entity: spaceEntityManager.getEntityList()) {
 //				if(entity instanceof Planet) {
 //					Rectangle x = ((Planet) entity).getBoundingBox();
@@ -169,6 +172,10 @@ public class GameScreen extends Scene {
 //					shape.rect(x.getX(), x.getY(), x.getWidth(), x.getHeight());
 //				}else if(entity instanceof Debris) {
 //					Rectangle x = ((Debris) entity).getBoundingBox();
+//					shape.setColor(Color.CYAN);
+//					shape.rect(x.getX(), x.getY(), x.getWidth(), x.getHeight());
+//				}else if(entity instanceof Projectile) {
+//					Rectangle x = ((Projectile) entity).getBoundingBox();
 //					shape.setColor(Color.CYAN);
 //					shape.rect(x.getX(), x.getY(), x.getWidth(), x.getHeight());
 //				}
@@ -223,12 +230,30 @@ public class GameScreen extends Scene {
 		
 	    // Accumulate time for spawning projectiles
 	    projectileSpawnTimer += deltaTime;
+	    debrisSpawnTimer += deltaTime;
 
 	    // Check if it's time to spawn a projectile (every second)
-	    if (projectileSpawnTimer >= 0.5) {
-	        spaceEntityManager.add(new Projectile(player1.getPositionX()+35, player1.getPositionY() + 50, 10, 50, Color.GREEN, true, true, 4));
+	    if (projectileSpawnTimer >= 0.2) {
+	        spaceEntityManager.add(new Projectile(player1.getPositionX()+35, player1.getPositionY() + 50, 10, 50, Color.GREEN, true, true, DEFAULT_PROJECTILE_SPEED));
 	        spaceAIControlManager.update(spaceEntityManager.getEntityList());
-	        projectileSpawnTimer -= 0.5; // Reset the timer for next second
+	        spaceCollisionManager.update(spaceEntityManager.getEntityList());
+	        projectileSpawnTimer -= 0.2; // Reset the timer for next second
+	    }
+	    
+	    if (debrisSpawnTimer >= 1) {
+	    	for (int i=0; i<(int)Math.floor(Math.random() * INITIAL_MAX_SPAWN)+INITIAL_MIN_SPAWN; i++) {
+	        	spaceEntityManager.add(new Debris(
+	            		(float) (Math.random() * Gdx.graphics.getWidth()),
+	            		(float)(Gdx.graphics.getHeight() + (float)(Math.random() * 600)),
+	            		DEFAULT_ENTITY_SPEED,
+	            		DEFAULT_ENTITY_RADIUS,
+	            		DEFAULT_AI_COLOR,
+	            		AI_CONTROL,
+	            		COLLIDABLE));	
+	        }
+	    	spaceAIControlManager.update(spaceEntityManager.getEntityList());
+	        spaceCollisionManager.update(spaceEntityManager.getEntityList());
+	        debrisSpawnTimer -= 1;
 	    }
 
 		

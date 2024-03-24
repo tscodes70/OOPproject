@@ -9,8 +9,9 @@ import com.mygdx.gameengine.interfaces.iAI;
 import com.mygdx.gameengine.interfaces.iCollidable;
 import com.mygdx.gameengine.interfaces.iMovable;
 import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gamelayer.interfaces.iDebris;
 
-public class Debris extends Entity implements iCollidable, iAI, iMovable{
+public class Debris extends Entity implements iDebris{
 	private float currentHP;
 	private float maxHP;
 	private boolean aiControl;
@@ -48,15 +49,6 @@ public class Debris extends Entity implements iCollidable, iAI, iMovable{
         // Move entity vertically proportionally to deltaTime and speed
         float distanceToMove = speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
         super.setPositionY(super.getPositionY() - distanceToMove);
-
-        // Check if entity has moved off-screen
-        if (super.getPositionY() < 220) {
-            // Reset entity's position to top of screen
-        	super.setPositionY(Gdx.graphics.getHeight());
-//            if (entity.getSpeed() <= MAX_ENTITY_SPEED) {
-//               entity.setSpeed(entity.getSpeed() + 2);
-//            }
-        }
 	}
 
 // Getter Setter
