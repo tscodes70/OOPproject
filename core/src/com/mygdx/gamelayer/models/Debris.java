@@ -44,6 +44,7 @@ public class Debris extends Entity implements iDebris{
 		this.speedMultiplier = speedMultiplier;
 		this.aiControl = aiControl;
 		this.collidable = collidable;
+		this.horizontalDirection = random.nextBoolean() ? 1 : -1;
 	}
 	
 	@Override
