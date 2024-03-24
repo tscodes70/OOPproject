@@ -34,6 +34,9 @@ public class LevelSelectScreen extends Scene {
     private AppSimulation simulation;
     private float fadeInOverlayOpacity = 1.0f;
     
+    private final String VIEW_LEVEL_INFO = "ViewLevelInfo";
+    private final String RETURN_TO_MAIN = "ReturnToMain";
+
     private HashMap<String, Planet> planetHashmap;
 	
 	public LevelSelectScreen(HashMap<String, Texture> buttonTextures, HashMap<String, Planet> planetHashmap, Texture bgImage, Sound bgMusic, Mouse mouseDevice, AppSimulation simulation) {
@@ -48,20 +51,28 @@ public class LevelSelectScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Mercury"), 325, 775, 0.2f, "ViewLevelInfo"));
-		buttonManager.add(new Button(buttonTextures.get("Venus"), 325, 700, 0.2f, "ViewLevelInfo"));
-		buttonManager.add(new Button(buttonTextures.get("Earth"), 325, 625, 0.2f, "ViewLevelInfo"));
-		buttonManager.add(new Button(buttonTextures.get("Mars"), 325, 550, 0.2f, "ViewLevelInfo"));
-		
+		buttonManager.add(new Button(buttonTextures.get("Mercury"), 775, 0.2f, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button(buttonTextures.get("Venus"), 700, 0.2f, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button(buttonTextures.get("Earth"), 625, 0.2f, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button(buttonTextures.get("Mars"), 550, 0.2f, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button(buttonTextures.get("Jupiter"), 475, 0.2f, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button(buttonTextures.get("Saturn"), 400, 0.2f, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button(buttonTextures.get("Uranus"), 325, 0.2f, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button(buttonTextures.get("Neptune"), 250, 0.2f, VIEW_LEVEL_INFO));
+
 		// buttons for additional levels go here
 		
-		buttonManager.add(new Button(buttonTextures.get("Back"), 325, 125, 0.2f, "ReturnToMain"));
+		buttonManager.add(new Button(buttonTextures.get("Back"), 125, 0.2f, RETURN_TO_MAIN));
 
 		// set button data (planet name)
 		buttonManager.getButtonList().get(0).addData("planet", "Mercury");
 		buttonManager.getButtonList().get(1).addData("planet", "Venus");
 		buttonManager.getButtonList().get(2).addData("planet", "Earth");
 		buttonManager.getButtonList().get(3).addData("planet", "Mars");
+		buttonManager.getButtonList().get(4).addData("planet", "Jupiter");
+		buttonManager.getButtonList().get(5).addData("planet", "Saturn");
+		buttonManager.getButtonList().get(6).addData("planet", "Uranus");
+		buttonManager.getButtonList().get(7).addData("planet", "Neptune");
 
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 		this.planetHashmap = planetHashmap;
@@ -90,11 +101,11 @@ public class LevelSelectScreen extends Scene {
 		
 		if(clickedButton != null) {
 			switch(clickedButton.getAction()) {
-				case "ViewLevelInfo":
+				case VIEW_LEVEL_INFO:
 					// go to planet info screen
 					simulation.showLevelInfo(planetHashmap.get((String)clickedButton.getData().get("planet")));
 					break;
-				case "ReturnToMain":
+				case RETURN_TO_MAIN:
 					// go back to main menu
 					simulation.returnToMainMenu();
 			}

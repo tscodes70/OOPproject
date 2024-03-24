@@ -30,6 +30,7 @@ public class PauseScreen extends Scene {
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 24;
 		font = generator.generateFont(parameter);
+		
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
         title = new GlyphLayout(); //for getting width/height of text
         title.setText(font, GLYPHMESSAGE, Color.CLEAR, 600f, Align.center, true);

@@ -136,8 +136,11 @@ public class GameScreen extends Scene {
         // dynamically generate bitmap font of our desired size so it doesn't look pixelated
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 160; // font size in pixels
+		parameter.size = 125; // font size in pixels
 		countdownFont = generator.generateFont(parameter);
+		countdownFont.getData().setScale(1.25f);
+		countdownFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
         countdown = new GlyphLayout(countdownFont, "3"); //for getting width/height of text
 

@@ -43,6 +43,9 @@ public class PlanetInfoScreen extends Scene {
     private GlyphLayout planetNameGlyph, descriptionGlyph;
 	private final String IMAGE_PATH = "image";
 	
+	private final String START = "Start";
+	private final String SELECT_LEVEL = "SelectLevel";
+	
 	// y coordinates of the description text
 	private final float DESCRIPTION_Y_POS = 725f;
 	private final float TEXTAREA_WIDTH = 600f;
@@ -58,20 +61,24 @@ public class PlanetInfoScreen extends Scene {
 		// dynamically generate bitmap font of our desired size so it doesn't look pixelated
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 56;
+		parameter.size = 45;
 		planetNameFont = generator.generateFont(parameter); // font size 12 pixels
-		
-		parameter.size = 22;
+		planetNameFont.getData().setScale(1.25f);
+		planetNameFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
+		parameter.size = 20;
 		descriptionFont = generator.generateFont(parameter);
-		
+		descriptionFont.getData().setScale(1.1f);
+		descriptionFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
 		//Instantiate ButtonManager
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Start"), 325, 175, 0.2f, "Start"));
-		buttonManager.add(new Button(buttonTextures.get("Back"), 325, 75, 0.2f, "SelectLevel"));
+		buttonManager.add(new Button(buttonTextures.get("Start"), 175, 0.2f, START));
+		buttonManager.add(new Button(buttonTextures.get("Back"), 75, 0.2f, SELECT_LEVEL));
 		
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}
@@ -109,11 +116,11 @@ public class PlanetInfoScreen extends Scene {
 		Button clickedButton = buttonControlManager.handleClickEvents();
 		if(clickedButton != null) {
 			switch(clickedButton.getAction()) {
-				case "Start":
+				case START:
 					// start game
 					simulation.setGameLevel(planet);
 					break;
-				case "SelectLevel":
+				case SELECT_LEVEL:
 					// go back to planet selection
 					simulation.chooseLevel();
 					break;

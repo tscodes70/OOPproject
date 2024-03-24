@@ -43,7 +43,9 @@ public class LevelClearedScreen extends Scene {
     private GlyphLayout planetNameGlyph, messageGlyph;
     private String GLYPHMESSAGE = "has been successfully defended from pollution!";
 	private final String IMAGE_PATH = "image";
-
+	
+	private final String CONTINUE = "continue";
+	
 	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
 	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
 
@@ -58,12 +60,16 @@ public class LevelClearedScreen extends Scene {
 		// dynamically generate bitmap font of our desired size so it doesn't look pixelated
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 56;
+		parameter.size = 45;
 		planetNameFont = generator.generateFont(parameter);
-		
-		parameter.size = 24;
+		planetNameFont.getData().setScale(1.25f);
+		planetNameFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
+		parameter.size = 22;
 		messageFont = generator.generateFont(parameter);
-		
+		messageFont.getData().setScale(1.1f);
+		messageFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
         messageGlyph = new GlyphLayout(messageFont, GLYPHMESSAGE); //for getting width/height of text
@@ -72,7 +78,7 @@ public class LevelClearedScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Continue"), 325, 125, 0.2f, "Continue"));
+		buttonManager.add(new Button(buttonTextures.get("Continue"), 125, 0.2f, CONTINUE));
 		
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}
@@ -112,7 +118,7 @@ public class LevelClearedScreen extends Scene {
 		Button clickedButton = buttonControlManager.handleClickEvents();
 		if(clickedButton != null) {
 			switch(clickedButton.getAction()) {
-				case "Continue":
+				case CONTINUE:
 					// go back to level selection
 					simulation.chooseLevel();
 					break;

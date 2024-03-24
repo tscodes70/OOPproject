@@ -33,7 +33,11 @@ public class MainMenuScreen extends Scene {
     private AppSimulation simulation;
     
 	private final String IMAGE_PATH = "image";
-
+	
+	private final String SELECT_LEVEL = "SelectLevel";
+	private final String STATS = "Stats";
+	private final String QUIT = "Quit";
+	
 	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
 	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
 	
@@ -50,9 +54,9 @@ public class MainMenuScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Start"), 325, 475, 0.2f, "SelectLevel"));
-		buttonManager.add(new Button(buttonTextures.get("Stats"), 325, 375, 0.2f, "Stats"));
-		buttonManager.add(new Button(buttonTextures.get("Quit"), 325, 275, 0.2f, "Quit"));
+		buttonManager.add(new Button(buttonTextures.get("Start"), 475, 0.2f, SELECT_LEVEL ));
+		buttonManager.add(new Button(buttonTextures.get("Stats"), 375, 0.2f,  STATS));
+		buttonManager.add(new Button(buttonTextures.get("Quit"), 275, 0.2f, QUIT));
 		
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}
@@ -79,14 +83,14 @@ public class MainMenuScreen extends Scene {
 		
 		if(clickedButton != null) {
 			switch(clickedButton.getAction()) {
-				case "SelectLevel":
+				case SELECT_LEVEL :
 					// go to planet selection screen
 					simulation.chooseLevel();
 					break;
-				case "Stats":
+				case  STATS:
 					simulation.showStats();
 					break;
-				case "Quit":
+				case QUIT:
 					// exit application
 					Gdx.app.exit();
 					break;

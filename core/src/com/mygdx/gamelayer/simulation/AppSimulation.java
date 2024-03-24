@@ -32,11 +32,11 @@ public class AppSimulation extends Simulation {
 	private Sound bgSSMusic, bgGSMusic, bgESMusic;
 	
 	private SpaceTexture playerModel, debrisModel, startButtonModel, statsButtonModel, quitButtonModel;
-	private SpaceTexture mercuryButtonModel, venusButtonModel, earthButtonModel, marsButtonModel, backButtonModel, continueButtonModel;
+	private SpaceTexture mercuryButtonModel, venusButtonModel, earthButtonModel, marsButtonModel, jupiterButtonModel, saturnButtonModel, uranusButtonModel, neptuneButtonModel, backButtonModel, continueButtonModel;
 	private SpaceTexture bgSSImage, bgLSSImage, bgLCImage, bgStatsImage, bgGSImage;
-	private SpaceTexture mercuryPlanetModel, venusPlanetModel, earthPlanetModel, marsPlanetModel;
+	private SpaceTexture mercuryPlanetModel, venusPlanetModel, earthPlanetModel, marsPlanetModel, jupiterPlanetModel, saturnPlanetModel, uranusPlanetModel, neptunePlanetModel;
 	
-	private Planet mercuryPlanet,venusPlanet,earthPlanet, marsPlanet;
+	private Planet mercuryPlanet,venusPlanet,earthPlanet, marsPlanet, jupiterPlanet, saturnPlanet, uranusPlanet, neptunePlanet;
 	
 	private float planetPositionX,planetPositionY,planetWidth,planetHeight;
 	private boolean planetCollidable;
@@ -73,6 +73,11 @@ public class AppSimulation extends Simulation {
 	private final String IMAGE_VENUS_PATH = String.format("%s/venus_button.png", IMAGE_PATH);
 	private final String IMAGE_EARTH_PATH = String.format("%s/earth_button.png", IMAGE_PATH);
 	private final String IMAGE_MARS_PATH = String.format("%s/mars_button.png", IMAGE_PATH);
+	private final String IMAGE_JUPITER_PATH = String.format("%s/jupiter_button.png", IMAGE_PATH);
+	private final String IMAGE_SATURN_PATH = String.format("%s/saturn_button.png", IMAGE_PATH);
+	private final String IMAGE_URANUS_PATH = String.format("%s/uranus_button.png", IMAGE_PATH);
+	private final String IMAGE_NEPTUNE_PATH = String.format("%s/neptune_button.png", IMAGE_PATH);
+
 	private final String BGAUDIO_SS_PATH = String.format("%s/mii-channel.mp3", AUDIO_PATH);
 	private final String BGAUDIO_GS_PATH = String.format("%s/burnt_toaster.mp3", AUDIO_PATH);
 	private final String BGAUDIO_ES_PATH = String.format("%s/victory_fanfare.mp3", AUDIO_PATH);
@@ -90,6 +95,10 @@ public class AppSimulation extends Simulation {
 	private final String IMAGE_PLANET_VENUS_PATH = String.format("%s/venus_planet.png", IMAGE_PATH);
 	private final String IMAGE_PLANET_EARTH_PATH = String.format("%s/earth_planet.png", IMAGE_PATH);
 	private final String IMAGE_PLANET_MARS_PATH = String.format("%s/mars_planet.png", IMAGE_PATH);
+	private final String IMAGE_PLANET_JUPITER_PATH = String.format("%s/jupiter_planet.png", IMAGE_PATH);
+	private final String IMAGE_PLANET_SATURN_PATH = String.format("%s/saturn_planet.png", IMAGE_PATH);
+	private final String IMAGE_PLANET_URANUS_PATH = String.format("%s/uranus_planet.png", IMAGE_PATH);
+	private final String IMAGE_PLANET_NEPTUNE_PATH = String.format("%s/neptune_planet.png", IMAGE_PATH);
 
 
 	// indexes of the screens
@@ -150,16 +159,26 @@ public class AppSimulation extends Simulation {
 			playerModel = new SpaceTexture(IMAGE_PLAYER_PATH);
 //			debrisModel = new SpaceTexture(IMAGE_DEBRIS_PATH);
 			
+			// planet button models
 			mercuryButtonModel = new SpaceTexture(IMAGE_MERCURY_PATH);
 			venusButtonModel = new SpaceTexture(IMAGE_VENUS_PATH);
 			earthButtonModel = new SpaceTexture(IMAGE_EARTH_PATH);
 			marsButtonModel = new SpaceTexture(IMAGE_MARS_PATH);
+			jupiterButtonModel = new SpaceTexture(IMAGE_JUPITER_PATH);
+			saturnButtonModel = new SpaceTexture(IMAGE_SATURN_PATH);
+			uranusButtonModel = new SpaceTexture(IMAGE_URANUS_PATH);
+			neptuneButtonModel = new SpaceTexture(IMAGE_NEPTUNE_PATH);
 			
+			// planet image models
 			mercuryPlanetModel = new SpaceTexture(IMAGE_PLANET_MERCURY_PATH);
 			venusPlanetModel = new SpaceTexture(IMAGE_PLANET_VENUS_PATH);
 			earthPlanetModel = new SpaceTexture(IMAGE_PLANET_EARTH_PATH);
 			marsPlanetModel = new SpaceTexture(IMAGE_PLANET_MARS_PATH);
-			
+			jupiterPlanetModel = new SpaceTexture(IMAGE_PLANET_JUPITER_PATH);
+			saturnPlanetModel = new SpaceTexture(IMAGE_PLANET_SATURN_PATH);
+			uranusPlanetModel = new SpaceTexture(IMAGE_PLANET_URANUS_PATH);
+			neptunePlanetModel = new SpaceTexture(IMAGE_PLANET_NEPTUNE_PATH);
+
 			oManager.add("SSBGMusic",bgSSMusic);
 			oManager.add("GSBGMusic",bgGSMusic);
 			oManager.add("ESBGMusic",bgESMusic);
@@ -177,12 +196,20 @@ public class AppSimulation extends Simulation {
 			oManager.add("VenusButtonTexture", venusButtonModel);
 			oManager.add("EarthButtonTexture", earthButtonModel);
 			oManager.add("MarsButtonTexture", marsButtonModel);
-			
+			oManager.add("JupiterButtonTexture", jupiterButtonModel);
+			oManager.add("SaturnButtonTexture", saturnButtonModel);
+			oManager.add("UranusButtonTexture", uranusButtonModel);
+			oManager.add("NeptuneButtonTexture", neptuneButtonModel);
+
 			oManager.add("MercuryPlanetTexture", mercuryPlanetModel);
 			oManager.add("VenusPlanetTexture", venusPlanetModel);
 			oManager.add("EarthPlanetTexture", earthPlanetModel);
 			oManager.add("MarsPlanetTexture", marsPlanetModel);
-			
+			oManager.add("JupiterPlanetTexture", jupiterPlanetModel);
+			oManager.add("SaturnPlanetTexture", saturnPlanetModel);
+			oManager.add("UranusPlanetTexture", uranusPlanetModel);
+			oManager.add("NeptunePlanetTexture", neptunePlanetModel);
+
 			ioManager = new IOManager(iManager,oManager);
 			
 			// Planet Dimenensions
@@ -206,6 +233,10 @@ public class AppSimulation extends Simulation {
 			levelButtons.put("Venus", (Texture)ioManager.getOutputManager().retrieve("VenusButtonTexture"));
 			levelButtons.put("Earth", (Texture)ioManager.getOutputManager().retrieve("EarthButtonTexture"));
 			levelButtons.put("Mars", (Texture)ioManager.getOutputManager().retrieve("MarsButtonTexture"));
+			levelButtons.put("Jupiter", (Texture)ioManager.getOutputManager().retrieve("JupiterButtonTexture"));
+			levelButtons.put("Saturn", (Texture)ioManager.getOutputManager().retrieve("SaturnButtonTexture"));
+			levelButtons.put("Uranus", (Texture)ioManager.getOutputManager().retrieve("UranusButtonTexture"));
+			levelButtons.put("Neptune", (Texture)ioManager.getOutputManager().retrieve("NeptuneButtonTexture"));
 			levelButtons.put("Back", (Texture)ioManager.getOutputManager().retrieve("QuitButtonTexture"));
 
 			// planet info screen buttons
@@ -280,6 +311,42 @@ public class AppSimulation extends Simulation {
 				planetWidth, 
 				planetHeight, 
 				planetCollidable);
+		jupiterPlanet = new Planet(
+				"Jupiter",
+				(SpaceTexture)ioManager.getOutputManager().retrieve("JupiterPlanetTexture"), 
+				planetPositionX,
+				planetPositionY,
+				1.5f,
+				planetWidth, 
+				planetHeight, 
+				planetCollidable);
+		saturnPlanet = new Planet(
+				"Saturn",
+				(SpaceTexture)ioManager.getOutputManager().retrieve("SaturnPlanetTexture"), 
+				planetPositionX,
+				planetPositionY,
+				1.5f,
+				planetWidth, 
+				planetHeight, 
+				planetCollidable);
+		uranusPlanet = new Planet(
+				"Uranus",
+				(SpaceTexture)ioManager.getOutputManager().retrieve("UranusPlanetTexture"), 
+				planetPositionX,
+				planetPositionY,
+				1.5f,
+				planetWidth, 
+				planetHeight, 
+				planetCollidable);
+		neptunePlanet = new Planet(
+				"Neptune",
+				(SpaceTexture)ioManager.getOutputManager().retrieve("NeptunePlanetTexture"), 
+				planetPositionX,
+				planetPositionY,
+				1.5f,
+				planetWidth, 
+				planetHeight, 
+				planetCollidable);
 		
 		// Planet Hashmap
 		planetHashmap = new HashMap<String, Planet>();
@@ -287,6 +354,10 @@ public class AppSimulation extends Simulation {
 		planetHashmap.put("Venus",venusPlanet);
 		planetHashmap.put("Earth",earthPlanet);
 		planetHashmap.put("Mars",marsPlanet);
+		planetHashmap.put("Jupiter",jupiterPlanet);
+		planetHashmap.put("Saturn",saturnPlanet);
+		planetHashmap.put("Uranus",uranusPlanet);
+		planetHashmap.put("Neptune",neptunePlanet);
 
 		// a reference to appsimulation is passed to scenes so that they can request changes of game state
 		sceneManager.add(new MainMenuScreen(menuButtons, bgSSImage, bgSSMusic ,mouseDevice, this));
