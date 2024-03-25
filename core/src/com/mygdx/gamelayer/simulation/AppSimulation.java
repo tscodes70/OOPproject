@@ -17,6 +17,7 @@ import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Simulation;
 import com.mygdx.gameengine.models.Sound;
 import com.mygdx.gamelayer.factories.SpaceEntityFactory;
+import com.mygdx.gamelayer.models.JSONReader;
 import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.SpaceTexture;
 import com.mygdx.gamelayer.screens.*;
@@ -30,34 +31,28 @@ public class AppSimulation extends Simulation {
 	private OutputManager<iOutput> oManager;
 	private IOManager ioManager;
 	
+	private JSONReader statsFile;
+	
 	private Sound bgSSMusic, bgGSMusic, bgESMusic;
 	
 	private SpaceTexture playerModel, debrisModel, startButtonModel, statsButtonModel, quitButtonModel;
 	private SpaceTexture mercuryButtonModel, venusButtonModel, earthButtonModel, marsButtonModel, jupiterButtonModel, saturnButtonModel, uranusButtonModel, neptuneButtonModel, backButtonModel, continueButtonModel;
 	private SpaceTexture bgSSImage, bgLSSImage, bgLCImage, bgStatsImage, bgGSImage;
 	private SpaceTexture mercuryPlanetModel, venusPlanetModel, earthPlanetModel, marsPlanetModel, jupiterPlanetModel, saturnPlanetModel, uranusPlanetModel, neptunePlanetModel;
-	
-	private Planet mercuryPlanet,venusPlanet,earthPlanet, marsPlanet, jupiterPlanet, saturnPlanet, uranusPlanet, neptunePlanet;
-	
+		
 	private SpaceEntityFactory spaceEntityFactory;
-	private float planetPositionX,planetPositionY,planetWidth,planetHeight;
-	private boolean planetCollidable;
 
-	private final boolean COLLIDABLE = true;
 	
 	private final int ENTERKEY = Keys.ENTER;
 	private final int BACKSPACEKEY = Keys.BACKSPACE;
 	private final int ESCAPEKEY = Keys.ESCAPE;
-	private final int LEFTARROWKEY = Keys.LEFT;
-	private final int RIGHTARROWKEY = Keys.RIGHT;
-	private final int UPARROWKEY = Keys.UP;
-	private final int DOWNARROWKEY = Keys.DOWN;
-	
-	private final int LEFTCLICKBUTTON = Buttons.LEFT;
-	private final int RIGHTCLICKBUTTON = Buttons.RIGHT;
 	
 	private final String IMAGE_PATH = "image";
+	private final String STATS_PATH = "stats";
 	private final String AUDIO_PATH = "audio/music";
+	
+	// Stats Resource
+	private final String STATS_FILE_PATH = String.format("%s/stats.json", STATS_PATH);
 	
 	// Player resources
 	private final String IMAGE_PLAYER_PATH = String.format("%s/player.png", IMAGE_PATH);
@@ -135,6 +130,9 @@ public class AppSimulation extends Simulation {
 		
 		try {
 			// Load all resources for this simulation
+			// Load JSON stats file
+			statsFile = new JSONReader(STATS_FILE_PATH);
+			
 			// Instantiate IOManagers
 			iManager = new InputManager<iInput>();
 			keyboardDevice = new Keyboard();
@@ -299,7 +297,7 @@ public class AppSimulation extends Simulation {
 		sceneManager.add(new GameScreen((Planet)planetHashmap.get("Mercury"), ioManager, this));
 		sceneManager.add(new PauseScreen());
 		sceneManager.add(new LevelClearedScreen(levelClearedButtons, bgLCImage, bgESMusic, mouseDevice, this));
-		sceneManager.add(new StatsScreen(statsButtons, bgStatsImage, bgESMusic, mouseDevice, this));
+		sceneManager.add(new StatsScreen(statsButtons, statsFile, ioManager, this));
 
 		// Set Starting Scene
 		gameState = SPLASH_SCREEN;

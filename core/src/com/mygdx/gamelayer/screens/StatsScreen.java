@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,6 +21,7 @@ import com.mygdx.gameengine.managers.ButtonControlManager;
 import com.mygdx.gameengine.managers.ButtonManager;
 import com.mygdx.gameengine.managers.CollisionManager;
 import com.mygdx.gameengine.managers.EntityManager;
+import com.mygdx.gameengine.managers.IOManager;
 import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.managers.SceneManager;
 import com.mygdx.gameengine.models.Button;
@@ -28,6 +30,7 @@ import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
+import com.mygdx.gamelayer.models.JSONReader;
 import com.mygdx.gamelayer.simulation.AppSimulation;
 
 public class StatsScreen extends Scene {	
@@ -36,26 +39,26 @@ public class StatsScreen extends Scene {
     private ButtonManager buttonManager;
     private ButtonControlManager buttonControlManager;
     private AppSimulation simulation;
+    private JSONReader statsFile;
 
     private BitmapFont descriptionFont;
-	private final String IMAGE_PATH = "image";
 
 	private final String RETURN_TO_MAIN = "ReturnToMain";
-	
-	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
-	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
 	
 	// y coordinates of the description text
 	private final float DESCRIPTION_Y_POS = 850f;
 	private final float TEXTAREA_WIDTH = 600f;
 
-	public StatsScreen(HashMap<String, Texture> buttonTextures, Texture bgImage, Sound bgMusic, Mouse mouseDevice, AppSimulation simulation) {
-		super(bgMusic,bgImage);
+	public StatsScreen(HashMap<String, Texture> buttonTextures, JSONReader statsFile, IOManager iomanager, AppSimulation simulation) {
+		super(
+				(Sound)iomanager.getOutputManager().retrieve("SSBGMusic"),
+				(Texture)iomanager.getOutputManager().retrieve("StatsBGImage"));
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
 		int screenWidth = Gdx.graphics.getWidth();
 
 		this.simulation = simulation;
+		this.statsFile = statsFile;
 		
 		// dynamically generate bitmap font of our desired size so it doesn't look pixelated
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
@@ -72,7 +75,7 @@ public class StatsScreen extends Scene {
 		// add buttons
 		buttonManager.add(new Button(buttonTextures.get("Back"), 75, 0.2f, RETURN_TO_MAIN));
 		
-		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
+		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), (Mouse)iomanager.getInputManager().retrieve(2));
 	}
 	
 	/**
@@ -90,9 +93,13 @@ public class StatsScreen extends Scene {
 		buttonManager.drawButtons(batch);
 		
 		// statistics text
-		descriptionFont.draw(batch, "Statistics1: placeholder", super.centeredXPos(600f), DESCRIPTION_Y_POS - 40f, TEXTAREA_WIDTH, Align.left, true);
-		descriptionFont.draw(batch, "Statistics2: placeholder", super.centeredXPos(600f), DESCRIPTION_Y_POS - 80f, TEXTAREA_WIDTH, Align.left, true);
-		descriptionFont.draw(batch, "Statistics3: placeholder", super.centeredXPos(600f), DESCRIPTION_Y_POS - 120f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Mercury : " + statsFile.getJsonInt("mercury_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 40f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Venus : " + statsFile.getJsonInt("venus_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 80f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Earth : " + statsFile.getJsonInt("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 120f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Mars : " + statsFile.getJsonInt("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 160f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Jupiter : " + statsFile.getJsonInt("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 200f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Uranus : " + statsFile.getJsonInt("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 240f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Neptune : " + statsFile.getJsonInt("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 280f, TEXTAREA_WIDTH, Align.left, true);
 
 		batch.end();
 		

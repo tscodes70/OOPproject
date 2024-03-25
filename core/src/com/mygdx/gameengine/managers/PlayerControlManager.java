@@ -94,4 +94,23 @@ public class PlayerControlManager{
 		System.out.println("PlayerControlManager Resources Disposed");
 	}
 
+	// Setter and Getter
+	public List<iPlayer> getPlayerList() {
+		return playerList;
+	}
+
+	public void setPlayerList(List<iPlayer> playerList) {
+		this.playerList = playerList;
+	}
+
+	public Keyboard getKeyboardDevice() {
+		return keyboardDevice;
+	}
+
+	public void setKeyboardDevice(Keyboard keyboardDevice) {
+		this.keyboardDevice = keyboardDevice;
+	}	
+	
+	
+	
 }

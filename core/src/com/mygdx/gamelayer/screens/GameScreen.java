@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.gameengine.interfaces.iPlayer;
 import com.mygdx.gameengine.managers.AIControlManager;
 import com.mygdx.gameengine.managers.ButtonControlManager;
 import com.mygdx.gameengine.managers.ButtonManager;
@@ -96,6 +97,9 @@ public class GameScreen extends Scene {
 		// Populate SpaceEntityManager of Player & Debris
 		player1 = (Player)spaceEntityFactory.createEntity("Player",1, Keys.LEFT, Keys.RIGHT, Keys.UP, Keys.DOWN);
 		spaceEntityManager.add(player1);
+		
+		Player player2 = (Player)spaceEntityFactory.createEntity("Player",2, Keys.A, Keys.D, Keys.W, Keys.S);
+		spaceEntityManager.add(player2);
 		
         for (int i=0; i<(int)Math.floor(Math.random() * DEBRIS_MAX_SPAWN) + DEBRIS_MIN_SPAWN; i++) {
         	spaceEntityManager.add((Debris)spaceEntityFactory.createEntity("Debris", planet.getName()));	
@@ -188,9 +192,11 @@ public class GameScreen extends Scene {
 				System.out.println("YOU VERY ZAI BRO");
 				simulation.levelCleared(planet.getName(), planet.getTex());
 			}
-			if(player1.getHealthBar().getCurrentValue() <= 0) {
-				System.out.println("YOU BAO ZHA ALR BRO");
-				simulation.levelCleared(planet.getName(), planet.getTex());
+			for (iPlayer player : playerControlManager.getPlayerList()) {
+				if(((Player)player).getHealthBar().getCurrentValue() <= 0) {
+					System.out.println("YOU BAO ZHA ALR BRO");
+					simulation.levelCleared(planet.getName(), planet.getTex());
+				}
 			}
 			if(planet.getCurrentHP() <= 0) {
 				System.out.println("PLANET BAO ZHA ALR BRO");
@@ -219,7 +225,9 @@ public class GameScreen extends Scene {
 		
 	    // Spawn projectiles
 	    if (projectileSpawnTimer >= 0.2 && countdownTime > 0) {
-	        spaceEntityManager.add((Projectile)spaceEntityFactory.createDynamicEntity("Projectile",player1.getPositionX(),player1.getPositionY()));
+	    	for (iPlayer player : playerControlManager.getPlayerList()) {
+	        spaceEntityManager.add((Projectile)spaceEntityFactory.createDynamicEntity("Projectile",((Player)player).getPositionX(),((Player)player).getPositionY()));
+	    	}
 	        spaceAIControlManager.update(spaceEntityManager.getEntityList());
 	        spaceCollisionManager.update(spaceEntityManager.getEntityList());
 	        projectileSpawnTimer -= 0.2; // Reset the timer for next second
