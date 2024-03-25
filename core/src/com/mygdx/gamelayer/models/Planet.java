@@ -19,17 +19,20 @@ public class Planet extends Entity implements iPlanet {
 	public Planet(
 			String name,
 			SpaceTexture texture,
+			float width, 
+			float height,
 			float positionX, 
 			float positionY, 
 			float gravity,
-			float width, 
-			float height,
 			boolean collidable) {
 		super(texture,positionX, positionY, width, height);
 		this.boundingBox = new Rectangle(positionX, positionY, width, height);
 		this.collidable = collidable;
 		this.name = name;
 		this.info = String.format("This is a description of %s.", name);
+		
+		this.currentHP = 5;
+		this.maxHP = 5;
 	}
 
 // Getter Setter

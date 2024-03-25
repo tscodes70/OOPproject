@@ -15,6 +15,17 @@ public class SpaceEntityManager extends EntityManager{
 		super();
 	}
 	
+	public void updateEntityHealth(Entity collidedEntity, float damage) {
+	    if (collidedEntity instanceof Player) {
+	        ((Player)collidedEntity).getHealthBar().setCurrentValue(((Player)collidedEntity).getHealthBar().getCurrentValue()-damage);;
+	    } else if (collidedEntity instanceof Planet) {
+	       ((Planet)collidedEntity).setCurrentHP(((Planet)collidedEntity).getCurrentHP()-damage);
+	    } else {
+	        // Handle unexpected entity types
+	        System.out.println("Unhandled entity type: " + collidedEntity.getClass().getSimpleName());
+	    }
+	}
+	
 	@Override
 	public void drawEntities(SpriteBatch batch) {
 		for (Entity entity : super.getEntityList()) {
@@ -23,6 +34,9 @@ public class SpaceEntityManager extends EntityManager{
 					entity.draw(batch, entity.getWidth(), entity.getHeight());
 				}
 			    if (entity instanceof Player) {
+			        entity.draw(batch, entity.getWidth(), entity.getHeight());
+			    }
+			    if (entity instanceof Debris) {
 			        entity.draw(batch, entity.getWidth(), entity.getHeight());
 			    }
 				
@@ -36,10 +50,7 @@ public class SpaceEntityManager extends EntityManager{
 	 */
 	@Override
 	public void drawEntities(ShapeRenderer shape) {
-		for (Entity entity : super.getEntityList()) {
-			    if (entity instanceof Debris) {
-			        entity.draw(shape);
-			    }
+		for (Entity entity : super.getEntityList()) { 
 			    if (entity instanceof Player) {
 			    	// stats bar
 			        ((Player)entity).getHealthBar().draw(shape);

@@ -94,11 +94,11 @@ public class GameScreen extends Scene {
 		spaceEntityFactory = new SpaceEntityFactory(ioManager);
 		
 		// Populate SpaceEntityManager of Player & Debris
-		player1 = (Player)spaceEntityFactory.createEntity("Player", Keys.LEFT, Keys.RIGHT, Keys.UP, Keys.DOWN);
+		player1 = (Player)spaceEntityFactory.createEntity("Player",1, Keys.LEFT, Keys.RIGHT, Keys.UP, Keys.DOWN);
 		spaceEntityManager.add(player1);
 		
         for (int i=0; i<(int)Math.floor(Math.random() * DEBRIS_MAX_SPAWN) + DEBRIS_MIN_SPAWN; i++) {
-        	spaceEntityManager.add((Debris)spaceEntityFactory.createEntity("Debris"));	
+        	spaceEntityManager.add((Debris)spaceEntityFactory.createEntity("Debris", planet.getName()));	
         	}
         
         // Populate SpaceEntityManager with selected planet
@@ -181,16 +181,27 @@ public class GameScreen extends Scene {
 			// Start Executing Game
 			playerControlManager.move(deltaTime);
 			spaceAIControlManager.move(deltaTime);
-			spaceCollisionManager.checkCollisions(spaceEntityManager,spaceAIControlManager);
+			spaceCollisionManager.checkCollisions(spaceEntityManager,spaceAIControlManager,playerControlManager);
 			
 			// TESTING: hardcoded to go to level cleared screen after 10s of gameplay
-			if((int)countdownTime == 0) {
+			if((int)countdownTime == 0 || player1.getHealthBar().getCurrentValue() <= 0 || planet.getCurrentHP() <= 0) {
+				System.out.println("YOU VERY ZAI BRO");
+				simulation.levelCleared(planet.getName(), planet.getTex());
+			}
+			if(player1.getHealthBar().getCurrentValue() <= 0) {
+				System.out.println("YOU BAO ZHA ALR BRO");
+				simulation.levelCleared(planet.getName(), planet.getTex());
+			}
+			if(planet.getCurrentHP() <= 0) {
+				System.out.println("PLANET BAO ZHA ALR BRO");
 				simulation.levelCleared(planet.getName(), planet.getTex());
 			}
 		}
 	}
 	
 	public void update(float deltaTime) {
+		// TESTING: PRINT
+		System.out.println("Planet Hp " + planet.getCurrentHP() + "/" + planet.getMaxHP());
 		delay -= deltaTime;
         // Check if the countdown has reached zero or below
 		if (delay <= 0) {
@@ -205,7 +216,7 @@ public class GameScreen extends Scene {
 		    projectileSpawnTimer += deltaTime;
 		    debrisSpawnTimer += deltaTime;
 		}
-
+		
 	    // Spawn projectiles
 	    if (projectileSpawnTimer >= 0.2 && countdownTime > 0) {
 	        spaceEntityManager.add((Projectile)spaceEntityFactory.createDynamicEntity("Projectile",player1.getPositionX(),player1.getPositionY()));
@@ -217,7 +228,7 @@ public class GameScreen extends Scene {
 	    // Spawn debris
 	    if (debrisSpawnTimer >= 1 && countdownTime > 0) {
 	    	for (int i=0; i<(int)Math.floor(Math.random() * DEBRIS_MAX_SPAWN)+DEBRIS_MIN_SPAWN; i++) {
-	        	spaceEntityManager.add((Debris)spaceEntityFactory.createEntity("Debris"));	
+	        	spaceEntityManager.add((Debris)spaceEntityFactory.createEntity("Debris", planet.getName()));	
 	        }
 	    	spaceAIControlManager.update(spaceEntityManager.getEntityList());
 	        spaceCollisionManager.update(spaceEntityManager.getEntityList());

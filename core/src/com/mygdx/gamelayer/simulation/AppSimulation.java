@@ -59,9 +59,11 @@ public class AppSimulation extends Simulation {
 	private final String IMAGE_PATH = "image";
 	private final String AUDIO_PATH = "audio/music";
 	
-	// Player & Debris resources
+	// Player resources
 	private final String IMAGE_PLAYER_PATH = String.format("%s/player.png", IMAGE_PATH);
-//	private final String IMAGE_DEBRIS_PATH = String.format("%s/spawnplayer.png", IMAGE_PATH);
+	
+	// Debris resources
+	private final String IMAGE_MERCURY_DEBRIS_PATH = String.format("%s/mercury_debris.png", IMAGE_PATH);
 	
 	// generic menu buttons
 	private final String IMAGE_STARTBUTTON_PATH = String.format("%s/start_button.png", IMAGE_PATH);
@@ -159,7 +161,7 @@ public class AppSimulation extends Simulation {
 			continueButtonModel = new SpaceTexture(IMAGE_CONTINUEBUTTON_PATH);
 			
 			playerModel = new SpaceTexture(IMAGE_PLAYER_PATH);
-//			debrisModel = new SpaceTexture(IMAGE_DEBRIS_PATH);
+			debrisModel = new SpaceTexture(IMAGE_MERCURY_DEBRIS_PATH);
 			
 			// planet button models
 			mercuryButtonModel = new SpaceTexture(IMAGE_MERCURY_PATH);
@@ -192,7 +194,8 @@ public class AppSimulation extends Simulation {
 			oManager.add("GSBGImage", bgGSImage);
 			
 			oManager.add("PlayerTexture", playerModel);
-			oManager.add("DebrisTexture", debrisModel);
+			
+			oManager.add("MercuryDebrisTexture", debrisModel);
 			
 			oManager.add("StartButtonTexture", startButtonModel);
 			oManager.add("StatsButtonTexture", statsButtonModel);
@@ -293,9 +296,7 @@ public class AppSimulation extends Simulation {
 		sceneManager.add(new MainMenuScreen(menuButtons, bgSSImage, bgSSMusic ,mouseDevice, this));
 		sceneManager.add(new LevelSelectScreen(levelButtons, planetHashmap, bgLSSImage, bgSSMusic ,mouseDevice, this));
 		sceneManager.add(new PlanetInfoScreen(planetInfoButtons, bgLSSImage, bgSSMusic ,mouseDevice, this));
-		//sceneManager.add(new SplashScreen(bgSSMusic,bgSSImage));
-		sceneManager.add(new GameScreen(mercuryPlanet, ioManager, this));
-//		sceneManager.add(new GameScreen(buttonSA,buttonSP,bgGSMusic,keyboardDevice,mouseDevice));
+		sceneManager.add(new GameScreen((Planet)planetHashmap.get("Mercury"), ioManager, this));
 		sceneManager.add(new PauseScreen());
 		sceneManager.add(new LevelClearedScreen(levelClearedButtons, bgLCImage, bgESMusic, mouseDevice, this));
 		sceneManager.add(new StatsScreen(statsButtons, bgStatsImage, bgESMusic, mouseDevice, this));

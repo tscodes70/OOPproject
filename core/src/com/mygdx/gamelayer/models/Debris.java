@@ -3,6 +3,7 @@ package com.mygdx.gamelayer.models;
 import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
@@ -21,6 +22,7 @@ public class Debris extends Entity implements iDebris{
 	private boolean collidable;
 	private Rectangle boundingBox;
 	private int speedMultiplier;
+	private SpaceTexture texture;
 	
 	private final int DEFAULT_ENTITY_SPEED_MULTIPLIER = 100;
 	
@@ -41,6 +43,25 @@ public class Debris extends Entity implements iDebris{
 			boolean collidable) {
 		super(positionX, positionY, radius, colour);
 		this.boundingBox = new Rectangle(positionX-radius, positionY-radius, radius * 2, radius * 2);
+		this.speedMultiplier = speedMultiplier;
+		this.aiControl = aiControl;
+		this.collidable = collidable;
+		this.horizontalDirection = random.nextBoolean() ? 1 : -1;
+	}
+	
+	public Debris(
+			Texture texture,
+			float width, 
+			float height, 
+			float positionX, 
+			float positionY, 
+
+			int speedMultiplier, 
+			
+			boolean aiControl, 
+			boolean collidable) {
+		super(texture, positionX, positionY, width, height);
+		this.boundingBox = new Rectangle(positionX, positionY, width, height);
 		this.speedMultiplier = speedMultiplier;
 		this.aiControl = aiControl;
 		this.collidable = collidable;
@@ -78,6 +99,11 @@ public class Debris extends Entity implements iDebris{
 		
 		// Update position
 		super.setPositionX(newPositionX);
+	}
+	
+	@Override
+	public void dispose() {
+		
 	}
 	
 // Getter Setter

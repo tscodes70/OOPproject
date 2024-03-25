@@ -10,11 +10,13 @@ import com.mygdx.gameengine.interfaces.iPlayer;
 import com.mygdx.gameengine.managers.AIControlManager;
 import com.mygdx.gameengine.managers.CollisionManager;
 import com.mygdx.gameengine.managers.EntityManager;
+import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gamelayer.interfaces.iProjectile;
 import com.mygdx.gamelayer.interfaces.iDebris;
 import com.mygdx.gamelayer.interfaces.iPlanet;
 import com.mygdx.gamelayer.models.Planet;
+import com.mygdx.gamelayer.models.Player;
 
 public class SpaceCollisionManager extends CollisionManager {
 	
@@ -26,6 +28,23 @@ public class SpaceCollisionManager extends CollisionManager {
 		super(entityList);
 	}
 	
+	  /**
+     * Method to check and detect collisions between entities,
+     * Calls handleCollisions method to then resolve these detected collisions.
+     * @param entityManager
+     */
+	 public void checkCollisions(SpaceEntityManager entityManager, SpaceAIControlManager aiControlManager, PlayerControlManager playerControlManager) {
+		 for (int i = 0; i < super.getCollidableList().size() - 1; i++) {
+	            for (int j = i + 1; j < super.getCollidableList().size(); j++) {
+
+	                if (super.getCollidableList().get(i).getBoundingBox().overlaps(super.getCollidableList().get(j).getBoundingBox())) {
+	                	handleCollisions(entityManager, aiControlManager,playerControlManager, super.getCollidableList().get(i),super.getCollidableList().get(j));
+	                	
+	                }
+	            }
+	        }
+	    }
+	
 	 /**
 	  * Resolves collisions between 2 Entities, for this demonstration, 
 	  * AI collision with AI is allowed.
@@ -35,44 +54,74 @@ public class SpaceCollisionManager extends CollisionManager {
 	  * @param x
 	  * @param y
 	  */
-	@Override
-	 public void handleCollisions(EntityManager entityManager, AIControlManager aiControlManager, iCollidable x, iCollidable y) {
+	 public void handleCollisions(SpaceEntityManager entityManager, SpaceAIControlManager aiControlManager, PlayerControlManager playerControlManager, iCollidable x, iCollidable y) {
 		 if (x instanceof iDebris && y instanceof iPlayer){
-				 this.remove(x);	//update collidableList to remove entity
-				 entityManager.remove((Entity) x);	//update entityManager to remove entity
+			 	// Remove Debris
+				 this.remove(x);	
+				 entityManager.remove((Entity) x);	
 				 aiControlManager.remove((iAI) x);
+				 
+				 // Reduce player health
+				 entityManager.updateEntityHealth(((Entity)y),10);
+				 playerControlManager.update(entityManager.getEntityList());
+				 
 				 System.out.println("Collision Between Player & Debris - Debris Entity Removed");
 		 }else if (x instanceof iPlayer && y instanceof iDebris) {
-				 this.remove(y);	//update collidableList to remove entity
-				 entityManager.remove((Entity) y);	//update entityManager to remove entity
+				 // Remove Debris
+				 this.remove(y);	
+				 entityManager.remove((Entity) y);	
 				 aiControlManager.remove((iAI) y);
+				 
+				// Reduce player health
+				 entityManager.updateEntityHealth(((Entity)x),10);
+				 playerControlManager.update(entityManager.getEntityList());
+				 
 				 System.out.println("Collision Between Player & Debris - Debris Entity Removed");
 		 }else if(x instanceof iProjectile && y instanceof iDebris) {
-			 this.remove(x);
-			 this.remove(y);//update collidableList to remove entity
-			 entityManager.remove((Entity) x);	//update entityManager to remove entity
-			 entityManager.remove((Entity) y);
-			 aiControlManager.remove((iAI) x);
-			 aiControlManager.remove((iAI) y);
-			 System.out.println("Collision Between Projectile & Debris - Both Removed");
+				 // Remove Projectile
+				 this.remove(x);
+				 entityManager.remove((Entity) x);	
+				 aiControlManager.remove((iAI) x);
+				 
+				// Remove Debris
+				 this.remove(y);
+				 entityManager.remove((Entity) y);
+				 aiControlManager.remove((iAI) y);
+				 
+				 System.out.println("Collision Between Projectile & Debris - Both Removed");
 		 }else if(x instanceof iDebris && y instanceof iProjectile) {
-			 this.remove(x);
-			 this.remove(y);//update collidableList to remove entity
-			 entityManager.remove((Entity) x);	//update entityManager to remove entity
+			 // Remove Projectile
+			 this.remove(y);
 			 entityManager.remove((Entity) y);
-			 aiControlManager.remove((iAI) x);
 			 aiControlManager.remove((iAI) y);
+			 
+			// Remove Debris
+			 this.remove(x);
+			 entityManager.remove((Entity) x);	
+			 aiControlManager.remove((iAI) x);
+			 
 			 System.out.println("Collision Between Projectile & Debris - Both Removed");
 		 }
 		 else if (x instanceof iPlanet && y instanceof iDebris){
-			 this.remove(y);	//update collidableList to remove entity
-			 entityManager.remove((Entity) y);	//update entityManager to remove entity
+			 
+			 // Remove Debris
+			 this.remove(y);
+			 entityManager.remove((Entity) y);
 			 aiControlManager.remove((iAI) y);
+			 
+			 // Reduce Planet health
+			 entityManager.updateEntityHealth(((Entity)x),1);
+			 
 			 System.out.println("Collision Between Planet & Debris - AI Entity Removed");
 		 }else if (x instanceof iDebris && y instanceof iPlanet) {
-			 this.remove(x);	//update collidableList to remove entity
-			 entityManager.remove((Entity) x);	//update entityManager to remove entity
+			 // Remove Debris
+			 this.remove(x);
+			 entityManager.remove((Entity) x);
 			 aiControlManager.remove((iAI) x);
+			 
+			 // Reduce Planet health
+			 entityManager.updateEntityHealth(((Entity)y),1);
+			 
 			 System.out.println("Collision Between Planet & Debris - AI Entity Removed");
 		 }
 

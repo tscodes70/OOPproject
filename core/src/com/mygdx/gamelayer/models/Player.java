@@ -12,6 +12,7 @@ import com.mygdx.gameengine.models.Entity;
 
 public class Player extends Entity implements iCollidable, iPlayer {
 	
+	private int id;
 	private StatsBar healthBar;
 	private StatsBar staminaBar;
 	private float staminaRegenRate;
@@ -30,6 +31,7 @@ public class Player extends Entity implements iCollidable, iPlayer {
 
 
 	public Player(
+			int id,
 			float positionX, 
 			float positionY, 
 			int speedMultiplier, 
@@ -39,7 +41,8 @@ public class Player extends Entity implements iCollidable, iPlayer {
 			boolean collidable) {
 		
 		super(positionX, positionY, radius, colour);
-
+		
+		this.id = id;
 		this.playable = playable;
 		this.collidable = collidable;
 		this.boundingBox = new Rectangle(positionX-radius, positionY-radius, radius * 2, radius * 2);
@@ -52,12 +55,15 @@ public class Player extends Entity implements iCollidable, iPlayer {
 	}
 	
 	public Player(
-			float positionX, 
-			float positionY, 
-			int speedMultiplier, 
+			int id,
+			Texture texture,
 			float width,
 			float height,
-			Texture texture, 
+			float positionX, 
+			float positionY, 
+			
+			int speedMultiplier, 
+
 			boolean playable, 
 			boolean collidable,
 			
@@ -68,6 +74,7 @@ public class Player extends Entity implements iCollidable, iPlayer {
 		
 		super(texture, positionX, positionY, width, height);
 
+		this.id = id;
 		this.playable = playable;
 		this.collidable = collidable;
 		this.boundingBox = new Rectangle(positionX, positionY, width, height);
@@ -79,8 +86,8 @@ public class Player extends Entity implements iCollidable, iPlayer {
 		this.downKeybind = downKeybind;
 		
 		// HP and Stamina
-		this.healthBar = new StatsBar(positionX, positionY, Color.GREEN, Color.RED, 80, 5, 30, 100);
-		this.staminaBar = new StatsBar(positionX, positionY-5, Color.YELLOW, Color.GRAY, 80, 5, 50, 100);
+		this.healthBar = new StatsBar(positionX, positionY, Color.GREEN, Color.RED, 80, 5, 100, 100);
+		this.staminaBar = new StatsBar(positionX, positionY-5, Color.YELLOW, Color.GRAY, 80, 5, 100, 100);
 
 	}
 	
@@ -226,6 +233,14 @@ public StatsBar getHealthBar() {
 	@Override
 	public void setBoundingBox(Rectangle boundingBox) {
 		this.boundingBox = boundingBox;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 

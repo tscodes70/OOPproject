@@ -46,7 +46,7 @@ public class SpaceEntityFactory {
         this.ioManager = ioManager;
     }
 	
-	public Entity createEntity(String entityType) {
+	public Entity createEntity(String entityType, String entityPlanet) {
 		if (entityType == null) {
             return null;
 		}
@@ -54,11 +54,12 @@ public class SpaceEntityFactory {
             switch (entityType) {
                 case "Debris":
                     return new Debris(
+                    		(SpaceTexture) ioManager.getOutputManager().retrieve(entityPlanet + "DebrisTexture"),
+                    		DEFAULT_DEBRIS_WIDTH,
+                    		DEFAULT_DEBRIS_HEIGHT,
                     		(float) (Math.random() * (Gdx.graphics.getWidth() - 200) + 100),
                     		(float)(Gdx.graphics.getHeight() + (float)(Math.random() * 600)),
                     		DEFAULT_DEBRIS_SPEED,
-                    		DEFAULT_DEBRIS_RADIUS,
-                    		DEFAULT_AI_COLOR,
                     		AI_CONTROL,
                     		COLLIDABLE);	
                 default:
@@ -67,7 +68,7 @@ public class SpaceEntityFactory {
         }
 	}
 	
-	public Entity createEntity(String entityType, int value1, int value2, int value3, int value4) {
+	public Entity createEntity(String entityType, int id, int left, int right, int up, int down) {
 		if (entityType == null) {
             return null;
 		}
@@ -75,18 +76,19 @@ public class SpaceEntityFactory {
             switch (entityType) {
                 case "Player":
                 	return new Player(
+                					id,
+        							(SpaceTexture) ioManager.getOutputManager().retrieve("PlayerTexture"),
+                					DEFAULT_PLAYER_WIDTH, 
+                					DEFAULT_PLAYER_HEIGHT,
                 					DEFAULT_PLAYER_X, 
                 					DEFAULT_PLAYER_Y, 
                 					DEFAULT_PLAYER_SPEED, 
-                					DEFAULT_PLAYER_WIDTH, 
-                					DEFAULT_PLAYER_HEIGHT,
-                					(SpaceTexture) ioManager.getOutputManager().retrieve("PlayerTexture"),
                 					PLAYABLE,
                 					COLLIDABLE,
-                					value1,
-                					value2,
-                					value3,
-                					value4);		
+                					left,
+                					right,
+                					up,
+                					down);		
                 default:
                     return null;
             }
@@ -104,11 +106,11 @@ public class SpaceEntityFactory {
 	        	return new Planet(
 	        					dynamicString1,
 	        					(SpaceTexture)ioManager.getOutputManager().retrieve(dynamicString1 + "PlanetTexture"), 
+	        					PLANET_WIDTH, 
+	        					PLANET_HEIGHT, 
 	        					PLANET_POSITION_X,
 	        					PLANET_POSITION_Y,
 	        					dynamicValue1,
-	        					PLANET_WIDTH, 
-	        					PLANET_HEIGHT, 
 	        					PLANET_COLLIDABLE);
 	        default:
 	            return null;

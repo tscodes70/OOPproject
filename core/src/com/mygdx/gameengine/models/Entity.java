@@ -72,7 +72,7 @@ public class Entity {
      * Disposal of entity
      */
     public void dispose() {
-    	if(texture != null) texture.dispose();
+//    	if(texture != null) texture.dispose();
     }
     
     // Getters Setters
