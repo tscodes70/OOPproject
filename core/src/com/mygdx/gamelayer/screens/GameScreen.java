@@ -184,7 +184,7 @@ public class GameScreen extends Scene {
 			spaceCollisionManager.checkCollisions(spaceEntityManager,spaceAIControlManager,playerControlManager);
 			
 			// TESTING: hardcoded to go to level cleared screen after 10s of gameplay
-			if((int)countdownTime == 0 || player1.getHealthBar().getCurrentValue() <= 0 || planet.getCurrentHP() <= 0) {
+			if((int)countdownTime == 0) {
 				System.out.println("YOU VERY ZAI BRO");
 				simulation.levelCleared(planet.getName(), planet.getTex());
 			}
