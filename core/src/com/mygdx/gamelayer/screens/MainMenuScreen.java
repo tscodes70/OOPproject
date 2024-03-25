@@ -7,8 +7,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.gameengine.managers.AIControlManager;
 import com.mygdx.gameengine.managers.ButtonControlManager;
@@ -41,13 +45,22 @@ public class MainMenuScreen extends Scene {
 	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
 	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
 	
-    
+	private Texture titleTexture;
+	
+	//Set bg image
+	Texture bgImage = new Texture(Gdx.files.internal("image/spacep.png"));
+
+	
 	public MainMenuScreen(HashMap<String, Texture> buttonTextures, Texture bgImage, Sound bgMusic, Mouse mouseDevice, AppSimulation simulation) {
 		super(bgMusic,bgImage);
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
 		int screenWidth = Gdx.graphics.getWidth();
-
+		
+		//for title
+		titleTexture = new Texture(Gdx.files.internal("image/fonttwo.png"));
+		
+		
 		this.simulation = simulation;
 		
 		//Instantiate ButtonManager
@@ -73,6 +86,22 @@ public class MainMenuScreen extends Scene {
 		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		batch.begin();
+		
+		//draw the background image
+		if(bgImage != null) {
+			batch.draw(bgImage, 0, 0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+		}
+		
+//		//draw title text
+		if(titleTexture != null) {	
+			// Define the new width and height of the title image 
+			float scaleX = 0.5f;
+		    float scaleY = 0.5f;
+		    
+			batch.draw(titleTexture, 160, 720, titleTexture.getWidth() * scaleX, titleTexture.getHeight() * scaleY);
+		}
+		
+		
 		//entityManager.drawEntities(batch);
 		buttonManager.drawButtons(batch);
 		batch.end();
@@ -113,5 +142,6 @@ public class MainMenuScreen extends Scene {
 		shape.dispose();
 		buttonManager.dispose();
 		buttonControlManager.dispose();
+		titleTexture.dispose();
 	}
 }
