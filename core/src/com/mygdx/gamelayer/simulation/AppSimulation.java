@@ -16,6 +16,7 @@ import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Simulation;
 import com.mygdx.gameengine.models.Sound;
+import com.mygdx.gamelayer.factories.SpaceEntityFactory;
 import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.SpaceTexture;
 import com.mygdx.gamelayer.screens.*;
@@ -38,6 +39,7 @@ public class AppSimulation extends Simulation {
 	
 	private Planet mercuryPlanet,venusPlanet,earthPlanet, marsPlanet, jupiterPlanet, saturnPlanet, uranusPlanet, neptunePlanet;
 	
+	private SpaceEntityFactory spaceEntityFactory;
 	private float planetPositionX,planetPositionY,planetWidth,planetHeight;
 	private boolean planetCollidable;
 
@@ -183,6 +185,12 @@ public class AppSimulation extends Simulation {
 			oManager.add("GSBGMusic",bgGSMusic);
 			oManager.add("ESBGMusic",bgESMusic);
 			
+			oManager.add("SSBGImage", bgSSImage);
+			oManager.add("LSSBGImage", bgLSSImage);
+			oManager.add("LCBGImage", bgLCImage);
+			oManager.add("StatsBGImage", bgStatsImage);
+			oManager.add("GSBGImage", bgGSImage);
+			
 			oManager.add("PlayerTexture", playerModel);
 			oManager.add("DebrisTexture", debrisModel);
 			
@@ -211,13 +219,6 @@ public class AppSimulation extends Simulation {
 			oManager.add("NeptunePlanetTexture", neptunePlanetModel);
 
 			ioManager = new IOManager(iManager,oManager);
-			
-			// Planet Dimenensions
-			planetPositionX = 0;
-			planetPositionY = -(Gdx.graphics.getWidth() / 2f);
-			planetWidth = Gdx.graphics.getWidth();
-			planetHeight = 0.75f * ((float)Gdx.graphics.getWidth() /  (float)Gdx.graphics.getHeight()) * (float)Gdx.graphics.getHeight();
-			planetCollidable = COLLIDABLE;
 			
 			
 			// hashmaps of button textures to pass to their respective scenes
@@ -274,97 +275,26 @@ public class AppSimulation extends Simulation {
 		// Instantiate SceneManager & All AppSimulation Scenes
 		sceneManager = new SceneManager(oManager);
 		
-		// Creating Planets
-		mercuryPlanet = new Planet(
-				"Mercury",
-				(SpaceTexture)ioManager.getOutputManager().retrieve("MercuryPlanetTexture"), 
-				planetPositionX,
-				planetPositionY,
-				1.5f, //gravity
-				planetWidth, 
-				planetHeight, 
-				planetCollidable);
-		venusPlanet = new Planet(
-				"Venus",
-				(SpaceTexture)ioManager.getOutputManager().retrieve("VenusPlanetTexture"), 
-				planetPositionX,
-				planetPositionY,
-				1.5f,
-				planetWidth, 
-				planetHeight, 
-				planetCollidable);
-		earthPlanet = new Planet(
-				"Earth",
-				(SpaceTexture)ioManager.getOutputManager().retrieve("EarthPlanetTexture"), 
-				planetPositionX,
-				planetPositionY,
-				1.5f,
-				planetWidth, 
-				planetHeight, 
-				planetCollidable);
-		marsPlanet = new Planet(
-				"Mars",
-				(SpaceTexture)ioManager.getOutputManager().retrieve("MarsPlanetTexture"), 
-				planetPositionX,
-				planetPositionY,
-				1.5f,
-				planetWidth, 
-				planetHeight, 
-				planetCollidable);
-		jupiterPlanet = new Planet(
-				"Jupiter",
-				(SpaceTexture)ioManager.getOutputManager().retrieve("JupiterPlanetTexture"), 
-				planetPositionX,
-				planetPositionY,
-				1.5f,
-				planetWidth, 
-				planetHeight, 
-				planetCollidable);
-		saturnPlanet = new Planet(
-				"Saturn",
-				(SpaceTexture)ioManager.getOutputManager().retrieve("SaturnPlanetTexture"), 
-				planetPositionX,
-				planetPositionY,
-				1.5f,
-				planetWidth, 
-				planetHeight, 
-				planetCollidable);
-		uranusPlanet = new Planet(
-				"Uranus",
-				(SpaceTexture)ioManager.getOutputManager().retrieve("UranusPlanetTexture"), 
-				planetPositionX,
-				planetPositionY,
-				1.5f,
-				planetWidth, 
-				planetHeight, 
-				planetCollidable);
-		neptunePlanet = new Planet(
-				"Neptune",
-				(SpaceTexture)ioManager.getOutputManager().retrieve("NeptunePlanetTexture"), 
-				planetPositionX,
-				planetPositionY,
-				1.5f,
-				planetWidth, 
-				planetHeight, 
-				planetCollidable);
+		// Instantiate SpaceEntityFactory
+		spaceEntityFactory = new SpaceEntityFactory(ioManager);
 		
 		// Planet Hashmap
 		planetHashmap = new HashMap<String, Planet>();
-		planetHashmap.put("Mercury",mercuryPlanet);
-		planetHashmap.put("Venus",venusPlanet);
-		planetHashmap.put("Earth",earthPlanet);
-		planetHashmap.put("Mars",marsPlanet);
-		planetHashmap.put("Jupiter",jupiterPlanet);
-		planetHashmap.put("Saturn",saturnPlanet);
-		planetHashmap.put("Uranus",uranusPlanet);
-		planetHashmap.put("Neptune",neptunePlanet);
+		planetHashmap.put("Mercury",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Mercury", 1.5f));
+		planetHashmap.put("Venus",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Venus", 1.5f));
+		planetHashmap.put("Earth",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Earth", 1.5f));
+		planetHashmap.put("Mars",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Mars", 1.5f));
+		planetHashmap.put("Jupiter",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Jupiter", 1.5f));
+		planetHashmap.put("Saturn",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Saturn", 1.5f));
+		planetHashmap.put("Uranus",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Uranus", 1.5f));
+		planetHashmap.put("Neptune",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Neptune", 1.5f));
 
 		// a reference to appsimulation is passed to scenes so that they can request changes of game state
 		sceneManager.add(new MainMenuScreen(menuButtons, bgSSImage, bgSSMusic ,mouseDevice, this));
 		sceneManager.add(new LevelSelectScreen(levelButtons, planetHashmap, bgLSSImage, bgSSMusic ,mouseDevice, this));
 		sceneManager.add(new PlanetInfoScreen(planetInfoButtons, bgLSSImage, bgSSMusic ,mouseDevice, this));
 		//sceneManager.add(new SplashScreen(bgSSMusic,bgSSImage));
-		sceneManager.add(new GameScreen(mercuryPlanet, playerModel, bgGSImage, bgGSMusic,keyboardDevice,mouseDevice, this));
+		sceneManager.add(new GameScreen(mercuryPlanet, ioManager, this));
 //		sceneManager.add(new GameScreen(buttonSA,buttonSP,bgGSMusic,keyboardDevice,mouseDevice));
 		sceneManager.add(new PauseScreen());
 		sceneManager.add(new LevelClearedScreen(levelClearedButtons, bgLCImage, bgESMusic, mouseDevice, this));
@@ -434,7 +364,7 @@ public class AppSimulation extends Simulation {
 	// start the game
 	public void setGameLevel(Planet planet) {
 		gameState = GAME_SCREEN;
-		sceneManager.setGameLevel(planet, playerModel, bgGSImage, keyboardDevice, mouseDevice, this);
+		sceneManager.setGameLevel(planet, ioManager, this);
 		sceneManager.setScene(gameState);
 	}
 	

@@ -91,18 +91,18 @@ public class SceneManager{
 	 * Reinitializes the game scene
 	 * @param manager
 	 */
-	public void resetGameScene(Planet planet, SpaceTexture playerModel, SpaceTexture bgTexture, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
+	public void resetGameScene(Planet planet, IOManager iomanager, AppSimulation simulation) {
 		Scene gameScene = sceneList.get(GAME_SCREEN);
 		int gameSceneIndex = sceneList.indexOf(gameScene);
 //		sceneList.set(gameSceneIndex, new GameScreen(buttonSA,buttonSP,bgGSMusic,keyboardDevice,mouseDevice));
-		sceneList.set(gameSceneIndex, new GameScreen(planet, playerModel, bgTexture, bgGSMusic,keyboardDevice,mouseDevice, simulation));
+		sceneList.set(gameSceneIndex, new GameScreen(planet, iomanager, simulation));
 	}
 	
 	// enter the selected level for the game
-	public void setGameLevel(Planet planet, SpaceTexture playerModel, SpaceTexture bgTexture, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
+	public void setGameLevel(Planet planet, IOManager iomanager, AppSimulation simulation) {
 		Scene gameScene = sceneList.get(GAME_SCREEN);
 		int gameSceneIndex = sceneList.indexOf(gameScene);
-		sceneList.set(gameSceneIndex, new GameScreen(planet, playerModel, bgTexture, bgGSMusic, keyboardDevice,mouseDevice, simulation));
+		sceneList.set(gameSceneIndex, new GameScreen(planet, iomanager, simulation));
 	}
 	
 	// go to the info screen for the selected level

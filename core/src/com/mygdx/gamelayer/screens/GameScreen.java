@@ -23,12 +23,14 @@ import com.mygdx.gameengine.managers.ButtonControlManager;
 import com.mygdx.gameengine.managers.ButtonManager;
 import com.mygdx.gameengine.managers.CollisionManager;
 import com.mygdx.gameengine.managers.EntityManager;
+import com.mygdx.gameengine.managers.IOManager;
 import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
+import com.mygdx.gamelayer.factories.SpaceEntityFactory;
 import com.mygdx.gamelayer.managers.SpaceAIControlManager;
 import com.mygdx.gamelayer.managers.SpaceCollisionManager;
 import com.mygdx.gamelayer.managers.SpaceEntityManager;
@@ -55,28 +57,6 @@ public class GameScreen extends Scene {
     
     private Planet planet;
 	
-	private final int DEFAULT_PLAYER_X = 400;
-	private final int DEFAULT_PLAYER_Y = 250;
-	private final int DEFAULT_PLAYER_SPEED = 3;
-	
-
-	private final int DEFAULT_PROJECTILE_SPEED = 5;
-	private final int DEFAULT_PROJECTILE_WIDTH = 5;
-	private final int DEFAULT_PROJECTILE_HEIGHT = 30;
-	
-	private final int DEFAULT_ENTITY_RADIUS = 40; // remove
-	private final int DEFAULT_ENTITY_WIDTH = 80;
-	private final int DEFAULT_ENTITY_HEIGHT = 100;
-	private final int DEFAULT_ENTITY_SPEED = 1;
-
-	private final Color DEFAULT_AI_COLOR = Color.RED;
-	private final boolean COLLIDABLE = true;
-	private final boolean PLAYABLE = true;
-	private final boolean AI_CONTROL = true;
-	
-	private final int INITIAL_MAX_SPAWN = 8;
-	private final int INITIAL_MIN_SPAWN = 3;
-	
 	private BitmapFont font, countdownFont;
 	private GlyphLayout countdown;
     private float countdownTime = 180f;
@@ -88,70 +68,59 @@ public class GameScreen extends Scene {
     private float projectileSpawnTimer = 0;
     private float debrisSpawnTimer = 0;
     
-	public GameScreen(Planet planet, SpaceTexture playerModel, SpaceTexture bgTexture, Sound bgMusic, Keyboard keyboardDevice, Mouse mouseDevice, AppSimulation simulation) {
-		super(bgMusic, bgTexture);
-		batch = new SpriteBatch();
-		shape = new ShapeRenderer();
+    private SpaceEntityFactory spaceEntityFactory;
+    
+    private final int DEBRIS_MIN_SPAWN = 3;
+    private final int DEBRIS_MAX_SPAWN = 8;
+    
+	public GameScreen(Planet planet, IOManager ioManager, AppSimulation simulation) {
+		super(
+				(Sound) ioManager.getOutputManager().retrieve("GSBGMusic"), 
+				(SpaceTexture)ioManager.getOutputManager().retrieve("GSBGImage"));
 
-		this.keyboardDevice = keyboardDevice;
-		this.mouseDevice = mouseDevice;
+		this.keyboardDevice = (Keyboard) ioManager.getInputManager().retrieve(1);
+		this.mouseDevice = (Mouse) ioManager.getInputManager().retrieve(2);
 		this.simulation = simulation;
 		this.planet = planet;
+		
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        font = new BitmapFont();
+		batch = new SpriteBatch();
+		shape = new ShapeRenderer();
         
-        //Instantiate EntityManager
+        //Instantiate SpaceEntityManager & SpaceEntityFactory
 		spaceEntityManager = new SpaceEntityManager();
-
-		//Creation of Entities (Player Entity, AI Entities)
-		player1 = new Player(
-				DEFAULT_PLAYER_X, 
-				DEFAULT_PLAYER_Y, 
-				DEFAULT_PLAYER_SPEED, 
-				DEFAULT_ENTITY_WIDTH, 
-				DEFAULT_ENTITY_HEIGHT,
-				playerModel,
-				PLAYABLE,
-				COLLIDABLE,
-				
-				Keys.LEFT,
-				Keys.RIGHT,
-				Keys.UP,
-				Keys.DOWN);
+		spaceEntityFactory = new SpaceEntityFactory(ioManager);
+		
+		// Populate SpaceEntityManager of Player & Debris
+		player1 = (Player)spaceEntityFactory.createEntity("Player", Keys.LEFT, Keys.RIGHT, Keys.UP, Keys.DOWN);
 		spaceEntityManager.add(player1);
 		
-        for (int i=0; i<(int)Math.floor(Math.random() * INITIAL_MAX_SPAWN)+INITIAL_MIN_SPAWN; i++) {
-        	spaceEntityManager.add(new Debris(
-        			(float) (Math.random() * (Gdx.graphics.getWidth() - 200) + 100),
-            		(float)(Gdx.graphics.getHeight() + (float)(Math.random() * 600)),
-            		DEFAULT_ENTITY_SPEED,
-            		DEFAULT_ENTITY_RADIUS,
-            		DEFAULT_AI_COLOR,
-            		AI_CONTROL,
-            		COLLIDABLE));	
-        }
+        for (int i=0; i<(int)Math.floor(Math.random() * DEBRIS_MAX_SPAWN) + DEBRIS_MIN_SPAWN; i++) {
+        	spaceEntityManager.add((Debris)spaceEntityFactory.createEntity("Debris"));	
+        	}
         
+        // Populate SpaceEntityManager with selected planet
         spaceEntityManager.add(planet);
         
-        font = new BitmapFont();
-        
-        // dynamically generate bitmap font of our desired size so it doesn't look pixelated
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 125; // font size in pixels
-		countdownFont = generator.generateFont(parameter);
-		countdownFont.getData().setScale(1.25f);
-		countdownFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-
-		generator.dispose(); // don't forget to dispose to avoid memory leaks!
-        countdown = new GlyphLayout(countdownFont, "3"); //for getting width/height of text
-
-		//Instantiate AIControlManager
+		//Instantiate SpaceAIControlManager
 		spaceAIControlManager = new SpaceAIControlManager(spaceEntityManager.getEntityList());
 		
 		//Instantiate PlayerControlManager
 		playerControlManager = new PlayerControlManager(spaceEntityManager.getEntityList(), keyboardDevice);
 		
-		//Instantiate CollisionManager
+		//Instantiate SpaceCollisionManager
 		spaceCollisionManager = new SpaceCollisionManager(spaceEntityManager.getEntityList());
+        
+        // Dynamically generate bitmap font (prevent pixellation)
+		parameter.size = 125; // font size in pixels
+		countdownFont = generator.generateFont(parameter);
+		countdownFont.getData().setScale(1.25f);
+		countdownFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        countdown = new GlyphLayout(countdownFont, "3"); //for getting width/height of text
+        generator.dispose(); // prevent mem leaks
+
 	}
 	
 	/**
@@ -164,6 +133,7 @@ public class GameScreen extends Scene {
 		update(deltaTime);
 
 		shape.begin(ShapeRenderer.ShapeType.Filled);
+			// Draw Entities (Shapes)
 			spaceEntityManager.drawEntities(shape);
 //			 Show hitboxes
 //			for(Entity entity: spaceEntityManager.getEntityList()) {
@@ -189,31 +159,31 @@ public class GameScreen extends Scene {
 
 		
 		batch.begin();
-        font.draw(batch, "Time: " + (int) countdownTime, 10, Gdx.graphics.getHeight() - 10);
-        	spaceEntityManager.drawEntities(batch);     	
-        //to display points on screen
-        font.draw(batch, "Points: \n" + playerPoints, 10, Gdx.graphics.getHeight() - 50);
-        
+			// HUD display (time left and points)
+	        font.draw(batch, "Time: " + (int) countdownTime, 10, Gdx.graphics.getHeight() - 10);
+	        font.draw(batch, "Points: \n" + playerPoints, 10, Gdx.graphics.getHeight() - 50);
+	        
+	        // Draw Entities (Sprite)
+	        spaceEntityManager.drawEntities(batch); 
 		batch.end();
 		
-		// fade in effect should be called after everything else
+		// Screen Transition Fade-In Effect
 		super.fadeIn(delay, deltaTime);
 
-		// show 3-2-1 countdown before starting game i.e. scene not yet fully faded in
+		// Countdown before Screen Fade-in
 		if(!super.isFadedIn()) {
 			batch.begin();
-			float countdownTextX = super.centeredXPos(countdown.width);
-	        float countdownTextY = ((float)Gdx.graphics.getHeight() / 2f) + (countdown.height / 2f);
-	        countdownFont.draw(batch, Integer.toString((int)delay), countdownTextX, countdownTextY);
+				float countdownTextX = super.centeredXPos(countdown.width);
+		        float countdownTextY = ((float)Gdx.graphics.getHeight() / 2f) + (countdown.height / 2f);
+		        countdownFont.draw(batch, Integer.toString((int)delay), countdownTextX, countdownTextY);
 			batch.end();
 		} else {
-			// only start executing game logic when the scene transition is complete
+			// Start Executing Game
 			playerControlManager.move(deltaTime);
 			spaceAIControlManager.move(deltaTime);
 			spaceCollisionManager.checkCollisions(spaceEntityManager,spaceAIControlManager);
 			
-			// test test
-			// hardcoded to go to level cleared screen after 10s of gameplay
+			// TESTING: hardcoded to go to level cleared screen after 10s of gameplay
 			if((int)countdownTime == 0) {
 				simulation.levelCleared(planet.getName(), planet.getTex());
 			}
@@ -228,7 +198,7 @@ public class GameScreen extends Scene {
             // Handle countdown completion, e.g., end the game or take appropriate action
         }
 
-		// start decreasing the main counter once delay over
+		// After Delay, start game timer
 		if(delay == 0) {
 			countdownTime -= deltaTime;
 		    // Accumulate time for spawning 
@@ -238,7 +208,7 @@ public class GameScreen extends Scene {
 
 	    // Spawn projectiles
 	    if (projectileSpawnTimer >= 0.2 && countdownTime > 0) {
-	        spaceEntityManager.add(new Projectile(player1.getPositionX()+35, player1.getPositionY() + 50, DEFAULT_PROJECTILE_WIDTH, DEFAULT_PROJECTILE_HEIGHT, Color.GREEN, true, true, DEFAULT_PROJECTILE_SPEED));
+	        spaceEntityManager.add((Projectile)spaceEntityFactory.createDynamicEntity("Projectile",player1.getPositionX(),player1.getPositionY()));
 	        spaceAIControlManager.update(spaceEntityManager.getEntityList());
 	        spaceCollisionManager.update(spaceEntityManager.getEntityList());
 	        projectileSpawnTimer -= 0.2; // Reset the timer for next second
@@ -246,15 +216,8 @@ public class GameScreen extends Scene {
 	    
 	    // Spawn debris
 	    if (debrisSpawnTimer >= 1 && countdownTime > 0) {
-	    	for (int i=0; i<(int)Math.floor(Math.random() * INITIAL_MAX_SPAWN)+INITIAL_MIN_SPAWN; i++) {
-	        	spaceEntityManager.add(new Debris(
-	        			(float) (Math.random() * (Gdx.graphics.getWidth() - 200) + 100),
-	            		(float)(Gdx.graphics.getHeight() + (float)(Math.random() * 600)),
-	            		DEFAULT_ENTITY_SPEED,
-	            		DEFAULT_ENTITY_RADIUS,
-	            		DEFAULT_AI_COLOR,
-	            		AI_CONTROL,
-	            		COLLIDABLE));	
+	    	for (int i=0; i<(int)Math.floor(Math.random() * DEBRIS_MAX_SPAWN)+DEBRIS_MIN_SPAWN; i++) {
+	        	spaceEntityManager.add((Debris)spaceEntityFactory.createEntity("Debris"));	
 	        }
 	    	spaceAIControlManager.update(spaceEntityManager.getEntityList());
 	        spaceCollisionManager.update(spaceEntityManager.getEntityList());

@@ -36,12 +36,7 @@ public class Player extends Entity implements iCollidable, iPlayer {
 			float radius, 
 			Color colour, 
 			boolean playable, 
-			boolean collidable,
-			
-			int leftKeybind,
-			int rightKeybind,
-			int upKeybind,
-			int downKeybind) {
+			boolean collidable) {
 		
 		super(positionX, positionY, radius, colour);
 
@@ -49,11 +44,6 @@ public class Player extends Entity implements iCollidable, iPlayer {
 		this.collidable = collidable;
 		this.boundingBox = new Rectangle(positionX-radius, positionY-radius, radius * 2, radius * 2);
 		this.speedMultiplier = speedMultiplier;
-		
-		this.leftKeybind = leftKeybind;
-		this.rightKeybind = rightKeybind;
-		this.upKeybind = upKeybind;
-		this.downKeybind = downKeybind;
 		
 		// HP and Stamina
 		this.healthBar = new StatsBar(positionX-45, positionY-60, Color.GREEN, Color.RED, 100, 10, 30, 100);

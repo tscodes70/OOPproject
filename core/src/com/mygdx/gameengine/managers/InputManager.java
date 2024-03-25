@@ -22,6 +22,10 @@ public class InputManager<T extends iInput> {
 		if (!inputList.containsKey(deviceId)) inputList.remove(deviceId);
 		else System.out.println("ERROR - Removal of input device failed");
 	}
+	
+	public T retrieve(int id) {
+		return inputList.get(id);
+	}
 
 	public HashMap<Integer, T> getInputList() {
 		return inputList;
