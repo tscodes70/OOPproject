@@ -63,9 +63,9 @@ public class GameScreen extends Scene {
     private float countdownTime = 180f;
     private float delay;
 
-    private int playerPoints = 100;//Initial points
-    
-    private Player player1;
+    private int playerPoints = 0;//Initial points
+
+	private Player player1;
     private float projectileSpawnTimer = 0;
     private float debrisSpawnTimer = 0;
     
@@ -184,11 +184,11 @@ public class GameScreen extends Scene {
 		} else {
 			// Start Executing Game
 			for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
-				((Player)player).playerGravity(Gdx.graphics.getDeltaTime(), planet.getGravity());//for gravity effect, renders gravity
+				((Player)player).playerGravity(Gdx.graphics.getDeltaTime(), planet.getScaledGravity());//for gravity effect, renders gravity
 			}
-			spaceplayerControlManager.move(deltaTime,planet.getGravity());
+			spaceplayerControlManager.move(deltaTime,planet.getScaledGravity());
 			spaceAIControlManager.move(deltaTime);
-			spaceCollisionManager.checkCollisions(spaceEntityManager,spaceAIControlManager,spaceplayerControlManager);
+			spaceCollisionManager.checkCollisions(spaceEntityManager,spaceAIControlManager,spaceplayerControlManager,this);
 			
 			// Projectile go past screen
 			List<Entity> entityList = spaceEntityManager.getEntityList();
@@ -286,4 +286,13 @@ public class GameScreen extends Scene {
 		spaceCollisionManager.dispose();
 		spaceEntityManager.dispose();
 	}
+	
+    public int getPlayerPoints() {
+		return playerPoints;
+	}
+
+	public void setPlayerPoints(int playerPoints) {
+		this.playerPoints = playerPoints;
+	}
+	
 }

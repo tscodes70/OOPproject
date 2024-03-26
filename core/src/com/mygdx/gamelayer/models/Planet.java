@@ -25,6 +25,8 @@ public class Planet extends Entity implements iPlanet {
 	private String name;
 	private String info;
 	private float gravity;
+	
+	private final float GRAVITYSCALE = 0.7f;
 
 	public Planet(
 			String name,
@@ -101,6 +103,7 @@ public class Planet extends Entity implements iPlanet {
 	public void setInfo(String info) { this.info = info; }
 	public float getGravity() { return gravity; }
 	public void setGravity(float gravity) { this.gravity = gravity; }
+	public float getScaledGravity() { return ((gravity/3.7f)*GRAVITYSCALE); }
 
 
 	

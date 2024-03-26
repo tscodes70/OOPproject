@@ -110,8 +110,8 @@ public class PlanetInfoScreen extends Scene {
 		descriptionFont.draw(batch, planet.getInfo(),  super.centeredXPos(600f), DESCRIPTION_Y_POS, TEXTAREA_WIDTH, Align.left, true);
 		
 		// vertical position of these elements are dynamic based on height of the description text
-		descriptionFont.draw(batch, "Buffs: placeholder", super.centeredXPos(600f), DESCRIPTION_Y_POS - descriptionGlyph.height - 40f, TEXTAREA_WIDTH, Align.left, true);
-		descriptionFont.draw(batch, "Debuffs: placeholder", super.centeredXPos(600f), DESCRIPTION_Y_POS - descriptionGlyph.height - 80f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Gravity: " + planet.getGravity() + " m/s^2", super.centeredXPos(600f), DESCRIPTION_Y_POS - descriptionGlyph.height - 40f, TEXTAREA_WIDTH, Align.left, true);
+//		descriptionFont.draw(batch, "Debuffs: placeholder", super.centeredXPos(600f), DESCRIPTION_Y_POS - descriptionGlyph.height - 80f, TEXTAREA_WIDTH, Align.left, true);
 		descriptionFont.draw(batch, "Highscore: placeholder/3 stars", super.centeredXPos(600f), DESCRIPTION_Y_POS - descriptionGlyph.height - 120f, TEXTAREA_WIDTH, Align.left, true);
 
 		batch.end();

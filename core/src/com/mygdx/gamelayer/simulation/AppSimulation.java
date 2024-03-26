@@ -281,14 +281,16 @@ public class AppSimulation extends Simulation {
 		
 		// Planet Hashmap
 		planetHashmap = new HashMap<String, Planet>();
-		planetHashmap.put("Mercury",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Mercury", 1.5f));
-		planetHashmap.put("Venus",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Venus", 1.5f));
-		planetHashmap.put("Earth",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Earth", 1.5f));
-		planetHashmap.put("Mars",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Mars", 1.5f));
-		planetHashmap.put("Jupiter",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Jupiter", 1.5f));
-		planetHashmap.put("Saturn",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Saturn", 1.5f));
-		planetHashmap.put("Uranus",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Uranus", 1.5f));
-		planetHashmap.put("Neptune",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Neptune", 1.5f));
+		planetHashmap.put("Mercury", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Mercury", 3.7f));
+		planetHashmap.put("Venus", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Venus", 8.87f));
+		planetHashmap.put("Earth", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Earth", 9.81f));
+		planetHashmap.put("Mars", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Mars", 3.71f));
+		planetHashmap.put("Jupiter", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Jupiter", 24.79f));
+		planetHashmap.put("Saturn", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Saturn", 10.44f));
+		planetHashmap.put("Uranus", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Uranus", 8.69f));
+		planetHashmap.put("Neptune", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Neptune", 11.15f));
+
+
 
 		// a reference to appsimulation is passed to scenes so that they can request changes of game state
 		sceneManager.add(new MainMenuScreen(menuButtons, ioManager, this));

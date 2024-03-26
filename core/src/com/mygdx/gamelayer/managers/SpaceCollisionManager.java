@@ -20,6 +20,7 @@ import com.mygdx.gamelayer.models.Debris;
 import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.Player;
 import com.mygdx.gamelayer.models.Projectile;
+import com.mygdx.gamelayer.screens.GameScreen;
 
 public class SpaceCollisionManager extends CollisionManager {
 	
@@ -36,12 +37,12 @@ public class SpaceCollisionManager extends CollisionManager {
      * Calls handleCollisions method to then resolve these detected collisions.
      * @param entityManager
      */
-	 public void checkCollisions(SpaceEntityManager entityManager, SpaceAIControlManager aiControlManager, SpacePlayerControlManager playerControlManager) {
+	 public void checkCollisions(SpaceEntityManager entityManager, SpaceAIControlManager aiControlManager, SpacePlayerControlManager playerControlManager, GameScreen gamescreen) {
 		 for (int i = 0; i < super.getCollidableList().size() - 1; i++) {
 	            for (int j = i + 1; j < super.getCollidableList().size(); j++) {
 
 	                if (super.getCollidableList().get(i).getBoundingBox().overlaps(super.getCollidableList().get(j).getBoundingBox())) {
-	                	handleCollisions(entityManager, aiControlManager,playerControlManager, super.getCollidableList().get(i),super.getCollidableList().get(j));
+	                	handleCollisions(entityManager, aiControlManager,playerControlManager, super.getCollidableList().get(i),super.getCollidableList().get(j), gamescreen);
 	                	
 	                }
 	            }
@@ -57,16 +58,18 @@ public class SpaceCollisionManager extends CollisionManager {
 	  * @param x
 	  * @param y
 	  */
-	 public void handleCollisions(SpaceEntityManager entityManager, SpaceAIControlManager aiControlManager, SpacePlayerControlManager playerControlManager, iCollidable x, iCollidable y) {
+	 public void handleCollisions(SpaceEntityManager entityManager, SpaceAIControlManager aiControlManager, SpacePlayerControlManager playerControlManager, iCollidable x, iCollidable y, GameScreen gamescreen) {
 		 if (x instanceof iDebris && y instanceof iSpacePlayer){
 			 // Remove Debris
 			this.remove(x);	
+			gamescreen.setPlayerPoints(gamescreen.getPlayerPoints()-50);
 			((Debris)x).handleCollision(((Player)y),entityManager,aiControlManager,playerControlManager);
 			System.out.println("Collision Between Player & Debris - Debris Entity Removed");
 				 
 		 }else if (x instanceof iSpacePlayer && y instanceof iDebris) {
 			// Remove Debris
 			this.remove(y);	
+			gamescreen.setPlayerPoints(gamescreen.getPlayerPoints()-50);
 			((Player)x).handleCollision(((Debris)y),entityManager,aiControlManager,playerControlManager);
 			System.out.println("Collision Between Player & Debris - Debris Entity Removed");
 				 
@@ -74,7 +77,7 @@ public class SpaceCollisionManager extends CollisionManager {
 			 // Remove Projectile & Debris
 			this.remove(x);
 			this.remove(y);
-
+			gamescreen.setPlayerPoints(gamescreen.getPlayerPoints()+100);
 			((Projectile)x).handleCollision(((Debris)y),entityManager,aiControlManager,playerControlManager);
 			System.out.println("Collision Between Projectile & Debris - Both Removed");
 				 
@@ -82,7 +85,7 @@ public class SpaceCollisionManager extends CollisionManager {
 			 // Remove Projectile & Debris
 			 this.remove(y);
 			 this.remove(x);
-			 
+			 gamescreen.setPlayerPoints(gamescreen.getPlayerPoints()+100);
 			 ((Debris)x).handleCollision(((Projectile)y),entityManager,aiControlManager,playerControlManager);
 			 System.out.println("Collision Between Projectile & Debris - Both Removed");
 			 
