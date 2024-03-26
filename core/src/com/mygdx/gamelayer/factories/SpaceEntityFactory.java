@@ -17,7 +17,8 @@ public class SpaceEntityFactory {
 	private final int DEFAULT_PLAYER_SPEED = 3;
 	private final int DEFAULT_PLAYER_WIDTH = 80;
 	private final int DEFAULT_PLAYER_HEIGHT = 100;
-	
+	private final int PLAYER_STAMINA_REGEN = 2;
+
 	private final int DEFAULT_PROJECTILE_XOFFSET = 35;
 	private final int DEFAULT_PROJECTILE_YOFFSET = 50;
 	private final int DEFAULT_PROJECTILE_SPEED = 5;
@@ -68,7 +69,7 @@ public class SpaceEntityFactory {
         }
 	}
 	
-	public Entity createEntity(String entityType, int id, int left, int right, int up, int down) {
+	public Entity createEntity(String entityType, int id, int left, int right, int up, int down, int shift) {
 		if (entityType == null) {
             return null;
 		}
@@ -82,13 +83,16 @@ public class SpaceEntityFactory {
                 					DEFAULT_PLAYER_HEIGHT,
                 					DEFAULT_PLAYER_X, 
                 					DEFAULT_PLAYER_Y, 
-                					DEFAULT_PLAYER_SPEED, 
+                					DEFAULT_PLAYER_SPEED,
+									PLAYER_STAMINA_REGEN,
                 					PLAYABLE,
                 					COLLIDABLE,
                 					left,
                 					right,
                 					up,
-                					down);		
+                					down,
+							shift
+							);
                 default:
                     return null;
             }
@@ -139,4 +143,6 @@ public class SpaceEntityFactory {
 	    	}
         }
     }
+
 }
+

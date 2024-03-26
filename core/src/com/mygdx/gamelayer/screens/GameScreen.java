@@ -95,10 +95,10 @@ public class GameScreen extends Scene {
 		spaceEntityFactory = new SpaceEntityFactory(ioManager);
 		
 		// Populate SpaceEntityManager of Player & Debris
-		player1 = (Player)spaceEntityFactory.createEntity("Player",1, Keys.LEFT, Keys.RIGHT, Keys.UP, Keys.DOWN);
+		player1 = (Player)spaceEntityFactory.createEntity("Player",1, Keys.LEFT, Keys.RIGHT, Keys.UP, Keys.DOWN, Keys.SHIFT_LEFT);
 		spaceEntityManager.add(player1);
 		
-		Player player2 = (Player)spaceEntityFactory.createEntity("Player",2, Keys.A, Keys.D, Keys.W, Keys.S);
+		Player player2 = (Player)spaceEntityFactory.createEntity("Player",2, Keys.A, Keys.D, Keys.W, Keys.S, Keys.SHIFT_RIGHT);
 		spaceEntityManager.add(player2);
 		
         for (int i=0; i<(int)Math.floor(Math.random() * DEBRIS_MAX_SPAWN) + DEBRIS_MIN_SPAWN; i++) {

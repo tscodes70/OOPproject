@@ -34,7 +34,8 @@ public class Player extends Entity implements iSpacePlayer {
 	private int rightKeybind;
 	private int upKeybind;
 	private int downKeybind;
-	
+	private int shiftKeybind;
+
 	private final int DEFAULT_ENTITY_SPEED_MULTIPLIER = 100;
 
 
@@ -71,7 +72,8 @@ public class Player extends Entity implements iSpacePlayer {
 			float positionX, 
 			float positionY, 
 			
-			int speedMultiplier, 
+			int speedMultiplier,
+			float staminaRegenRate,
 
 			boolean playable, 
 			boolean collidable,
@@ -79,7 +81,8 @@ public class Player extends Entity implements iSpacePlayer {
 			int leftKeybind,
 			int rightKeybind,
 			int upKeybind,
-			int downKeybind) {
+			int downKeybind,
+			int shiftKeybind) {
 		
 		super(texture, positionX, positionY, width, height);
 
@@ -88,12 +91,14 @@ public class Player extends Entity implements iSpacePlayer {
 		this.collidable = collidable;
 		this.boundingBox = new Rectangle(positionX, positionY, width, height);
 		this.speedMultiplier = speedMultiplier;
+		this.staminaRegenRate = staminaRegenRate;
 		
 		this.leftKeybind = leftKeybind;
 		this.rightKeybind = rightKeybind;
 		this.upKeybind = upKeybind;
 		this.downKeybind = downKeybind;
-		
+		this.shiftKeybind = shiftKeybind;
+
 		// HP and Stamina
 		this.healthBar = new StatsBar(positionX, positionY, Color.GREEN, Color.RED, 80, 5, 100, 100);
 		this.staminaBar = new StatsBar(positionX, positionY-5, Color.YELLOW, Color.GRAY, 80, 5, 100, 100);
@@ -133,14 +138,29 @@ public class Player extends Entity implements iSpacePlayer {
 	  * @param deltaTime
 	  */
 	 public void moveLeft(float deltaTime, float gravity) {
-		        float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
+		 float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
+		 float currentStamina = staminaBar.getCurrentValue();
+		 System.out.println(currentStamina);
 
-		        // Ensure entity is within left boundary of screen
-		        if (super.getPositionX() - distanceToMove - super.getRadius() >= 0) {
-		        	super.setPositionX(super.getPositionX() - distanceToMove);
-		        	update(deltaTime);
-		        }
-		    }
+		 if (Gdx.input.isKeyPressed(shiftKeybind)) {
+			 if (currentStamina > 0 && currentStamina <= staminaBar.getMaxValue()) {
+				 distanceToMove = ((speedMultiplier + 5) * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
+				 currentStamina -= staminaRegenRate;
+				 staminaBar.setCurrentValue(currentStamina);
+			 }
+		 } else {
+			 if (currentStamina >= 0 && currentStamina < staminaBar.getMaxValue()) {
+				 currentStamina += staminaRegenRate;
+				 staminaBar.setCurrentValue(currentStamina);
+			 }
+		 }
+
+		 // Ensure entity is within left boundary of screen
+		 if (super.getPositionX() - distanceToMove - super.getRadius() >= 0) {
+			 super.setPositionX(super.getPositionX() - distanceToMove);
+			 update(deltaTime);
+		 }
+	 }
 		
 
 	 /**
@@ -148,14 +168,29 @@ public class Player extends Entity implements iSpacePlayer {
 	  * @param deltaTime
 	  */
 	 public void moveRight(float deltaTime, float gravity) {
-		        float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
+		 float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
+		 float currentStamina = staminaBar.getCurrentValue();
+		 System.out.println(currentStamina);
 
-		        // Ensure entity is within right boundary of screen
-		        if (super.getPositionX() + distanceToMove + super.getRadius() <= Gdx.graphics.getWidth()-super.getWidth()) {
-		        	super.setPositionX(super.getPositionX() + distanceToMove);
-		        	update(deltaTime);		        
-		            }
-		    }
+		 if (Gdx.input.isKeyPressed(shiftKeybind)) {
+			 if (currentStamina > 0 && currentStamina <= staminaBar.getMaxValue()) {
+				 distanceToMove = ((speedMultiplier + 5) * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
+				 currentStamina -= staminaRegenRate;
+				 staminaBar.setCurrentValue(currentStamina);
+			 }
+		 } else {
+			 if (currentStamina >= 0 && currentStamina < staminaBar.getMaxValue()) {
+				 currentStamina += staminaRegenRate;
+				 staminaBar.setCurrentValue(currentStamina);
+			 }
+		 }
+
+		 // Ensure entity is within right boundary of screen
+		 if (super.getPositionX() + distanceToMove + super.getRadius() <= Gdx.graphics.getWidth() - super.getWidth()) {
+			 super.setPositionX(super.getPositionX() + distanceToMove);
+			 update(deltaTime);
+		 }
+	 }
 		
 
 	 /**
@@ -163,14 +198,29 @@ public class Player extends Entity implements iSpacePlayer {
 	  * @param deltaTime
 	  */
 	 public void moveUp(float deltaTime, float gravity) {
-		        float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
+		 float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
+		 float currentStamina = staminaBar.getCurrentValue();
+		 System.out.println(currentStamina);
 
-		        // Ensure entity is within top boundary of screen
-		        if (super.getPositionY() + distanceToMove + super.getRadius() <= Gdx.graphics.getHeight()-getBoundingBox().height) {  // Adjusted boundary check
-		        	super.setPositionY(super.getPositionY() + distanceToMove);
-		        	update(deltaTime);		       
-		            }
-		    }
+		 if (Gdx.input.isKeyPressed(shiftKeybind)) {
+			 if (currentStamina > 0 && currentStamina <= staminaBar.getMaxValue()) {
+				 distanceToMove = ((speedMultiplier + 5) * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
+				 currentStamina -= staminaRegenRate;
+				 staminaBar.setCurrentValue(currentStamina);
+			 }
+		 } else {
+			 if (currentStamina >= 0 && currentStamina < staminaBar.getMaxValue()) {
+				 currentStamina += staminaRegenRate;
+				 staminaBar.setCurrentValue(currentStamina);
+			 }
+		 }
+
+		 // Ensure entity is within top boundary of screen
+		 if (super.getPositionY() + distanceToMove + super.getRadius() <= Gdx.graphics.getHeight() - getBoundingBox().height) {  // Adjusted boundary check
+			 super.setPositionY(super.getPositionY() + distanceToMove);
+			 update(deltaTime);
+		 }
+	 }
 		
 
 	 /**
@@ -178,13 +228,29 @@ public class Player extends Entity implements iSpacePlayer {
 	  * @param deltaTime
 	  */
 	 public void moveDown(float deltaTime, float gravity) {
-		        float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
+		 float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
+		 float currentStamina = staminaBar.getCurrentValue();
+		 System.out.println(currentStamina);
 
-		        // Ensure entity is within bottom boundary of screen
-		        if (super.getPositionY() - distanceToMove - super.getRadius() >= 200) {
-		        	super.setPositionY(super.getPositionY() - distanceToMove);
-		        	update(deltaTime);		        }
-		    }
+		 if (Gdx.input.isKeyPressed(shiftKeybind)) {
+			 if (currentStamina > 0 && currentStamina <= staminaBar.getMaxValue()) {
+				 distanceToMove = ((speedMultiplier + 5) * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
+				 currentStamina -= staminaRegenRate;
+				 staminaBar.setCurrentValue(currentStamina);
+			 }
+		 } else {
+			 if (currentStamina >= 0 && currentStamina < staminaBar.getMaxValue()) {
+				 currentStamina += staminaRegenRate;
+				 staminaBar.setCurrentValue(currentStamina);
+			 }
+		 }
+
+		 // Ensure entity is within bottom boundary of screen
+		 if (super.getPositionY() - distanceToMove - super.getRadius() >= 200) {
+			 super.setPositionY(super.getPositionY() - distanceToMove);
+			 update(deltaTime);
+		 }
+	 }
 		
     
 	// Interfaces Overrides
@@ -242,6 +308,9 @@ public class Player extends Entity implements iSpacePlayer {
 	public void setUpKeybind(int upKeybind) {this.upKeybind = upKeybind;}
 	public int getDownKeybind() {return downKeybind;}
 	public void setDownKeybind(int downKeybind) {this.downKeybind = downKeybind;}
+	public int getShiftKeybind() {return shiftKeybind;}
+	public void setShiftKeybind(int shiftKeybind) {this.shiftKeybind = shiftKeybind;}
+
 	public int getId() { return id; }
 	public void setId(int id) { this.id = id; }
 	public StatsBar getHealthBar() { return healthBar; }
