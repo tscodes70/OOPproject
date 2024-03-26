@@ -3,13 +3,21 @@ package com.mygdx.gamelayer.models;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
+import com.mygdx.gameengine.interfaces.iAI;
 import com.mygdx.gameengine.interfaces.iCollidable;
 import com.mygdx.gameengine.interfaces.iPlayer;
+import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gamelayer.interfaces.iDebris;
+import com.mygdx.gamelayer.interfaces.iPlanet;
+import com.mygdx.gamelayer.interfaces.iProjectile;
 import com.mygdx.gamelayer.interfaces.iSpacePlayer;
+import com.mygdx.gamelayer.managers.SpaceAIControlManager;
+import com.mygdx.gamelayer.managers.SpaceEntityManager;
 
 public class Player extends Entity implements iSpacePlayer {
 	
@@ -179,7 +187,49 @@ public class Player extends Entity implements iSpacePlayer {
 		    }
 		
     
-    
+	// Interfaces Overrides
+	 @Override
+		public void handleCollision(Entity collidedEntity, SpaceEntityManager spaceEntityManager, SpaceAIControlManager spaceAIControlManager, PlayerControlManager spacePlayerControlManager) {
+			if(collidedEntity instanceof iSpacePlayer) {
+				
+			}else if (collidedEntity instanceof iPlanet) {
+	
+			}else if (collidedEntity instanceof iDebris) {
+				// Reduce player health
+				spaceEntityManager.updateEntityHealth(this,10);
+				
+				// Remove debris entity
+				spaceEntityManager.remove((Entity) collidedEntity);	
+				spaceAIControlManager.remove((iAI) collidedEntity);
+				
+				// Update player health
+				spacePlayerControlManager.update(spaceEntityManager.getEntityList());
+			}else if (collidedEntity instanceof iProjectile) {
+			}
+		}
+		
+		@Override
+		public void draw(ShapeRenderer shape) {
+			shape.setColor(super.getColour());
+	        if(super.getRadius() != 0) {
+	        	shape.circle(getPositionX(), getPositionY(), getRadius());
+	        }else if(super.getWidth() != 0) {
+	        	shape.rect(getPositionX(), getPositionY(), getWidth(), getHeight());
+	        }
+		}
+
+		@Override
+		public void draw(SpriteBatch batch, float width, float height) {
+			batch.draw(super.getTex(), getPositionX(), getPositionY(), width, height);
+		}
+		
+		@Override public boolean isPlayable() { return playable; }
+		@Override public void setPlayable(boolean playable) { this.playable = playable; }
+		@Override public boolean isCollidable() { return collidable; }
+		@Override public void setCollidable(boolean collidable) { this.collidable = collidable; }
+		@Override public Rectangle getBoundingBox() { return boundingBox; }
+		@Override public void setBoundingBox(Rectangle boundingBox) { this.boundingBox = boundingBox; }
+
 
 // Getter Setter
 	public float getStaminaRegenRate() { return staminaRegenRate; }
@@ -192,73 +242,21 @@ public class Player extends Entity implements iSpacePlayer {
 	public void setUpKeybind(int upKeybind) {this.upKeybind = upKeybind;}
 	public int getDownKeybind() {return downKeybind;}
 	public void setDownKeybind(int downKeybind) {this.downKeybind = downKeybind;}
+	public int getId() { return id; }
+	public void setId(int id) { this.id = id; }
+	public StatsBar getHealthBar() { return healthBar; }
+	public void setHealthBar(StatsBar healthBar) { this.healthBar = healthBar; }
+	public StatsBar getStaminaBar() { return staminaBar; }
+	public void setStaminaBar(StatsBar staminaBar) { this.staminaBar = staminaBar; }
+	public int getSpeedMultiplier() { return speedMultiplier; }
+	public void setSpeedMultiplier(int speedMultiplier) { this.speedMultiplier = speedMultiplier; }
+
 	
 	
-public StatsBar getHealthBar() {
-		return healthBar;
-	}
 
-	public void setHealthBar(StatsBar healthBar) {
-		this.healthBar = healthBar;
-	}
 
-	public StatsBar getStaminaBar() {
-		return staminaBar;
-	}
 
-	public void setStaminaBar(StatsBar staminaBar) {
-		this.staminaBar = staminaBar;
-	}
 
-	// my brain thinking how to incorporate imovable
-	public int getSpeedMultiplier() {
-		return speedMultiplier;
-	}
-
-	public void setSpeedMultiplier(int speedMultiplier) {
-		this.speedMultiplier = speedMultiplier;
-		
-	}
-	
-// Interfaces Overrides
-	
-	@Override
-	public boolean isPlayable() {
-		return playable;
-	}
-
-	@Override
-	public void setPlayable(boolean playable) {
-		this.playable = playable;
-	}
-
-	@Override
-	public boolean isCollidable() {
-		return collidable;
-	}
-
-	@Override
-	public void setCollidable(boolean collidable) {
-		this.collidable = collidable;
-	}
-
-	@Override
-	public Rectangle getBoundingBox() {
-		return boundingBox;
-	}
-
-	@Override
-	public void setBoundingBox(Rectangle boundingBox) {
-		this.boundingBox = boundingBox;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 
 

@@ -43,7 +43,7 @@ public class PlayerControlManager{
      */
 	public void remove(iPlayer player) {
 		playerList.remove(player);
-		player.dispose();
+		((Entity)player).dispose();
 	}
 	
 	/**
@@ -74,7 +74,7 @@ public class PlayerControlManager{
 	 *  Disposal of PlayerControlManager Resources
 	 */
 	public void dispose() {
-		for (iPlayer p : playerList) p.dispose();
+		for (iPlayer player : playerList) ((Entity)player).dispose();
 		System.out.println("PlayerControlManager Resources Disposed");
 	}
 

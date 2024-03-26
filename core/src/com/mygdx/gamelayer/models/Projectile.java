@@ -2,12 +2,20 @@ package com.mygdx.gamelayer.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.gameengine.interfaces.iAI;
 import com.mygdx.gameengine.interfaces.iCollidable;
 import com.mygdx.gameengine.interfaces.iMovable;
+import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gamelayer.interfaces.iDebris;
+import com.mygdx.gamelayer.interfaces.iPlanet;
 import com.mygdx.gamelayer.interfaces.iProjectile;
+import com.mygdx.gamelayer.interfaces.iSpacePlayer;
+import com.mygdx.gamelayer.managers.SpaceAIControlManager;
+import com.mygdx.gamelayer.managers.SpaceEntityManager;
 
 public class Projectile extends Entity implements iProjectile {
 	
@@ -58,6 +66,46 @@ public class Projectile extends Entity implements iProjectile {
         }
 	}
 
+	 @Override
+	public void handleCollision(Entity collidedEntity, SpaceEntityManager spaceEntityManager, SpaceAIControlManager spaceAIControlManager, PlayerControlManager spacePlayerControlManager) {
+		if(collidedEntity instanceof iSpacePlayer) {
+				
+		}else if (collidedEntity instanceof iPlanet) {
+	
+		}else if (collidedEntity instanceof iDebris) {
+			// Remove Debris
+			spaceEntityManager.remove((Entity) collidedEntity);
+			spaceAIControlManager.remove((iAI) collidedEntity);
+				 
+			// Remove Projectile
+			spaceEntityManager.remove((Entity) this);	
+			spaceAIControlManager.remove((iAI) this);
+			
+		}else if (collidedEntity instanceof iProjectile) {
+		}
+	}
+	 
+	@Override
+	public void move(float deltaTime, float gravity) {
+		// TODO Auto-generated method stub
+			
+	}
+	 
+	@Override
+	public void draw(ShapeRenderer shape) {
+		shape.setColor(super.getColour());
+        if(super.getRadius() != 0) {
+        	shape.circle(getPositionX(), getPositionY(), getRadius());
+        }else if(super.getWidth() != 0) {
+        	shape.rect(getPositionX(), getPositionY(), getWidth(), getHeight());
+        }
+	}
+
+	@Override
+	public void draw(SpriteBatch batch, float width, float height) {
+		batch.draw(super.getTex(), getPositionX(), getPositionY(), width, height);
+	}
+	
 	@Override
 	public boolean isCollidable() {
 		// TODO Auto-generated method stub
@@ -108,5 +156,7 @@ public class Projectile extends Entity implements iProjectile {
 		this.speedMultiplier = speedMultiplier;
 		
 	}
+
+
 
 }

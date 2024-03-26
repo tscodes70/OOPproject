@@ -1,11 +1,20 @@
 package com.mygdx.gamelayer.models;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
+import com.mygdx.gameengine.interfaces.iAI;
 import com.mygdx.gameengine.interfaces.iCollidable;
+import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gamelayer.interfaces.iDebris;
 import com.mygdx.gamelayer.interfaces.iPlanet;
+import com.mygdx.gamelayer.interfaces.iProjectile;
+import com.mygdx.gamelayer.interfaces.iSpacePlayer;
+import com.mygdx.gamelayer.managers.SpaceAIControlManager;
+import com.mygdx.gamelayer.managers.SpaceEntityManager;
 
 public class Planet extends Entity implements iPlanet {
 	
@@ -37,68 +46,62 @@ public class Planet extends Entity implements iPlanet {
 		this.maxHP = 5;
 	}
 
-// Getter Setter
-	public float getCurrentHP() { return currentHP; }
-	public void setCurrentHP(float currentHP) { this.currentHP = currentHP; }
-	public float getMaxHP() { return maxHP; }
-	public void setMaxHP(float maxHP) { this.maxHP = maxHP; }
+
 
 // Interface Overrides
 	@Override
-	public boolean isCollidable() {
-		// TODO Auto-generated method stub
-		return collidable;
-	}
-
-	@Override
-	public void setCollidable(boolean collidable) {
-		// TODO Auto-generated method stub
-		this.collidable = collidable;
-	}
-
-	@Override
-	public Rectangle getBoundingBox() {
-		// TODO Auto-generated method stub
-		return boundingBox;
+	public void handleCollision(Entity collidedEntity, SpaceEntityManager spaceEntityManager, SpaceAIControlManager spaceAIControlManager, PlayerControlManager spacePlayerControlManager) {
+		if (collidedEntity instanceof iDebris) {
+			// Reduce Planet health
+			spaceEntityManager.updateEntityHealth(this,1);
+						 
+			// Remove Debris
+			spaceEntityManager.remove((Entity) collidedEntity);
+			spaceAIControlManager.remove((iAI) collidedEntity);
+		}
 	}
 	
-	@Override
-	public void setBoundingBox(Rectangle boundingBox) {
-		// TODO Auto-generated method stub
-		this.boundingBox = boundingBox;
-	}
-
 	@Override
 	public void update(float deltatime) {
 		// TODO Auto-generated method stub
 		
 	}
-
-	public String getName() {
-		return name;
+	
+	@Override
+	public void draw(ShapeRenderer shape) {
+		shape.setColor(super.getColour());
+        if(super.getRadius() != 0) {
+        	shape.circle(getPositionX(), getPositionY(), getRadius());
+        }else if(super.getWidth() != 0) {
+        	shape.rect(getPositionX(), getPositionY(), getWidth(), getHeight());
+        }
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getInfo() {
-		return info;
-	}
-
-	public void setInfo(String info) {
-		this.info = info;
-	}
-
-	public float getGravity() {
-		return gravity;
-	}
-
-	public void setGravity(float gravity) {
-		this.gravity = gravity;
+	@Override
+	public void draw(SpriteBatch batch, float width, float height) {
+		batch.draw(super.getTex(), getPositionX(), getPositionY(), width, height);
 	}
 	
+	@Override public boolean isCollidable() { return collidable; }
+	@Override public void setCollidable(boolean collidable) { this.collidable = collidable; }
+	@Override public Rectangle getBoundingBox() { return boundingBox; }
+	@Override public void setBoundingBox(Rectangle boundingBox) { this.boundingBox = boundingBox; }
+
+
+
 	
+	// Getter Setter
+	public float getCurrentHP() { return currentHP; }
+	public void setCurrentHP(float currentHP) { this.currentHP = currentHP; }
+	public float getMaxHP() { return maxHP; }
+	public void setMaxHP(float maxHP) { this.maxHP = maxHP; }
+	public String getName() { return name; }
+	public void setName(String name) { this.name = name; }
+	public String getInfo() { return info; }
+	public void setInfo(String info) { this.info = info; }
+	public float getGravity() { return gravity; }
+	public void setGravity(float gravity) { this.gravity = gravity; }
+
 
 	
 }

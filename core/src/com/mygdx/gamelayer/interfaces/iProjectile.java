@@ -5,6 +5,6 @@ import com.mygdx.gameengine.interfaces.iCollidable;
 import com.mygdx.gameengine.interfaces.iEntity;
 import com.mygdx.gameengine.interfaces.iMovable;
 
-public interface iProjectile extends iCollidable, iMovable, iAI{
+public interface iProjectile extends iSpaceCollidable, iSpaceMovable, iAI{
 
 }

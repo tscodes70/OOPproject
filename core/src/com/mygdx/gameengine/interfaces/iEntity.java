@@ -8,8 +8,6 @@ public interface iEntity {
     void setPositionY(float y);
     void update(float deltatime);
     
-    // For shapes
-    float getRadius();
     
     // Disposal
     void dispose();

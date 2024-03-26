@@ -27,7 +27,7 @@ public class SpacePlayerControlManager extends PlayerControlManager {
      */
 	public void remove(iSpacePlayer player) {
 		playerList.remove(player);
-		player.dispose();
+		((Entity)player).dispose();
 	}
 	
 	 @Override

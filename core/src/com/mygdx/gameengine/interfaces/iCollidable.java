@@ -1,6 +1,7 @@
 package com.mygdx.gameengine.interfaces;
 
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.gameengine.models.Entity;
 
 public interface iCollidable {
 

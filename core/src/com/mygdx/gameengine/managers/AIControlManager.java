@@ -38,7 +38,7 @@ public class AIControlManager{
      */
     public void remove(iAI ai) {
     	aiList.remove(ai);
-    	ai.dispose();
+    	((Entity)ai).dispose();
     }
     
     public void extractAI(List<Entity> entityList) {
@@ -62,7 +62,7 @@ public class AIControlManager{
      * @param deltaTime
      */
     public void move(float deltaTime) {
-        for (iAI ai : aiList) ai.update(deltaTime);
+        for (iAI ai : aiList) ((Entity)ai).update(deltaTime);
     }
     
     /**
@@ -77,7 +77,7 @@ public class AIControlManager{
      * Disposing of AIControlManager Resources
      */
     public void dispose() {
-    	for (iAI a : aiList) a.dispose();
+    	for (iAI ai : aiList) ((Entity)ai).dispose();
 		System.out.println("AIControlManager Resources Disposed");
     }
 

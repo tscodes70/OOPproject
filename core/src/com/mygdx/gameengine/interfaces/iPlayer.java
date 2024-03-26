@@ -1,6 +1,6 @@
 package com.mygdx.gameengine.interfaces;
 
-public interface iPlayer extends iEntity{
+public interface iPlayer {
 
     boolean isPlayable();
     void setPlayable(boolean playable);

@@ -1,6 +1,6 @@
 package com.mygdx.gameengine.interfaces;
 
-public interface iAI extends iEntity{
+public interface iAI {
 	
     boolean isAIControl();
     void setAIControl(boolean aiControl);
