@@ -1,6 +1,8 @@
 package com.mygdx.gamelayer.screens;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -187,6 +189,19 @@ public class GameScreen extends Scene {
 			spaceAIControlManager.move(deltaTime);
 			spaceCollisionManager.checkCollisions(spaceEntityManager,spaceAIControlManager,playerControlManager);
 			
+			// Projectile go past screen
+			List<Entity> entityList = spaceEntityManager.getEntityList();
+			Iterator<Entity> iterator = entityList.iterator();
+			while (iterator.hasNext()) {
+			    Entity projectile = iterator.next();
+			    if (projectile instanceof Projectile) {
+			        if (((Projectile) projectile).getPositionY() >= Gdx.graphics.getHeight()) {
+			            iterator.remove(); // Safely remove the current element
+			            spaceAIControlManager.update(spaceEntityManager.getEntityList());
+			        }
+			    }
+			}
+			
 			// TESTING: hardcoded to go to level cleared screen after 10s of gameplay
 			if((int)countdownTime == 0) {
 				System.out.println("YOU VERY ZAI BRO");
@@ -207,7 +222,7 @@ public class GameScreen extends Scene {
 	
 	public void update(float deltaTime) {
 		// TESTING: PRINT
-		System.out.println("Planet Hp " + planet.getCurrentHP() + "/" + planet.getMaxHP());
+//		System.out.println("Planet Hp " + planet.getCurrentHP() + "/" + planet.getMaxHP());
 		delay -= deltaTime;
         // Check if the countdown has reached zero or below
 		if (delay <= 0) {
