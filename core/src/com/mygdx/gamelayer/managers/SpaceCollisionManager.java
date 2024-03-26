@@ -13,6 +13,7 @@ import com.mygdx.gameengine.managers.EntityManager;
 import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gamelayer.interfaces.iProjectile;
+import com.mygdx.gamelayer.interfaces.iSpacePlayer;
 import com.mygdx.gamelayer.interfaces.iDebris;
 import com.mygdx.gamelayer.interfaces.iPlanet;
 import com.mygdx.gamelayer.models.Debris;
@@ -57,13 +58,13 @@ public class SpaceCollisionManager extends CollisionManager {
 	  * @param y
 	  */
 	 public void handleCollisions(SpaceEntityManager entityManager, SpaceAIControlManager aiControlManager, SpacePlayerControlManager playerControlManager, iCollidable x, iCollidable y) {
-		 if (x instanceof iDebris && y instanceof iPlayer){
+		 if (x instanceof iDebris && y instanceof iSpacePlayer){
 			 // Remove Debris
 			this.remove(x);	
 			((Debris)x).handleCollision(((Player)y),entityManager,aiControlManager,playerControlManager);
 			System.out.println("Collision Between Player & Debris - Debris Entity Removed");
 				 
-		 }else if (x instanceof iPlayer && y instanceof iDebris) {
+		 }else if (x instanceof iSpacePlayer && y instanceof iDebris) {
 			// Remove Debris
 			this.remove(y);	
 			((Player)x).handleCollision(((Debris)y),entityManager,aiControlManager,playerControlManager);
