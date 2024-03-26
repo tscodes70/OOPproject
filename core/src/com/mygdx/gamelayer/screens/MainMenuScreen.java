@@ -19,6 +19,7 @@ import com.mygdx.gameengine.managers.ButtonControlManager;
 import com.mygdx.gameengine.managers.ButtonManager;
 import com.mygdx.gameengine.managers.CollisionManager;
 import com.mygdx.gameengine.managers.EntityManager;
+import com.mygdx.gameengine.managers.IOManager;
 import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.managers.SceneManager;
 import com.mygdx.gameengine.models.Button;
@@ -35,6 +36,7 @@ public class MainMenuScreen extends Scene {
     private ButtonManager buttonManager;
     private ButtonControlManager buttonControlManager;
     private AppSimulation simulation;
+    private Mouse mouseDevice;
     
 	private final String IMAGE_PATH = "image";
 	
@@ -49,10 +51,13 @@ public class MainMenuScreen extends Scene {
 	
 	//Set bg image
 	Texture bgImage = new Texture(Gdx.files.internal("image/spacep.png"));
+	
 
 	
-	public MainMenuScreen(HashMap<String, Texture> buttonTextures, Texture bgImage, Sound bgMusic, Mouse mouseDevice, AppSimulation simulation) {
-		super(bgMusic,bgImage);
+	public MainMenuScreen(HashMap<String, Texture> buttonTextures, IOManager ioManager, AppSimulation simulation) {
+		super(
+				(Sound)ioManager.getOutputManager().retrieve("SSBGMusic"),
+				(Texture)ioManager.getOutputManager().retrieve("SSBGImage"));
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
 		int screenWidth = Gdx.graphics.getWidth();
@@ -62,6 +67,7 @@ public class MainMenuScreen extends Scene {
 		
 		
 		this.simulation = simulation;
+		this.mouseDevice = (Mouse)ioManager.getInputManager().retrieve(2);
 		
 		//Instantiate ButtonManager
 		buttonManager = new ButtonManager();

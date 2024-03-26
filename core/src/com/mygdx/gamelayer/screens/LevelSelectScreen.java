@@ -14,6 +14,7 @@ import com.mygdx.gameengine.managers.ButtonControlManager;
 import com.mygdx.gameengine.managers.ButtonManager;
 import com.mygdx.gameengine.managers.CollisionManager;
 import com.mygdx.gameengine.managers.EntityManager;
+import com.mygdx.gameengine.managers.IOManager;
 import com.mygdx.gameengine.managers.OutputManager;
 import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.managers.SceneManager;
@@ -33,36 +34,43 @@ public class LevelSelectScreen extends Scene {
     private ButtonControlManager buttonControlManager;
     private AppSimulation simulation;
     private float fadeInOverlayOpacity = 1.0f;
+    private Mouse mouseDevice;
     
     private final String VIEW_LEVEL_INFO = "ViewLevelInfo";
     private final String RETURN_TO_MAIN = "ReturnToMain";
+    
+    private final float BUTTONSCALE = 0.2f;
 
     private HashMap<String, Planet> planetHashmap;
 	
-	public LevelSelectScreen(HashMap<String, Texture> buttonTextures, HashMap<String, Planet> planetHashmap, Texture bgImage, Sound bgMusic, Mouse mouseDevice, AppSimulation simulation) {
-		super(bgMusic,bgImage);
+	public LevelSelectScreen(HashMap<String, Texture> buttonTextures, HashMap<String, Planet> planetHashmap, IOManager ioManager, AppSimulation simulation) {
+		super(
+				(Sound)ioManager.getOutputManager().retrieve("SSBGMusic"),
+				(Texture)ioManager.getOutputManager().retrieve("LSSBGImage"));
+		
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
 		int screenWidth = Gdx.graphics.getWidth();
 		
 		this.simulation = simulation;
+		this.mouseDevice = (Mouse)ioManager.getInputManager().retrieve(2);
 		
 		//Instantiate ButtonManager
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Mercury"), 775, 0.2f, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button(buttonTextures.get("Venus"), 700, 0.2f, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button(buttonTextures.get("Earth"), 625, 0.2f, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button(buttonTextures.get("Mars"), 550, 0.2f, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button(buttonTextures.get("Jupiter"), 475, 0.2f, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button(buttonTextures.get("Saturn"), 400, 0.2f, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button(buttonTextures.get("Uranus"), 325, 0.2f, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button(buttonTextures.get("Neptune"), 250, 0.2f, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("MercuryButtonTexture"), 775, BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("VenusButtonTexture"), 700, BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("EarthButtonTexture"), 625, BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("MarsButtonTexture"), 550, BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("JupiterButtonTexture"), 475, BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("SaturnButtonTexture"), 400, BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("UranusButtonTexture"), 325, BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("NeptuneButtonTexture"), 250, BUTTONSCALE, VIEW_LEVEL_INFO));
 
 		// buttons for additional levels go here
 		
-		buttonManager.add(new Button(buttonTextures.get("Back"), 125, 0.2f, RETURN_TO_MAIN));
+		buttonManager.add(new Button(buttonTextures.get("Back"), 70, BUTTONSCALE, RETURN_TO_MAIN));
 
 		// set button data (planet name)
 		buttonManager.getButtonList().get(0).addData("planet", "Mercury");

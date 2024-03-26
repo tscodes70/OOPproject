@@ -19,14 +19,6 @@ public class ButtonControlManager {
     
 	private final int LEFTCLICKBUTTON = Buttons.LEFT;
 	private final int RIGHTCLICKBUTTON = Buttons.RIGHT;
-	
-	private final int DEFAULT_ENTITY_SPEED = 2;
-	private final int DEFAULT_ENTITY_RADIUS = 40;
-	private final Color DEFAULT_PLAYER_COLOR = Color.BLUE;
-	private final Color DEFAULT_AI_COLOR = Color.RED;
-	private final boolean COLLIDABLE = true;
-	private final boolean AI_CONTROL = true;
-
     
     /**
      * Constructor that manages a list of Button instances
@@ -78,4 +70,22 @@ public class ButtonControlManager {
     	if(spawnPlayerButton != null)  spawnPlayerButton.dispose();
 		System.out.println("ButtonManager Resources Disposed");
     }
+
+	public List<Button> getButtonList() {
+		return buttonList;
+	}
+
+	public void setButtonList(List<Button> buttonList) {
+		this.buttonList = buttonList;
+	}
+
+	public Mouse getMouseDevice() {
+		return mouseDevice;
+	}
+
+	public void setMouseDevice(Mouse mouseDevice) {
+		this.mouseDevice = mouseDevice;
+	}
+    
+    
 }

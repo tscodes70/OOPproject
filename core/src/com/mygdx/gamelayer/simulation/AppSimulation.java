@@ -291,12 +291,12 @@ public class AppSimulation extends Simulation {
 		planetHashmap.put("Neptune",(Planet)spaceEntityFactory.createDynamicEntity("Planet", "Neptune", 1.5f));
 
 		// a reference to appsimulation is passed to scenes so that they can request changes of game state
-		sceneManager.add(new MainMenuScreen(menuButtons, bgSSImage, bgSSMusic ,mouseDevice, this));
-		sceneManager.add(new LevelSelectScreen(levelButtons, planetHashmap, bgLSSImage, bgSSMusic ,mouseDevice, this));
-		sceneManager.add(new PlanetInfoScreen(planetInfoButtons, bgLSSImage, bgSSMusic ,mouseDevice, this));
+		sceneManager.add(new MainMenuScreen(menuButtons, ioManager, this));
+		sceneManager.add(new LevelSelectScreen(levelButtons, planetHashmap, ioManager, this));
+		sceneManager.add(new PlanetInfoScreen(planetInfoButtons, ioManager, this));
 		sceneManager.add(new GameScreen((Planet)planetHashmap.get("Mercury"), ioManager, this));
 		sceneManager.add(new PauseScreen());
-		sceneManager.add(new LevelClearedScreen(levelClearedButtons, bgLCImage, bgESMusic, mouseDevice, this));
+		sceneManager.add(new LevelClearedScreen(levelClearedButtons, ioManager, this));
 		sceneManager.add(new StatsScreen(statsButtons, statsFile, ioManager, this));
 
 		// Set Starting Scene

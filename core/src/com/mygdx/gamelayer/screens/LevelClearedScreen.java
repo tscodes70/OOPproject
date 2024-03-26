@@ -20,6 +20,7 @@ import com.mygdx.gameengine.managers.ButtonControlManager;
 import com.mygdx.gameengine.managers.ButtonManager;
 import com.mygdx.gameengine.managers.CollisionManager;
 import com.mygdx.gameengine.managers.EntityManager;
+import com.mygdx.gameengine.managers.IOManager;
 import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.managers.SceneManager;
 import com.mygdx.gameengine.models.Button;
@@ -37,25 +38,25 @@ public class LevelClearedScreen extends Scene {
     private ButtonControlManager buttonControlManager;
     private AppSimulation simulation;
     private String planetName;
-    private String planetImagePath;
     private Texture planetImage;
     private BitmapFont planetNameFont, messageFont;
     private GlyphLayout planetNameGlyph, messageGlyph;
     private String GLYPHMESSAGE = "has been successfully defended from pollution!";
-	private final String IMAGE_PATH = "image";
+	private Mouse mouseDevice;
 	
 	private final String CONTINUE = "continue";
-	
-	private final String IMAGE_SA = String.format("%s/spawnai.png", IMAGE_PATH);
-	private final String IMAGE_SP = String.format("%s/spawnplayer.png", IMAGE_PATH);
 
-	public LevelClearedScreen(HashMap<String, Texture> buttonTextures, Texture bgImage, Sound bgMusic, Mouse mouseDevice, AppSimulation simulation) {
-		super(bgMusic,bgImage);
+
+	public LevelClearedScreen(HashMap<String, Texture> buttonTextures, IOManager ioManager, AppSimulation simulation) {
+		super(
+				(Sound)ioManager.getOutputManager().retrieve("ESBGMusic"),
+				(Texture)ioManager.getOutputManager().retrieve("LCBGImage"));
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
 		int screenWidth = Gdx.graphics.getWidth();
 
 		this.simulation = simulation;
+		this.mouseDevice = (Mouse)ioManager.getInputManager().retrieve(2);
 		
 		// dynamically generate bitmap font of our desired size so it doesn't look pixelated
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
