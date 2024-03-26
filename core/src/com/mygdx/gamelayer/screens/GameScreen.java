@@ -18,10 +18,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.gameengine.interfaces.iPlayer;
-import com.mygdx.gameengine.managers.AIControlManager;
 import com.mygdx.gameengine.managers.ButtonControlManager;
 import com.mygdx.gameengine.managers.ButtonManager;
 import com.mygdx.gameengine.managers.CollisionManager;
@@ -34,9 +30,11 @@ import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
 import com.mygdx.gamelayer.factories.SpaceEntityFactory;
+import com.mygdx.gamelayer.interfaces.iSpacePlayer;
 import com.mygdx.gamelayer.managers.SpaceAIControlManager;
 import com.mygdx.gamelayer.managers.SpaceCollisionManager;
 import com.mygdx.gamelayer.managers.SpaceEntityManager;
+import com.mygdx.gamelayer.managers.SpacePlayerControlManager;
 import com.mygdx.gamelayer.models.Debris;
 import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.Player;
@@ -49,7 +47,7 @@ public class GameScreen extends Scene {
 	private SpriteBatch batch;
     private ShapeRenderer shape;
     private SpaceEntityManager spaceEntityManager;
-    private PlayerControlManager playerControlManager;
+    private SpacePlayerControlManager spaceplayerControlManager;
     private SpaceAIControlManager spaceAIControlManager;
     private SpaceCollisionManager spaceCollisionManager;
     private ButtonManager buttonManager;
@@ -113,8 +111,8 @@ public class GameScreen extends Scene {
 		//Instantiate SpaceAIControlManager
 		spaceAIControlManager = new SpaceAIControlManager(spaceEntityManager.getEntityList());
 		
-		//Instantiate PlayerControlManager
-		playerControlManager = new PlayerControlManager(spaceEntityManager.getEntityList(), keyboardDevice);
+		//Instantiate SpacePlayerControlManager
+		spaceplayerControlManager = new SpacePlayerControlManager(spaceEntityManager.getEntityList(), keyboardDevice);
 		
 		//Instantiate SpaceCollisionManager
 		spaceCollisionManager = new SpaceCollisionManager(spaceEntityManager.getEntityList());
@@ -185,9 +183,12 @@ public class GameScreen extends Scene {
 			batch.end();
 		} else {
 			// Start Executing Game
-			playerControlManager.move(deltaTime);
+			for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
+				((Player)player).playerGravity(Gdx.graphics.getDeltaTime(), planet.getGravity());//for gravity effect, renders gravity
+			}
+			spaceplayerControlManager.move(deltaTime,planet.getGravity());
 			spaceAIControlManager.move(deltaTime);
-			spaceCollisionManager.checkCollisions(spaceEntityManager,spaceAIControlManager,playerControlManager);
+			spaceCollisionManager.checkCollisions(spaceEntityManager,spaceAIControlManager,spaceplayerControlManager);
 			
 			// Projectile go past screen
 			List<Entity> entityList = spaceEntityManager.getEntityList();
@@ -207,7 +208,7 @@ public class GameScreen extends Scene {
 				System.out.println("YOU VERY ZAI BRO");
 				simulation.levelCleared(planet.getName(), planet.getTex());
 			}
-			for (iPlayer player : playerControlManager.getPlayerList()) {
+			for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
 				if(((Player)player).getHealthBar().getCurrentValue() <= 0) {
 					System.out.println("YOU BAO ZHA ALR BRO");
 					simulation.levelCleared(planet.getName(), planet.getTex());
@@ -240,7 +241,7 @@ public class GameScreen extends Scene {
 		
 	    // Spawn projectiles
 	    if (projectileSpawnTimer >= 0.2 && countdownTime > 0) {
-	    	for (iPlayer player : playerControlManager.getPlayerList()) {
+	    	for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
 	        spaceEntityManager.add((Projectile)spaceEntityFactory.createDynamicEntity("Projectile",((Player)player).getPositionX(),((Player)player).getPositionY()));
 	    	}
 	        spaceAIControlManager.update(spaceEntityManager.getEntityList());
@@ -280,7 +281,7 @@ public class GameScreen extends Scene {
 		shape.dispose();
 		font.dispose();
 		countdownFont.dispose();
-		playerControlManager.dispose();
+		spaceplayerControlManager.dispose();
 		spaceAIControlManager.dispose();
 		spaceCollisionManager.dispose();
 		spaceEntityManager.dispose();

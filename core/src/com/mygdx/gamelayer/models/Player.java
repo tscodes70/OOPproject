@@ -9,8 +9,9 @@ import com.badlogic.gdx.math.Shape2D;
 import com.mygdx.gameengine.interfaces.iCollidable;
 import com.mygdx.gameengine.interfaces.iPlayer;
 import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gamelayer.interfaces.iSpacePlayer;
 
-public class Player extends Entity implements iCollidable, iPlayer {
+public class Player extends Entity implements iSpacePlayer {
 	
 	private int id;
 	private StatsBar healthBar;
@@ -102,13 +103,29 @@ public class Player extends Entity implements iCollidable, iPlayer {
         staminaBar.setPositionY(super.getPositionY()-5);
        
     }
+    
+    public void playerGravity(float deltaTime, float gravity) {//TESTESTESTESTESTESTEST, might not need accel and decel here
+		// Check if the up key is pressed
+		if (Gdx.input.isKeyPressed(upKeybind)) {
+			moveUp(deltaTime, gravity);
+			update(deltaTime);
+			;/////TEST EDITED TO ACCEPT GRAVITY/////TEST EDITED TO ACCEPT GRAVITY/////TEST EDITED TO ACCEPT GRAVITY
+		} else {
+			// Move the player down based on gravity
+			float distanceToMove = speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime * gravity;
+				//Check boundary
+				if((getPositionY() - distanceToMove) <= 200) setPositionY(200);
+				else setPositionY(getPositionY() - distanceToMove);
+			update(deltaTime);
+		}
+	}
 
 	 /**
 	  * Moves Player towards the left by the set default speed
 	  * @param deltaTime
 	  */
-	 public void moveLeft(float deltaTime) {
-		        float distanceToMove = speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
+	 public void moveLeft(float deltaTime, float gravity) {
+		        float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
 
 		        // Ensure entity is within left boundary of screen
 		        if (super.getPositionX() - distanceToMove - super.getRadius() >= 0) {
@@ -122,8 +139,8 @@ public class Player extends Entity implements iCollidable, iPlayer {
 	  * Moves Player towards the right by the set default speed
 	  * @param deltaTime
 	  */
-	 public void moveRight(float deltaTime) {
-		        float distanceToMove = speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
+	 public void moveRight(float deltaTime, float gravity) {
+		        float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
 
 		        // Ensure entity is within right boundary of screen
 		        if (super.getPositionX() + distanceToMove + super.getRadius() <= Gdx.graphics.getWidth()-super.getWidth()) {
@@ -137,11 +154,11 @@ public class Player extends Entity implements iCollidable, iPlayer {
 	  * Moves Player towards the top by the set default speed
 	  * @param deltaTime
 	  */
-	 public void moveUp(float deltaTime) {
-		        float distanceToMove = speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
+	 public void moveUp(float deltaTime, float gravity) {
+		        float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
 
 		        // Ensure entity is within top boundary of screen
-		        if (super.getPositionY() + distanceToMove + super.getRadius() <= Gdx.graphics.getHeight()) {  // Adjusted boundary check
+		        if (super.getPositionY() + distanceToMove + super.getRadius() <= Gdx.graphics.getHeight()-getBoundingBox().height) {  // Adjusted boundary check
 		        	super.setPositionY(super.getPositionY() + distanceToMove);
 		        	update(deltaTime);		       
 		            }
@@ -152,8 +169,8 @@ public class Player extends Entity implements iCollidable, iPlayer {
 	  * Moves Player towards the bottom by the set default speed
 	  * @param deltaTime
 	  */
-	 public void moveDown(float deltaTime) {
-		        float distanceToMove = speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime;
+	 public void moveDown(float deltaTime, float gravity) {
+		        float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
 
 		        // Ensure entity is within bottom boundary of screen
 		        if (super.getPositionY() - distanceToMove - super.getRadius() >= 200) {

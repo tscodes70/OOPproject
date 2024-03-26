@@ -15,8 +15,6 @@ import com.mygdx.gameengine.models.Keyboard;
 public class PlayerControlManager{
 	
     private List<iPlayer> playerList;
-    
-
     private Keyboard keyboardDevice;
 
 	/**
@@ -25,7 +23,6 @@ public class PlayerControlManager{
 	 * @param entityList
 	 */
 	public PlayerControlManager(List<Entity> entityList, Keyboard keyboardDevice){
-		super();
 		this.keyboardDevice = keyboardDevice;
 		playerList = new ArrayList<iPlayer>();
 		
@@ -72,19 +69,6 @@ public class PlayerControlManager{
 		    playerList = updatedPlayerList;
 	 }
 
-	 /**
-	  * Main movement handler methods that calls movement methods
-	  * based on respective movement key presses
-	  * @param deltaTime
-	  */
-	public void move(float deltaTime) {
-		for (iPlayer player : playerList) {
-		if(keyboardDevice.pollInputHold(player.getLeftKeybind())) player.moveLeft(deltaTime);
-		if(keyboardDevice.pollInputHold(player.getRightKeybind())) player.moveRight(deltaTime);
-		if(keyboardDevice.pollInputHold(player.getUpKeybind())) player.moveUp(deltaTime);
-		if(keyboardDevice.pollInputHold(player.getDownKeybind())) player.moveDown(deltaTime);
-		}
-	}
 	
 	/**
 	 *  Disposal of PlayerControlManager Resources

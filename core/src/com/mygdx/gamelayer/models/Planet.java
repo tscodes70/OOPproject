@@ -15,6 +15,7 @@ public class Planet extends Entity implements iPlanet {
 	private Rectangle boundingBox;
 	private String name;
 	private String info;
+	private float gravity;
 
 	public Planet(
 			String name,
@@ -30,6 +31,7 @@ public class Planet extends Entity implements iPlanet {
 		this.collidable = collidable;
 		this.name = name;
 		this.info = String.format("This is a description of %s.", name);
+		this.setGravity(gravity);
 		
 		this.currentHP = 5;
 		this.maxHP = 5;
@@ -87,6 +89,16 @@ public class Planet extends Entity implements iPlanet {
 	public void setInfo(String info) {
 		this.info = info;
 	}
+
+	public float getGravity() {
+		return gravity;
+	}
+
+	public void setGravity(float gravity) {
+		this.gravity = gravity;
+	}
+	
+	
 
 	
 }
