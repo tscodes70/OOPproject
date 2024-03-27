@@ -67,7 +67,7 @@ public class AppSimulation extends Simulation {
 	private final String IMAGE_EARTH_DEBRIS_PATH = String.format("%s/earth_debris.png", IMAGE_PATH);
 	private final String IMAGE_MARS_DEBRIS_PATH = String.format("%s/mars_debris.png", IMAGE_PATH);
 	private final String IMAGE_JUPITER_DEBRIS_PATH = String.format("%s/jupiter_debris.png", IMAGE_PATH);
-	private final String IMAGE_SATURN_DEBRIS_PATH = String.format("%s/saturn_debris.png", IMAGE_PATH);
+	private final String IMAGE_SATURN_DEBRIS_PATH = String.format("%s/mercury_debris.png", IMAGE_PATH);
 	private final String IMAGE_URANUS_DEBRIS_PATH = String.format("%s/uranus_debris.png", IMAGE_PATH);
 	private final String IMAGE_NEPTUNE_DEBRIS_PATH = String.format("%s/neptune_debris.png", IMAGE_PATH);
 	
@@ -76,7 +76,7 @@ public class AppSimulation extends Simulation {
 	private final String IMAGE_EARTH_DEBRIS_2_PATH = String.format("%s/earth_debris_2.png", IMAGE_PATH);
 	private final String IMAGE_MARS_DEBRIS_2_PATH = String.format("%s/mars_debris_2.png", IMAGE_PATH);
 	private final String IMAGE_JUPITER_DEBRIS_2_PATH = String.format("%s/jupiter_debris_2.png", IMAGE_PATH);
-	private final String IMAGE_SATURN_DEBRIS_2_PATH = String.format("%s/saturn_debris_2.png", IMAGE_PATH);
+	private final String IMAGE_SATURN_DEBRIS_2_PATH = String.format("%s/mercury_debris_2.png", IMAGE_PATH);
 	private final String IMAGE_URANUS_DEBRIS_2_PATH = String.format("%s/uranus_debris_2.png", IMAGE_PATH);
 	private final String IMAGE_NEPTUNE_DEBRIS_2_PATH = String.format("%s/neptune_debris_2.png", IMAGE_PATH);
 	

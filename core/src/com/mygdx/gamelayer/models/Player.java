@@ -151,8 +151,7 @@ public class Player extends Entity implements iSpacePlayer {
 	 public void moveLeft(float deltaTime, float gravity, boolean boost) {
 		 float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
 		 float currentStamina = staminaBar.getCurrentValue();
-		 
-		 System.out.print(boost);
+
 		 if (boost) {
 			 if (currentStamina > 0 && currentStamina <= staminaBar.getMaxValue()) {
 				 distanceToMove = ((speedMultiplier + 5) * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
