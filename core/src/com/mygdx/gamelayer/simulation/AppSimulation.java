@@ -39,7 +39,9 @@ public class AppSimulation extends Simulation {
 	private SpaceTexture mercuryButtonModel, venusButtonModel, earthButtonModel, marsButtonModel, jupiterButtonModel, saturnButtonModel, uranusButtonModel, neptuneButtonModel, backButtonModel, continueButtonModel;
 	private SpaceTexture bgSSImage, bgLSSImage, bgLCImage, bgStatsImage, bgGSImage;
 	private SpaceTexture mercuryPlanetModel, venusPlanetModel, earthPlanetModel, marsPlanetModel, jupiterPlanetModel, saturnPlanetModel, uranusPlanetModel, neptunePlanetModel;
-		
+	private SpaceTexture mercuryDebrisModel, venusDebrisModel, earthDebrisModel, marsDebrisModel, jupiterDebrisModel, saturnDebrisModel, uranusDebrisModel, neptuneDebrisModel;
+
+	
 	private SpaceEntityFactory spaceEntityFactory;
 
 	
@@ -59,6 +61,14 @@ public class AppSimulation extends Simulation {
 	
 	// Debris resources
 	private final String IMAGE_MERCURY_DEBRIS_PATH = String.format("%s/mercury_debris.png", IMAGE_PATH);
+	private final String IMAGE_VENUS_DEBRIS_PATH = String.format("%s/venus_debris.png", IMAGE_PATH);
+	private final String IMAGE_EARTH_DEBRIS_PATH = String.format("%s/earth_debris.png", IMAGE_PATH);
+	private final String IMAGE_MARS_DEBRIS_PATH = String.format("%s/mars_debris.png", IMAGE_PATH);
+	private final String IMAGE_JUPITER_DEBRIS_PATH = String.format("%s/jupiter_debris.png", IMAGE_PATH);
+	private final String IMAGE_SATURN_DEBRIS_PATH = String.format("%s/saturn_debris.png", IMAGE_PATH);
+	private final String IMAGE_URANUS_DEBRIS_PATH = String.format("%s/uranus_debris.png", IMAGE_PATH);
+	private final String IMAGE_NEPTUNE_DEBRIS_PATH = String.format("%s/neptune_debris.png", IMAGE_PATH);
+
 	
 	// generic menu buttons
 	private final String IMAGE_STARTBUTTON_PATH = String.format("%s/start_button.png", IMAGE_PATH);
@@ -159,7 +169,16 @@ public class AppSimulation extends Simulation {
 			continueButtonModel = new SpaceTexture(IMAGE_CONTINUEBUTTON_PATH);
 			
 			playerModel = new SpaceTexture(IMAGE_PLAYER_PATH);
-			debrisModel = new SpaceTexture(IMAGE_MERCURY_DEBRIS_PATH);
+			
+			// Debris Model
+			mercuryDebrisModel = new SpaceTexture(IMAGE_MERCURY_DEBRIS_PATH);
+			venusDebrisModel = new SpaceTexture(IMAGE_VENUS_DEBRIS_PATH);
+			earthDebrisModel = new SpaceTexture(IMAGE_EARTH_DEBRIS_PATH);
+			marsDebrisModel = new SpaceTexture(IMAGE_MARS_DEBRIS_PATH);
+			jupiterDebrisModel = new SpaceTexture(IMAGE_JUPITER_DEBRIS_PATH);
+			saturnDebrisModel = new SpaceTexture(IMAGE_SATURN_DEBRIS_PATH);
+			uranusDebrisModel = new SpaceTexture(IMAGE_URANUS_DEBRIS_PATH);
+			neptuneDebrisModel = new SpaceTexture(IMAGE_NEPTUNE_DEBRIS_PATH);
 			
 			// planet button models
 			mercuryButtonModel = new SpaceTexture(IMAGE_MERCURY_PATH);
@@ -193,7 +212,14 @@ public class AppSimulation extends Simulation {
 			
 			oManager.add("PlayerTexture", playerModel);
 			
-			oManager.add("MercuryDebrisTexture", debrisModel);
+			oManager.add("MercuryDebrisTexture", mercuryDebrisModel);
+			oManager.add("VenusDebrisTexture", venusDebrisModel);
+			oManager.add("EarthDebrisTexture", earthDebrisModel);
+			oManager.add("MarsDebrisTexture", marsDebrisModel);
+			oManager.add("JupiterDebrisTexture", jupiterDebrisModel);
+			oManager.add("SaturnDebrisTexture", saturnDebrisModel);
+			oManager.add("UranusDebrisTexture", uranusDebrisModel);
+			oManager.add("NeptuneDebrisTexture", neptuneDebrisModel);
 			
 			oManager.add("StartButtonTexture", startButtonModel);
 			oManager.add("StatsButtonTexture", statsButtonModel);
