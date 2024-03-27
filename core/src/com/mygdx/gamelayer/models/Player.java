@@ -320,6 +320,18 @@ public class Player extends Entity implements iSpacePlayer {
 	public int getSpeedMultiplier() { return speedMultiplier; }
 	public void setSpeedMultiplier(int speedMultiplier) { this.speedMultiplier = speedMultiplier; }
 
+	@Override
+	public boolean isAIControl() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setAIControl(boolean aiControl) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 

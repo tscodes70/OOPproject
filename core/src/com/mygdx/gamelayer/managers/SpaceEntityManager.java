@@ -15,6 +15,16 @@ public class SpaceEntityManager extends EntityManager{
 		super();
 	}
 	
+	// Add entity
+	public void addEntity(Entity entity) {
+		super.getEntityList().add(entity);
+	}
+	
+	// Remove entity
+		public void removeEntity(Entity entity) {
+			super.getEntityList().remove(entity);
+		}
+	
 	public void updateEntityHealth(Entity collidedEntity, float damage) {
 	    if (collidedEntity instanceof Player) {
 	        ((Player)collidedEntity).getHealthBar().setCurrentValue(((Player)collidedEntity).getHealthBar().getCurrentValue()-damage);;

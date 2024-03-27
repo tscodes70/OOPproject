@@ -106,5 +106,21 @@ public class Planet extends Entity implements iPlanet {
 	public float getScaledGravity() { return ((gravity/3.7f)*GRAVITYSCALE); }
 
 
+
+	@Override
+	public boolean isAIControl() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public void setAIControl(boolean aiControl) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 	
 }

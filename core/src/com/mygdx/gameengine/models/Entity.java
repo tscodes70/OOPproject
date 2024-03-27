@@ -6,11 +6,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.gameengine.interfaces.iAI;
 import com.mygdx.gameengine.interfaces.iCollidable;
 import com.mygdx.gameengine.interfaces.iEntity;
 import com.mygdx.gameengine.interfaces.iMovable;
 
-public abstract class Entity implements iEntity{
+public abstract class Entity implements iEntity, iAI{
     private float positionX;
     private float positionY;
     private float radius;
