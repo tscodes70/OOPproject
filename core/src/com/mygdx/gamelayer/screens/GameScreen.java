@@ -57,7 +57,7 @@ public class GameScreen extends Scene {
     private Mouse mouseDevice;
     
     private Planet planet;
-	
+
 	private BitmapFont font, countdownFont;
 	private GlyphLayout countdown;
     private float countdownTime = 180f;
@@ -95,10 +95,10 @@ public class GameScreen extends Scene {
 		spaceEntityFactory = new SpaceEntityFactory(ioManager);
 		
 		// Populate SpaceEntityManager of Player & Debris
-		player1 = (Player)spaceEntityFactory.createEntity("Player",1, Keys.LEFT, Keys.RIGHT, Keys.UP, Keys.DOWN, Keys.SHIFT_LEFT);
+		player1 = (Player)spaceEntityFactory.createEntity("Player",1, Keys.LEFT, Keys.RIGHT, Keys.UP, Keys.DOWN, Keys.SHIFT_RIGHT);
 		spaceEntityManager.add(player1);
 		
-		Player player2 = (Player)spaceEntityFactory.createEntity("Player",2, Keys.A, Keys.D, Keys.W, Keys.S, Keys.SHIFT_RIGHT);
+		Player player2 = (Player)spaceEntityFactory.createEntity("Player",2, Keys.A, Keys.D, Keys.W, Keys.S, Keys.SHIFT_LEFT);
 		spaceEntityManager.add(player2);
 		
         for (int i=0; i<(int)Math.floor(Math.random() * DEBRIS_MAX_SPAWN) + DEBRIS_MIN_SPAWN; i++) {
@@ -184,7 +184,7 @@ public class GameScreen extends Scene {
 		} else {
 			// Start Executing Game
 			for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
-				((Player)player).playerGravity(Gdx.graphics.getDeltaTime(), planet.getScaledGravity());//for gravity effect, renders gravity
+				((Player)player).playerGravity(deltaTime, planet.getScaledGravity());//for gravity effect, renders gravity
 			}
 			spaceplayerControlManager.move(deltaTime,planet.getScaledGravity());
 			spaceAIControlManager.move(deltaTime);
@@ -294,5 +294,23 @@ public class GameScreen extends Scene {
 	public void setPlayerPoints(int playerPoints) {
 		this.playerPoints = playerPoints;
 	}
+
+	public SpaceEntityFactory getSpaceEntityFactory() {
+		return spaceEntityFactory;
+	}
+
+	public void setSpaceEntityFactory(SpaceEntityFactory spaceEntityFactory) {
+		this.spaceEntityFactory = spaceEntityFactory;
+	}
+	
+	public Planet getPlanet() {
+		return planet;
+	}
+
+	public void setPlanet(Planet planet) {
+		this.planet = planet;
+	}
+	
+	
 	
 }

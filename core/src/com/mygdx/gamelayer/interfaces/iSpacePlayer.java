@@ -5,9 +5,9 @@ import com.mygdx.gameengine.interfaces.iPlayer;
 
 public interface iSpacePlayer extends iPlayer, iSpaceCollidable {
     
-    void moveLeft(float deltaTime, float gravity);
-    void moveRight(float deltaTime, float gravity);
-    void moveUp(float deltaTime, float gravity);
-    void moveDown(float deltaTime, float gravity);
+    void moveLeft(float deltaTime, float gravity, boolean boost);
+    void moveRight(float deltaTime, float gravity, boolean boost);
+    void moveUp(float deltaTime, float gravity, boolean boost);
+    void moveDown(float deltaTime, float gravity, boolean boost);
     void playerGravity(float deltaTime, float gravity);
 }

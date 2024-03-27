@@ -27,7 +27,7 @@ public class SpaceEntityFactory {
 	
 	private final int DEFAULT_DEBRIS_RADIUS = 40; // remove
 	private final int DEFAULT_DEBRIS_WIDTH = 80;
-	private final int DEFAULT_DEBRIS_HEIGHT = 100;
+	private final int DEFAULT_DEBRIS_HEIGHT = 80;
 	private final int DEFAULT_DEBRIS_SPEED = 1;
 
 	private final Color DEFAULT_AI_COLOR = Color.RED;
@@ -143,6 +143,30 @@ public class SpaceEntityFactory {
 	    	}
         }
     }
+    
+    public Entity createDynamicEntity(String entityType, String entityPlanet, float dynamicValue1, float dynamicValue2) {
+    	if (entityType == null) {
+            return null;
+		}
+        else {
+	    	switch (entityType) {  	
+		    	case "Debris":
+		    		return new Debris(
+	        			(SpaceTexture) ioManager.getOutputManager().retrieve(entityPlanet + "DebrisTexture"),
+	            		DEFAULT_DEBRIS_WIDTH/2,
+	            		DEFAULT_DEBRIS_HEIGHT/2,
+	            		(float) dynamicValue1,
+	            		(float) dynamicValue2,
+	            		DEFAULT_DEBRIS_SPEED/2,
+	            		AI_CONTROL,
+	            		COLLIDABLE);
+	            default:
+	                return null;
+	    	}
+        }
+    }
+    
+    
 
 }
 

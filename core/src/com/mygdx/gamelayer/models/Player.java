@@ -35,7 +35,9 @@ public class Player extends Entity implements iSpacePlayer {
 	private int upKeybind;
 	private int downKeybind;
 	private int shiftKeybind;
-
+	
+	
+	private final float DEFAULT_PLAYER_STAMINA_DRAIN_RATE = 1;
 	private final int DEFAULT_ENTITY_SPEED_MULTIPLIER = 100;
 
 
@@ -117,46 +119,50 @@ public class Player extends Entity implements iSpacePlayer {
        
     }
     
+    public void regenStaminaBar(float deltaTime) {
+        // Regen stamina bar
+		if (staminaBar.getCurrentValue() < staminaBar.getMaxValue()) {
+				staminaBar.setCurrentValue(staminaBar.getCurrentValue() + staminaRegenRate);
+		}
+    }
+    
     public void playerGravity(float deltaTime, float gravity) {//TESTESTESTESTESTESTEST, might not need accel and decel here
 		// Check if the up key is pressed
 		if (Gdx.input.isKeyPressed(upKeybind)) {
-			moveUp(deltaTime, gravity);
-			update(deltaTime);
-			;/////TEST EDITED TO ACCEPT GRAVITY/////TEST EDITED TO ACCEPT GRAVITY/////TEST EDITED TO ACCEPT GRAVITY
+			if (Gdx.input.isKeyPressed(shiftKeybind)) moveUp(deltaTime, gravity, true);
+			else moveUp(deltaTime, gravity, false);
+
 		} else {
 			// Move the player down based on gravity
-			float distanceToMove = speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime * gravity;
-				//Check boundary
-				if((getPositionY() - distanceToMove) <= 200) setPositionY(200);
-				else setPositionY(getPositionY() - distanceToMove);
-			update(deltaTime);
+			 float distanceToDrop = speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime * gravity;
+			// Apply Gravity
+			if((super.getPositionY() - distanceToDrop) <= 200) super.setPositionY(200);
+			else super.setPositionY(super.getPositionY() - distanceToDrop);
+			
 		}
+		
+		update(deltaTime);
 	}
 
 	 /**
 	  * Moves Player towards the left by the set default speed
 	  * @param deltaTime
 	  */
-	 public void moveLeft(float deltaTime, float gravity) {
+	 public void moveLeft(float deltaTime, float gravity, boolean boost) {
 		 float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
 		 float currentStamina = staminaBar.getCurrentValue();
-		 System.out.println(currentStamina);
-
-		 if (Gdx.input.isKeyPressed(shiftKeybind)) {
+		 
+		 System.out.print(boost);
+		 if (boost) {
 			 if (currentStamina > 0 && currentStamina <= staminaBar.getMaxValue()) {
 				 distanceToMove = ((speedMultiplier + 5) * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
-				 currentStamina -= staminaRegenRate;
-				 staminaBar.setCurrentValue(currentStamina);
-			 }
-		 } else {
-			 if (currentStamina >= 0 && currentStamina < staminaBar.getMaxValue()) {
-				 currentStamina += staminaRegenRate;
+				 currentStamina -= DEFAULT_PLAYER_STAMINA_DRAIN_RATE;
 				 staminaBar.setCurrentValue(currentStamina);
 			 }
 		 }
 
 		 // Ensure entity is within left boundary of screen
-		 if (super.getPositionX() - distanceToMove - super.getRadius() >= 0) {
+		if (super.getPositionX() - distanceToMove - super.getRadius() >= 0) {
 			 super.setPositionX(super.getPositionX() - distanceToMove);
 			 update(deltaTime);
 		 }
@@ -167,20 +173,14 @@ public class Player extends Entity implements iSpacePlayer {
 	  * Moves Player towards the right by the set default speed
 	  * @param deltaTime
 	  */
-	 public void moveRight(float deltaTime, float gravity) {
+	 public void moveRight(float deltaTime, float gravity, boolean boost) {
 		 float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
 		 float currentStamina = staminaBar.getCurrentValue();
-		 System.out.println(currentStamina);
 
-		 if (Gdx.input.isKeyPressed(shiftKeybind)) {
+		 if (boost) {
 			 if (currentStamina > 0 && currentStamina <= staminaBar.getMaxValue()) {
 				 distanceToMove = ((speedMultiplier + 5) * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
-				 currentStamina -= staminaRegenRate;
-				 staminaBar.setCurrentValue(currentStamina);
-			 }
-		 } else {
-			 if (currentStamina >= 0 && currentStamina < staminaBar.getMaxValue()) {
-				 currentStamina += staminaRegenRate;
+				 currentStamina -= DEFAULT_PLAYER_STAMINA_DRAIN_RATE;
 				 staminaBar.setCurrentValue(currentStamina);
 			 }
 		 }
@@ -197,22 +197,17 @@ public class Player extends Entity implements iSpacePlayer {
 	  * Moves Player towards the top by the set default speed
 	  * @param deltaTime
 	  */
-	 public void moveUp(float deltaTime, float gravity) {
+	 public void moveUp(float deltaTime, float gravity, boolean boost) {
 		 float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
 		 float currentStamina = staminaBar.getCurrentValue();
-		 System.out.println(currentStamina);
 
-		 if (Gdx.input.isKeyPressed(shiftKeybind)) {
+		 if (boost) {
 			 if (currentStamina > 0 && currentStamina <= staminaBar.getMaxValue()) {
 				 distanceToMove = ((speedMultiplier + 5) * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
-				 currentStamina -= staminaRegenRate;
+				 currentStamina -= DEFAULT_PLAYER_STAMINA_DRAIN_RATE;
 				 staminaBar.setCurrentValue(currentStamina);
 			 }
-		 } else {
-			 if (currentStamina >= 0 && currentStamina < staminaBar.getMaxValue()) {
-				 currentStamina += staminaRegenRate;
-				 staminaBar.setCurrentValue(currentStamina);
-			 }
+		 
 		 }
 
 		 // Ensure entity is within top boundary of screen
@@ -227,23 +222,19 @@ public class Player extends Entity implements iSpacePlayer {
 	  * Moves Player towards the bottom by the set default speed
 	  * @param deltaTime
 	  */
-	 public void moveDown(float deltaTime, float gravity) {
+	 public void moveDown(float deltaTime, float gravity, boolean boost) {
 		 float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
 		 float currentStamina = staminaBar.getCurrentValue();
-		 System.out.println(currentStamina);
 
-		 if (Gdx.input.isKeyPressed(shiftKeybind)) {
+		 if (boost) {
 			 if (currentStamina > 0 && currentStamina <= staminaBar.getMaxValue()) {
 				 distanceToMove = ((speedMultiplier + 5) * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
-				 currentStamina -= staminaRegenRate;
+				 currentStamina -= DEFAULT_PLAYER_STAMINA_DRAIN_RATE;
 				 staminaBar.setCurrentValue(currentStamina);
 			 }
-		 } else {
-			 if (currentStamina >= 0 && currentStamina < staminaBar.getMaxValue()) {
-				 currentStamina += staminaRegenRate;
-				 staminaBar.setCurrentValue(currentStamina);
-			 }
+		 
 		 }
+	
 
 		 // Ensure entity is within bottom boundary of screen
 		 if (super.getPositionY() - distanceToMove - super.getRadius() >= 200) {

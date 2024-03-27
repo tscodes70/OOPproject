@@ -8,6 +8,7 @@ import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gamelayer.interfaces.iSpacePlayer;
+import com.mygdx.gamelayer.models.Player;
 
 public class SpacePlayerControlManager extends PlayerControlManager {
 	
@@ -53,10 +54,25 @@ public class SpacePlayerControlManager extends PlayerControlManager {
 
     public void move(float deltaTime, float gravity) {
         for (iSpacePlayer player : getSpacePlayerList()) {
-            if(getKeyboardDevice().pollInputHold(player.getLeftKeybind())) player.moveLeft(deltaTime, gravity);
-            if(getKeyboardDevice().pollInputHold(player.getRightKeybind())) player.moveRight(deltaTime, gravity);
-            if(getKeyboardDevice().pollInputHold(player.getUpKeybind())) player.moveUp(deltaTime, gravity);
-            if(getKeyboardDevice().pollInputHold(player.getDownKeybind())) player.moveDown(deltaTime, gravity);
+            if(getKeyboardDevice().pollInputHold(player.getLeftKeybind())) {
+            	if(getKeyboardDevice().pollInputHold(((Player)player).getShiftKeybind())) player.moveLeft(deltaTime, gravity, true);
+            	else player.moveLeft(deltaTime, gravity, false);
+            }
+            else if(getKeyboardDevice().pollInputHold(player.getRightKeybind())) {
+            	if(getKeyboardDevice().pollInputHold(((Player)player).getShiftKeybind())) player.moveRight(deltaTime, gravity, true);
+            	else player.moveRight(deltaTime, gravity, false);
+            }
+            else if(getKeyboardDevice().pollInputHold(player.getUpKeybind())) {
+            	if(getKeyboardDevice().pollInputHold(((Player)player).getShiftKeybind())) player.moveUp(deltaTime, gravity, true);
+            	else player.moveUp(deltaTime, gravity, false);
+            }
+            else if(getKeyboardDevice().pollInputHold(player.getDownKeybind())) {
+            	if(getKeyboardDevice().pollInputHold(((Player)player).getShiftKeybind())) player.moveDown(deltaTime, gravity, true);
+            	else player.moveDown(deltaTime, gravity, false);
+            }
+            else {
+    			((Player)player).regenStaminaBar(deltaTime);
+            }
         }
     }
 

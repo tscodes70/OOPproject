@@ -15,6 +15,7 @@ import com.mygdx.gameengine.interfaces.iMovable;
 import com.mygdx.gameengine.interfaces.iPlayer;
 import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.models.Entity;
+import com.mygdx.gamelayer.factories.SpaceEntityFactory;
 import com.mygdx.gamelayer.interfaces.iDebris;
 import com.mygdx.gamelayer.interfaces.iPlanet;
 import com.mygdx.gamelayer.interfaces.iProjectile;
@@ -185,59 +186,7 @@ public class Debris extends Entity implements iDebris{
 			// Remove Projectile
 			spaceEntityManager.remove((Entity) this);
 			spaceAIControlManager.remove((iAI) this);
-		}
-		
-		//Splitting of smaller pieces
-		float newSize = this.getRadius() / 3;
-		if(newSize >= 1) {
-			int splitPieces = 3; // test split
-			Random random = new Random();
-			
-			for(int i = 0; i < splitPieces; i++) {
-				
-				 float newPositionX = this.getPositionX();// Example new position calculation
-	             float newPositionY = this.getPositionY();
-				
-		        float directionX = random.nextFloat() - 0.5f; // Random direction X
-		        float directionY = random.nextFloat() - 0.5f; // Random direction Y
-		        
-		     // Normalize the direction vector
-		        float magnitude = (float) Math.sqrt(directionX * directionX + directionY * directionY);
-		        directionX /= magnitude;
-		        directionY /= magnitude;
-				
-				
-	             
-	             Debris smallerDebris = new Debris(
-	                        newPositionX, 
-	                        newPositionY, 
-	                        this.speedMultiplier, 
-	                        newSize, // New size for the smaller debris
-	                        this.getColour(),
-	                        this.gravity,
-	                        this.aiControl, 
-	                        this.collidable
-	                );
-	             
-	             // Set initial movement direction for smaller pieces
-	             smallerDebris.setInitialDirection(directionX, directionY);
-      
-	             // Add new pieces to game
-	             spaceEntityManager.addEntity(smallerDebris);
-	             spaceAIControlManager.add((iAI) smallerDebris);
-			}
-			
-			
-		}
-		
-		// Remove original debris
-		spaceEntityManager.remove((Entity) this);
-        spaceAIControlManager.remove((iAI) this);
-        
-        // Remove the projectile that hit the debris
-        spaceEntityManager.remove(collidedEntity);
-        spaceAIControlManager.remove((iAI) collidedEntity);
-		
+		}			
 	}
 	
 	@Override public boolean isAIControl() { return aiControl; }
@@ -251,7 +200,7 @@ public class Debris extends Entity implements iDebris{
 	
 	// Getter Setter
 	public float getCurrentHP() { return currentHP; }
-	public void setCurrentHP(float currentHP) { this.currentHP = currentHP; }
+	public void setCurrentHP( float currentHP ) { this.currentHP = currentHP; }
 	public float getMaxHP() { return maxHP; }
 	public void setMaxHP(float maxHP) { this.maxHP = maxHP; }
 
