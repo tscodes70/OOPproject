@@ -2,6 +2,7 @@ package com.mygdx.gamelayer.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -38,6 +39,23 @@ public class Projectile extends Entity implements iProjectile {
 			int speedMultiplier) {
 		
 		super(positionX, positionY, width, height, colour);
+		this.boundingBox = new Rectangle(positionX, positionY, width, height);
+		this.collidable = collidable;
+		this.speedMultiplier = speedMultiplier;
+		this.aiControl = aiControl;
+	}
+	
+	public Projectile(
+			Texture texture,
+			float positionX, 
+			float positionY, 
+			float width,
+			float height,
+			boolean collidable,
+			boolean aiControl,
+			int speedMultiplier) {
+		
+		super(texture, positionX, positionY, width, height);
 		this.boundingBox = new Rectangle(positionX, positionY, width, height);
 		this.collidable = collidable;
 		this.speedMultiplier = speedMultiplier;

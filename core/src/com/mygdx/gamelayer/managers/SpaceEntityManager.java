@@ -49,7 +49,9 @@ public class SpaceEntityManager extends EntityManager{
 			    if (entity instanceof Debris) {
 			        entity.draw(batch, entity.getWidth(), entity.getHeight());
 			    }
-				
+			    if (entity instanceof Projectile) {
+			        entity.draw(batch, entity.getWidth(), entity.getHeight());
+			    }
 			}
 		}
 	}
@@ -67,9 +69,6 @@ public class SpaceEntityManager extends EntityManager{
 			        ((Player)entity).getStaminaBar().draw(shape);
 			    }
 
-			    if (entity instanceof Projectile) {
-			        entity.draw(shape);
-			    }
 			
 		}
 	}

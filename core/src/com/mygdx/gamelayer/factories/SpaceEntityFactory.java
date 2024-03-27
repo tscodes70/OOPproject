@@ -130,11 +130,11 @@ public class SpaceEntityFactory {
 	    	switch (entityType) {
 		        case "Projectile":
 		        	return new Projectile(
+		        			(SpaceTexture)ioManager.getOutputManager().retrieve("ProjectileTexture"), 
 		        			dynamicValue1 + DEFAULT_PROJECTILE_XOFFSET, 
 		        			dynamicValue2 + DEFAULT_PROJECTILE_YOFFSET, 
 		            		DEFAULT_PROJECTILE_WIDTH, 
 		            		DEFAULT_PROJECTILE_HEIGHT, 
-		            		Color.GREEN, // change later on
 		            		COLLIDABLE, 
 		            		AI_CONTROL, 
 		            		DEFAULT_PROJECTILE_SPEED);
