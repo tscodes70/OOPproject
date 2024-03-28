@@ -35,7 +35,7 @@ public class AppSimulation extends Simulation {
 	
 	private SpaceTexture playerModel, projectileModel, explosionModel, startButtonModel, statsButtonModel, quitButtonModel;
 	private SpaceTexture mercuryButtonModel, venusButtonModel, earthButtonModel, marsButtonModel, jupiterButtonModel, saturnButtonModel, uranusButtonModel, neptuneButtonModel, backButtonModel, continueButtonModel;
-	private SpaceTexture bgSSImage, bgLSSImage, bgLCImage, bgLFImage, bgStatsImage, bgGSImage;
+	private SpaceTexture bgSSImage, bgPISImage, bgLSSImage, bgLCImage, bgLFImage, bgStatsImage, bgGSImage;
 	private SpaceTexture mercuryPlanetModel, venusPlanetModel, earthPlanetModel, marsPlanetModel, jupiterPlanetModel, saturnPlanetModel, uranusPlanetModel, neptunePlanetModel;
 	private SpaceTexture mercuryDebrisModel, venusDebrisModel, earthDebrisModel, marsDebrisModel, jupiterDebrisModel, saturnDebrisModel, uranusDebrisModel, neptuneDebrisModel;
 	private SpaceTexture mercuryDebris2Model, venusDebris2Model, earthDebris2Model, marsDebris2Model, jupiterDebris2Model, saturnDebris2Model, uranusDebris2Model, neptuneDebris2Model;
@@ -106,6 +106,7 @@ public class AppSimulation extends Simulation {
 	
 	// background images
 	private final String BGIMAGE_SS_PATH = String.format("%s/splash.jpg", IMAGE_PATH);
+	private final String BGIMAGE_PIS_PATH = String.format("%s/testbg.png", IMAGE_PATH);
 	private final String BGIMAGE_LSS_PATH = String.format("%s/choose_planet.png", IMAGE_PATH);
 	private final String BGIMAGE_LC_PATH = String.format("%s/level_cleared.png", IMAGE_PATH);
 	private final String BGIMAGE_LF_PATH = String.format("%s/level_failed.png", IMAGE_PATH);
@@ -170,8 +171,9 @@ public class AppSimulation extends Simulation {
 			bgGSMusic = new Sound(BGAUDIO_GS_PATH);
 			bgESMusic = new Sound(BGAUDIO_ES_PATH);
 			
-			// background image textures (NOT ADDED INTO OMANAGER YET)
+			// background image textures
 			bgSSImage = new SpaceTexture(BGIMAGE_SS_PATH);
+			bgPISImage = new SpaceTexture(BGIMAGE_PIS_PATH);
 			bgLSSImage = new SpaceTexture(BGIMAGE_LSS_PATH);
 			bgLCImage = new SpaceTexture(BGIMAGE_LC_PATH);
 			bgLFImage = new SpaceTexture(BGIMAGE_LF_PATH);
@@ -236,6 +238,7 @@ public class AppSimulation extends Simulation {
 			oManager.add("ESBGMusic",bgESMusic);
 			
 			oManager.add("SSBGImage", bgSSImage);
+			oManager.add("PISBGImage", bgPISImage);
 			oManager.add("LSSBGImage", bgLSSImage);
 			oManager.add("LCBGImage", bgLCImage);
 			oManager.add("LFBGImage", bgLFImage);
@@ -351,10 +354,10 @@ public class AppSimulation extends Simulation {
 		spaceEntityFactory = new SpaceEntityFactory(ioManager);
 		
 		// Planet Descriptions
-		String mercuryInfo = "Mercury is the planet closest to the Sun! But guess what? It's not the hottest planet!<"
-				+ "Mercury zooms around the Sun super fast! That's why it's named after a Roman god known for speed.<"
-				+ "You know what's cool? You can actually see Mercury from Earth! Keep an eye out when the sun rises or sets! It looks like a shiny star near the sun.<"
-				+ "Mercury is mostly made of rock and has a super strong iron core!";
+		String mercuryInfo = "Mercury is the planet closest to the Sun! \nBut guess what? It's not the hottest planet!<"
+				+ "Mercury zooms around the Sun super fast!\nThat's why it's named after a Roman god known\nfor speed.<"
+				+ "You know what's cool? You can actually see\nMercury from Earth! \nKeep an eye out when the sun rises or sets! <"
+				+ "Mercury is mostly made of rock and has a \nsuper strong iron core!";
 
 		
 		// Planet Hashmap

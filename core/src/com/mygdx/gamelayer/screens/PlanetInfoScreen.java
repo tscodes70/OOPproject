@@ -39,13 +39,13 @@ public class PlanetInfoScreen extends Scene {
 	private final String SELECT_LEVEL = "SelectLevel";
 	
 	// y coordinates of the description text
-	private final float DESCRIPTION_Y_POS = 725f;
+	private final float DESCRIPTION_Y_POS = 695f;
 	private final float TEXTAREA_WIDTH = 600f;
 
 	public PlanetInfoScreen(HashMap<String, Texture> buttonTextures, IOManager ioManager, AppSimulation simulation) {
 		super(
 				(Sound)ioManager.getOutputManager().retrieve("SSBGMusic"),
-				(Texture)ioManager.getOutputManager().retrieve("LSSBGImage"));
+				(Texture)ioManager.getOutputManager().retrieve("PISBGImage"));
 		
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
@@ -56,14 +56,18 @@ public class PlanetInfoScreen extends Scene {
 		// dynamically generate bitmap font of our desired size so it doesn't look pixelated
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		
+		FreeTypeFontGenerator generatorRetro = new FreeTypeFontGenerator(Gdx.files.internal("fonts/retro.ttf"));
 		parameter.size = 45;
-		planetNameFont = generator.generateFont(parameter); // font size 12 pixels
+		planetNameFont = generatorRetro.generateFont(parameter); // font size 12 pixels
 		planetNameFont.getData().setScale(1.25f);
+		planetNameFont.setColor(Color.YELLOW);
 		planetNameFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
-		parameter.size = 20;
+		parameter.size = 15;
 		descriptionFont = generator.generateFont(parameter);
 		descriptionFont.getData().setScale(1.1f);
+		descriptionFont.setColor(Color.BLACK);
 		descriptionFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
@@ -92,18 +96,18 @@ public class PlanetInfoScreen extends Scene {
 		String[] planetFacts = planet.getInfo().split("<");
 
 		// Draw planet name
-		planetNameFont.draw(batch, planet.getName(), super.centeredXPos(planetNameGlyph.width), 825f);
+		planetNameFont.draw(batch, planet.getName(), super.centeredXPos(planetNameGlyph.width), 880f);
 
 		// Draw wrapped text for planet description
 		float yPos = DESCRIPTION_Y_POS;
 		for (int i = 0; i < planetFacts.length; i++) {
-		    descriptionFont.draw(batch, planetFacts[i].trim(), super.centeredXPos(600f), yPos, TEXTAREA_WIDTH, Align.left, true);
+		    descriptionFont.draw(batch, planetFacts[i].trim(), super.centeredXPos(300f), yPos, TEXTAREA_WIDTH, Align.left, true);
 		    yPos -= 100; // Adjust vertical position for the next line
 		}
 
 		// Draw additional information
-		descriptionFont.draw(batch, "Gravity: " + planet.getGravity() + " m/s^2", super.centeredXPos(600f), yPos, TEXTAREA_WIDTH, Align.left, true);
-		descriptionFont.draw(batch, "Highscore: placeholder/3 stars", super.centeredXPos(600f), yPos - 30, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Gravity: " + planet.getGravity() + " m/s^2", super.centeredXPos(300f), yPos, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Highscore: 10000", super.centeredXPos(300f), yPos - 30, TEXTAREA_WIDTH, Align.left, true);
 
 		batch.end();
 		
