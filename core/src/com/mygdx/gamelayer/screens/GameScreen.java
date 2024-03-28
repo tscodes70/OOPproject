@@ -46,8 +46,9 @@ public class GameScreen extends Scene {
     
     private Planet planet;
 
-	private BitmapFont font, countdownFont;
-	private GlyphLayout countdown;
+	private BitmapFont countdownFont,topHudFont,bottomHudFont;
+	private GlyphLayout countdown, planetText, livesText;
+	
     private float countdownTime = 120f;
     private float delay;
 
@@ -56,8 +57,11 @@ public class GameScreen extends Scene {
 
 	private Player player1;
     private float projectileSpawnTimer = 0;
-    private float debrisSpawnTimer = 0;
     private float projectileSpawnThreshold = 0.1f;
+    private float debrisSpawnTimer = 0;
+    private float debrisSpawnThreshold = 1f;
+    private float temperatureVariationTimer = 0;
+    private float temperatureVariationThreshhold = 40f;
     
     private SpaceEntityFactory spaceEntityFactory;
     
@@ -73,9 +77,8 @@ public class GameScreen extends Scene {
 		this.simulation = simulation;
 		this.planet = planet;
 		
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arcadeclassic.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        font = new BitmapFont();
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
         
@@ -112,6 +115,20 @@ public class GameScreen extends Scene {
 		countdownFont.getData().setScale(1.25f);
 		countdownFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
         countdown = new GlyphLayout(countdownFont, "3"); //for getting width/height of text
+        
+     	// Dynamically generate bitmap font (prevent pixellation)
+     	parameter.size = 20; // font size in pixels
+     	topHudFont = generator.generateFont(parameter);
+     	topHudFont.getData().setScale(1.25f);
+     	topHudFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+     	
+     	parameter.size = 40; 
+     	bottomHudFont = generator.generateFont(parameter);
+     	bottomHudFont.getData().setScale(1.25f);
+     	bottomHudFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+     	
+     	planetText = new GlyphLayout(bottomHudFont, planet.getName());     
+     	livesText = new GlyphLayout(bottomHudFont, "Lives 5");  
         generator.dispose(); // prevent mem leaks
 
 	}
@@ -152,12 +169,13 @@ public class GameScreen extends Scene {
 
 		
 		batch.begin();
-			// HUD display (time left and points)
-	        font.draw(batch, "Time: " + (int) countdownTime, 10, Gdx.graphics.getHeight() - 10);
-	        font.draw(batch, "Points: \n" + playerPoints, 10, Gdx.graphics.getHeight() - 50);
-	        
 	        // Draw Entities (Sprite)
 	        spaceEntityManager.drawEntities(batch); 
+			// HUD display (time left and points)
+	        topHudFont.draw(batch, "Time " + (int) countdownTime, 10, Gdx.graphics.getHeight() - 10);
+	        topHudFont.draw(batch, "Score " + playerPoints, 10, Gdx.graphics.getHeight() - 50);
+	        bottomHudFont.draw(batch, planet.getName(), super.centeredXPos(planetText.width), 130);
+	        bottomHudFont.draw(batch, "Lives " + (int)planet.getCurrentHP() , super.centeredXPos(livesText.width), 80);
 		batch.end();
 		
 		// Screen Transition Fade-In Effect
@@ -194,26 +212,23 @@ public class GameScreen extends Scene {
 			
 			// level successfully cleared
 			if((int)countdownTime == 0) {
-				System.out.println("YOU VERY ZAI BRO");
 				simulation.levelCleared(planet.getName(), planet.getTex(), playerPoints);
 			}
 			
 			// if player pass away, show the player's texture in the level failed screen
 			for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
 				if(((Player)player).getHealthBar().getCurrentValue() <= 0) {
-					System.out.println("YOU BAO ZHA ALR BRO");
 					simulation.levelFailed("You",((Player)player).getTex(), playerPoints);
 				}
 			}
 			
 			// if planet pass away
 			if(planet.getCurrentHP() <= 0) {
-				System.out.println("PLANET BAO ZHA ALR BRO");
 				simulation.levelFailed(planet.getName(), planet.getTex(), playerPoints);
 			}
 			
 			// Update projectile speed and spawn
-			if(playerPoints >= (pointCheckpoint *10000) && pointCheckpoint < 5) {
+			if(playerPoints >= (pointCheckpoint *10000) && pointCheckpoint < 2) {
 				spaceEntityFactory.setProjectileSpeedMultiplier(spaceEntityFactory.getProjectileSpeedMultiplier()+1);
 				projectileSpawnThreshold -= 0.05f;
 				pointCheckpoint++;
@@ -235,11 +250,13 @@ public class GameScreen extends Scene {
 		    // Accumulate time for spawning 
 		    projectileSpawnTimer += deltaTime;
 		    debrisSpawnTimer += deltaTime;
+		    // Accumulate time for temp variation
+		    temperatureVariationTimer += deltaTime;
 		}
 		
 	    // Spawn projectiles
 	    if (projectileSpawnTimer >= projectileSpawnThreshold && countdownTime > 0) {
-	    	if(pointCheckpoint >= 5) {
+	    	if(pointCheckpoint >= 2) {
 	    		for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
 			        spaceEntityManager.add((Projectile)spaceEntityFactory.createDynamicEntity("DoubleProjectileLeft",((Player)player).getPositionX(),((Player)player).getPositionY()));
 			        spaceEntityManager.add((Projectile)spaceEntityFactory.createDynamicEntity("DoubleProjectileRight",((Player)player).getPositionX(),((Player)player).getPositionY()));
@@ -256,13 +273,19 @@ public class GameScreen extends Scene {
 	    }
 	    
 	    // Spawn debris
-	    if (debrisSpawnTimer >= 1 && countdownTime > 0) {
+	    if (debrisSpawnTimer >= debrisSpawnThreshold && countdownTime > 0) {
 	    	for (int i=0; i<(int)Math.floor(Math.random() * DEBRIS_MAX_SPAWN)+DEBRIS_MIN_SPAWN; i++) {
 	        	spaceEntityManager.add((Debris)spaceEntityFactory.createEntity("Debris", planet.getName()));	
 	        }
 	    	spaceAIControlManager.update(spaceEntityManager.getEntityList());
 	        spaceCollisionManager.update(spaceEntityManager.getEntityList());
 	        debrisSpawnTimer -= 1;
+	    }
+	    
+	    // Temperature Variation
+	    if(temperatureVariationTimer >= temperatureVariationThreshhold && countdownTime >0) {
+	    	System.out.println("Planet: " +  planet.getName());
+	    	temperatureVariationTimer -= 40;
 	    }
 	    
 	    // Handle Explosion Effects (Remove after delay)
@@ -292,7 +315,8 @@ public class GameScreen extends Scene {
 		super.dispose();
 		batch.dispose();
 		shape.dispose();
-		font.dispose();
+		bottomHudFont.dispose();
+		topHudFont.dispose();
 		countdownFont.dispose();
 		spaceplayerControlManager.dispose();
 		spaceAIControlManager.dispose();

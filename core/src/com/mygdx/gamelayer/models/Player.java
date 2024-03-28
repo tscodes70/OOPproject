@@ -37,7 +37,7 @@ public class Player extends Entity implements iSpacePlayer {
 	private int shiftKeybind;
 	
 	
-	private final float DEFAULT_PLAYER_STAMINA_DRAIN_RATE = 1;
+	private final float DEFAULT_PLAYER_STAMINA_DRAIN_RATE = 0.1f;
 	private final int DEFAULT_ENTITY_SPEED_MULTIPLIER = 100;
 
 
@@ -121,7 +121,7 @@ public class Player extends Entity implements iSpacePlayer {
     
     public void regenStaminaBar(float deltaTime) {
         // Regen stamina bar
-		if (staminaBar.getCurrentValue() < staminaBar.getMaxValue()) {
+		if (staminaBar.getCurrentValue() + staminaRegenRate < staminaBar.getMaxValue()) {
 				staminaBar.setCurrentValue(staminaBar.getCurrentValue() + staminaRegenRate);
 		}
     }
@@ -175,7 +175,7 @@ public class Player extends Entity implements iSpacePlayer {
 	 public void moveRight(float deltaTime, float gravity, boolean boost) {
 		 float distanceToMove = (speedMultiplier * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;
 		 float currentStamina = staminaBar.getCurrentValue();
-
+		 
 		 if (boost) {
 			 if (currentStamina > 0 && currentStamina <= staminaBar.getMaxValue()) {
 				 distanceToMove = ((speedMultiplier + 5) * DEFAULT_ENTITY_SPEED_MULTIPLIER * deltaTime) / gravity;

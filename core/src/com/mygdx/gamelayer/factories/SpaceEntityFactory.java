@@ -1,5 +1,7 @@
 package com.mygdx.gamelayer.factories;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
@@ -18,7 +20,7 @@ public class SpaceEntityFactory {
 	private final int DEFAULT_PLAYER_SPEED = 3;
 	private final int DEFAULT_PLAYER_WIDTH = 80;
 	private final int DEFAULT_PLAYER_HEIGHT = 100;
-	private final int PLAYER_STAMINA_REGEN = 10;
+	private final int PLAYER_STAMINA_REGEN = 1;
 
 	private final int DEFAULT_SINGLEPROJECTILE_XOFFSET = 35;
 	private final int DEFAULT_SINGLEPROJECTILE_YOFFSET = 50;
@@ -64,15 +66,30 @@ public class SpaceEntityFactory {
         else {
             switch (entityType) {
                 case "Debris":
-                    return new Debris(
-                    		(SpaceTexture) ioManager.getOutputManager().retrieve(entityPlanet + "DebrisTexture"),
-                    		DEFAULT_DEBRIS_WIDTH,
-                    		DEFAULT_DEBRIS_HEIGHT,
-                    		(float) (Math.random() * (Gdx.graphics.getWidth() - 200) + 100),
-                    		(float)(Gdx.graphics.getHeight() + (float)(Math.random() * 600)),
-                    		DEFAULT_DEBRIS_SPEED,
-                    		AI_CONTROL,
-                    		COLLIDABLE);	
+                	Random random = new Random();
+
+                	if(random.nextInt(2) == 0) {
+                		return new Debris(
+                        		(SpaceTexture) ioManager.getOutputManager().retrieve(entityPlanet + "DebrisTexture"),
+                        		DEFAULT_DEBRIS_WIDTH,
+                        		DEFAULT_DEBRIS_HEIGHT,
+                        		(float) (Math.random() * (Gdx.graphics.getWidth() - DEFAULT_DEBRIS_WIDTH)),
+                        		(float)(Gdx.graphics.getHeight() + (float)(Math.random() * 600)),
+                        		DEFAULT_DEBRIS_SPEED,
+                        		AI_CONTROL,
+                        		COLLIDABLE);
+                	}else {
+                		return new Debris(
+                        		(SpaceTexture) ioManager.getOutputManager().retrieve(entityPlanet + "Debris2Texture"),
+                        		DEFAULT_DEBRIS_WIDTH,
+                        		DEFAULT_DEBRIS_HEIGHT,
+                        		(float) (Math.random() * (Gdx.graphics.getWidth() - DEFAULT_DEBRIS_WIDTH)),
+                        		(float)(Gdx.graphics.getHeight() + (float)(Math.random() * 600)),
+                        		DEFAULT_DEBRIS_SPEED,
+                        		AI_CONTROL,
+                        		COLLIDABLE);
+                	}  
+                    	
                 default:
                     return null;
             }
@@ -190,15 +207,29 @@ public class SpaceEntityFactory {
         else {
 	    	switch (entityType) {  	
 		    	case "Debris":
-		    		return new Debris(
-	        			(SpaceTexture) ioManager.getOutputManager().retrieve(entityPlanet + "DebrisTexture"),
-	            		DEFAULT_DEBRIS_WIDTH/2,
-	            		DEFAULT_DEBRIS_HEIGHT/2,
-	            		(float) dynamicValue1,
-	            		(float) dynamicValue2,
-	            		DEFAULT_DEBRIS_SPEED/2,
-	            		AI_CONTROL,
-	            		COLLIDABLE);
+		    		Random random = new Random();
+
+                	if(random.nextInt(2) == 0) {
+			    		return new Debris(
+		        			(SpaceTexture) ioManager.getOutputManager().retrieve(entityPlanet + "DebrisTexture"),
+		            		DEFAULT_DEBRIS_WIDTH/2,
+		            		DEFAULT_DEBRIS_HEIGHT/2,
+		            		(float) dynamicValue1,
+		            		(float) dynamicValue2,
+		            		DEFAULT_DEBRIS_SPEED/2,
+		            		AI_CONTROL,
+		            		COLLIDABLE);
+                	}else {
+                		return new Debris(
+    		        			(SpaceTexture) ioManager.getOutputManager().retrieve(entityPlanet + "Debris2Texture"),
+    		            		DEFAULT_DEBRIS_WIDTH/2,
+    		            		DEFAULT_DEBRIS_HEIGHT/2,
+    		            		(float) dynamicValue1,
+    		            		(float) dynamicValue2,
+    		            		DEFAULT_DEBRIS_SPEED/2,
+    		            		AI_CONTROL,
+    		            		COLLIDABLE);
+                	}
 	            default:
 	                return null;
 	    	}
