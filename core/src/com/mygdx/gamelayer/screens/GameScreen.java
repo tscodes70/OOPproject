@@ -1,29 +1,19 @@
 package com.mygdx.gamelayer.screens;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
+
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.mygdx.gameengine.managers.ButtonControlManager;
-import com.mygdx.gameengine.managers.ButtonManager;
-import com.mygdx.gameengine.managers.CollisionManager;
-import com.mygdx.gameengine.managers.EntityManager;
 import com.mygdx.gameengine.managers.IOManager;
-import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
@@ -40,7 +30,6 @@ import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.Player;
 import com.mygdx.gamelayer.models.Projectile;
 import com.mygdx.gamelayer.models.SpaceTexture;
-import com.mygdx.gamelayer.models.StatsBar;
 import com.mygdx.gamelayer.simulation.AppSimulation;
 
 public class GameScreen extends Scene {	
@@ -50,11 +39,8 @@ public class GameScreen extends Scene {
     private SpacePlayerControlManager spaceplayerControlManager;
     private SpaceAIControlManager spaceAIControlManager;
     private SpaceCollisionManager spaceCollisionManager;
-    private ButtonManager buttonManager;
-    private ButtonControlManager buttonControlManager;
     private AppSimulation simulation;
     private Keyboard keyboardDevice;
-    private Mouse mouseDevice;
     
     private Planet planet;
 
@@ -80,7 +66,6 @@ public class GameScreen extends Scene {
 				(SpaceTexture)ioManager.getOutputManager().retrieve("GSBGImage"));
 
 		this.keyboardDevice = (Keyboard) ioManager.getInputManager().retrieve(1);
-		this.mouseDevice = (Mouse) ioManager.getInputManager().retrieve(2);
 		this.simulation = simulation;
 		this.planet = planet;
 		

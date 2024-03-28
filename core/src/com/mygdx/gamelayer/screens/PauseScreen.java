@@ -3,7 +3,6 @@ package com.mygdx.gamelayer.screens;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -12,7 +11,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.gameengine.models.Scene;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 
 public class PauseScreen extends Scene {
     private BitmapFont font;
@@ -41,9 +39,6 @@ public class PauseScreen extends Scene {
 	 */
     @Override
     public void render() {
-        //Gdx.gl.glClearColor(0, 0, 0, 0.9f);
-        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    	
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_ONE, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		

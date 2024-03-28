@@ -1,11 +1,8 @@
 package com.mygdx.gamelayer.screens;
 
 import java.util.HashMap;
-import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -15,17 +12,10 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
-import com.mygdx.gameengine.managers.AIControlManager;
 import com.mygdx.gameengine.managers.ButtonControlManager;
 import com.mygdx.gameengine.managers.ButtonManager;
-import com.mygdx.gameengine.managers.CollisionManager;
-import com.mygdx.gameengine.managers.EntityManager;
 import com.mygdx.gameengine.managers.IOManager;
-import com.mygdx.gameengine.managers.PlayerControlManager;
-import com.mygdx.gameengine.managers.SceneManager;
 import com.mygdx.gameengine.models.Button;
-import com.mygdx.gameengine.models.Entity;
-import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
@@ -40,7 +30,7 @@ public class LevelFailedScreen extends Scene {
     private String planetName;
     private Texture planetImage;
     private BitmapFont planetNameFont, messageFont;
-    private GlyphLayout planetNameGlyph, messageGlyph;
+    private GlyphLayout planetNameGlyph;
     private String GLYPHMESSAGE = "has been destroyed by space debris!";
     private String GLYPHMESSAGE_PLAYER_DEATH = "were destroyed by space debris!";
 

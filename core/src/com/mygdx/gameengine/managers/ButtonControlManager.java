@@ -4,11 +4,8 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.graphics.Color;
 import com.mygdx.gameengine.models.Button;
-import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gameengine.models.Mouse;
-import com.mygdx.gamelayer.simulation.AppSimulation;
 
 public class ButtonControlManager {
 	
@@ -18,7 +15,6 @@ public class ButtonControlManager {
     private Mouse mouseDevice;
     
 	private final int LEFTCLICKBUTTON = Buttons.LEFT;
-	private final int RIGHTCLICKBUTTON = Buttons.RIGHT;
     
     /**
      * Constructor that manages a list of Button instances

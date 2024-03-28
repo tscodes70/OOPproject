@@ -1,26 +1,15 @@
 package com.mygdx.gamelayer.screens;
 
 import java.util.HashMap;
-import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.mygdx.gameengine.managers.AIControlManager;
 import com.mygdx.gameengine.managers.ButtonControlManager;
 import com.mygdx.gameengine.managers.ButtonManager;
-import com.mygdx.gameengine.managers.CollisionManager;
-import com.mygdx.gameengine.managers.EntityManager;
 import com.mygdx.gameengine.managers.IOManager;
-import com.mygdx.gameengine.managers.OutputManager;
-import com.mygdx.gameengine.managers.PlayerControlManager;
-import com.mygdx.gameengine.managers.SceneManager;
 import com.mygdx.gameengine.models.Button;
-import com.mygdx.gameengine.models.Entity;
-import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
@@ -33,7 +22,6 @@ public class LevelSelectScreen extends Scene {
     private ButtonManager buttonManager;
     private ButtonControlManager buttonControlManager;
     private AppSimulation simulation;
-    private float fadeInOverlayOpacity = 1.0f;
     private Mouse mouseDevice;
     
     private final String VIEW_LEVEL_INFO = "ViewLevelInfo";
@@ -50,7 +38,6 @@ public class LevelSelectScreen extends Scene {
 		
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
-		int screenWidth = Gdx.graphics.getWidth();
 		
 		this.simulation = simulation;
 		this.mouseDevice = (Mouse)ioManager.getInputManager().retrieve(2);
@@ -93,9 +80,6 @@ public class LevelSelectScreen extends Scene {
 	public void render() {
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		super.render();
-
-		//Gdx.gl.glClearColor(0, 0, 0, 1);
-		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		batch.begin();
 		//entityManager.drawEntities(batch);

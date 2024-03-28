@@ -17,18 +17,6 @@ public class SceneManager{
 	private Scene activeScene;
 	
 	private OutputManager<iOutput> oManager;
-	
-	private final int LEVEL_INFO_SCREEN = 2;
-
-	private final int GAME_SCREEN = 3;
-	
-	private final int END_SCREEN = 5;
-
-	private final String AUDIO_PATH = "audio/music";
-	private final String BGAUDIO_GS_PATH = String.format("%s/burnt_toaster.mp3", AUDIO_PATH);
-	
-	// Lazy way (need change to use omanager)
-	private Sound bgGSMusic = new Sound(BGAUDIO_GS_PATH);
 
 	public SceneManager(OutputManager<iOutput> oManager) {
 		this.sceneList = new ArrayList<Scene>();

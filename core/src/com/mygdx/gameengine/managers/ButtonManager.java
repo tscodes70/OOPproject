@@ -3,9 +3,7 @@ package com.mygdx.gameengine.managers;
 import java.util.ArrayList;
 import java.util.List;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.gameengine.models.Button;
-import com.mygdx.gameengine.models.Entity;
 
 public class ButtonManager {
     private List<Button> buttonList;

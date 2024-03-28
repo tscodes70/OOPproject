@@ -1,13 +1,11 @@
 package com.mygdx.gamelayer.screens;
 
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 
 public class EndScreen extends Scene {
 	
