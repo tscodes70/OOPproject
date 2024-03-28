@@ -50,15 +50,17 @@ public class GameScreen extends Scene {
     private float delay;
 
     private int playerPoints = 0;//Initial points
+    private int pointCheckpoint = 1;
 
 	private Player player1;
     private float projectileSpawnTimer = 0;
     private float debrisSpawnTimer = 0;
+    private float projectileSpawnThreshold = 0.2f;
     
     private SpaceEntityFactory spaceEntityFactory;
     
-    private final int DEBRIS_MIN_SPAWN = 3;
-    private final int DEBRIS_MAX_SPAWN = 8;
+    private final int DEBRIS_MIN_SPAWN = 2;
+    private final int DEBRIS_MAX_SPAWN = 4;
     
 	public GameScreen(Planet planet, IOManager ioManager, AppSimulation simulation) {
 		super(
@@ -207,6 +209,13 @@ public class GameScreen extends Scene {
 				System.out.println("PLANET BAO ZHA ALR BRO");
 				simulation.levelFailed(planet.getName(), planet.getTex(), playerPoints);
 			}
+			
+			// Update projectile speed and spawn
+			if(playerPoints >= (pointCheckpoint *10000) && pointCheckpoint < 5) {
+				spaceEntityFactory.setProjectileSpeedMultiplier(spaceEntityFactory.getProjectileSpeedMultiplier()+1);
+				projectileSpawnThreshold -= 0.05f;
+				pointCheckpoint++;
+			}
 		}
 	}
 	
@@ -227,10 +236,18 @@ public class GameScreen extends Scene {
 		}
 		
 	    // Spawn projectiles
-	    if (projectileSpawnTimer >= 0.2 && countdownTime > 0) {
-	    	for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
-	        spaceEntityManager.add((Projectile)spaceEntityFactory.createDynamicEntity("Projectile",((Player)player).getPositionX(),((Player)player).getPositionY()));
+	    if (projectileSpawnTimer >= projectileSpawnThreshold && countdownTime > 0) {
+	    	if(pointCheckpoint >= 5) {
+	    		for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
+			        spaceEntityManager.add((Projectile)spaceEntityFactory.createDynamicEntity("DoubleProjectileLeft",((Player)player).getPositionX(),((Player)player).getPositionY()));
+			        spaceEntityManager.add((Projectile)spaceEntityFactory.createDynamicEntity("DoubleProjectileRight",((Player)player).getPositionX(),((Player)player).getPositionY()));
+			    	}
+	    	}else {
+	    		for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
+			        spaceEntityManager.add((Projectile)spaceEntityFactory.createDynamicEntity("SingleProjectile",((Player)player).getPositionX(),((Player)player).getPositionY()));
+			    	}
 	    	}
+		    	
 	        spaceAIControlManager.update(spaceEntityManager.getEntityList());
 	        spaceCollisionManager.update(spaceEntityManager.getEntityList());
 	        projectileSpawnTimer -= 0.2; // Reset the timer for next second

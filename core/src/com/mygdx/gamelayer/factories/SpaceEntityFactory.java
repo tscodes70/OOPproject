@@ -17,17 +17,22 @@ public class SpaceEntityFactory {
 	private final int DEFAULT_PLAYER_SPEED = 3;
 	private final int DEFAULT_PLAYER_WIDTH = 80;
 	private final int DEFAULT_PLAYER_HEIGHT = 100;
-	private final int PLAYER_STAMINA_REGEN = 2;
+	private final int PLAYER_STAMINA_REGEN = 10;
 
-	private final int DEFAULT_PROJECTILE_XOFFSET = 35;
-	private final int DEFAULT_PROJECTILE_YOFFSET = 50;
+	private final int DEFAULT_SINGLEPROJECTILE_XOFFSET = 35;
+	private final int DEFAULT_SINGLEPROJECTILE_YOFFSET = 50;
+	
+	private final int DEFAULT_DOUBLEPROJECTILE_LEFT_XOFFSET = 20;
+	private final int DEFAULT_DOUBLEPROJECTILE_RIGHT_XOFFSET = 50;
+	private final int DEFAULT_DOUBLEPROJECTILE_YOFFSET = 50;
+	
 	private final int DEFAULT_PROJECTILE_SPEED = 5;
-	private final int DEFAULT_PROJECTILE_WIDTH = 5;
+	private final int DEFAULT_PROJECTILE_WIDTH = 10;
 	private final int DEFAULT_PROJECTILE_HEIGHT = 30;
 	
 	private final int DEFAULT_DEBRIS_RADIUS = 40; // remove
-	private final int DEFAULT_DEBRIS_WIDTH = 80;
-	private final int DEFAULT_DEBRIS_HEIGHT = 80;
+	private final int DEFAULT_DEBRIS_WIDTH = 120;
+	private final int DEFAULT_DEBRIS_HEIGHT = 120;
 	private final int DEFAULT_DEBRIS_SPEED = 1;
 
 	private final Color DEFAULT_AI_COLOR = Color.RED;
@@ -42,6 +47,7 @@ public class SpaceEntityFactory {
     private final boolean PLANET_COLLIDABLE = true;
 	
 	private IOManager ioManager;
+	private int projectileSpeedMultiplier = 1;
 	
 	public SpaceEntityFactory(IOManager ioManager) {
         this.ioManager = ioManager;
@@ -128,16 +134,37 @@ public class SpaceEntityFactory {
 		}
         else {
 	    	switch (entityType) {
-		        case "Projectile":
+		        case "SingleProjectile":
 		        	return new Projectile(
 		        			(SpaceTexture)ioManager.getOutputManager().retrieve("ProjectileTexture"), 
-		        			dynamicValue1 + DEFAULT_PROJECTILE_XOFFSET, 
-		        			dynamicValue2 + DEFAULT_PROJECTILE_YOFFSET, 
+		        			dynamicValue1 + DEFAULT_SINGLEPROJECTILE_XOFFSET, 
+		        			dynamicValue2 + DEFAULT_SINGLEPROJECTILE_YOFFSET, 
 		            		DEFAULT_PROJECTILE_WIDTH, 
 		            		DEFAULT_PROJECTILE_HEIGHT, 
 		            		COLLIDABLE, 
 		            		AI_CONTROL, 
-		            		DEFAULT_PROJECTILE_SPEED);
+		            		DEFAULT_PROJECTILE_SPEED * projectileSpeedMultiplier);
+		        	
+		        case "DoubleProjectileLeft":
+		        	return new Projectile(
+		        			(SpaceTexture)ioManager.getOutputManager().retrieve("ProjectileTexture"), 
+		        			dynamicValue1 + DEFAULT_DOUBLEPROJECTILE_LEFT_XOFFSET, 
+		        			dynamicValue2 + DEFAULT_DOUBLEPROJECTILE_YOFFSET, 
+		            		DEFAULT_PROJECTILE_WIDTH, 
+		            		DEFAULT_PROJECTILE_HEIGHT, 
+		            		COLLIDABLE, 
+		            		AI_CONTROL, 
+		            		DEFAULT_PROJECTILE_SPEED * projectileSpeedMultiplier);
+		        case "DoubleProjectileRight":
+		        	return new Projectile(
+		        			(SpaceTexture)ioManager.getOutputManager().retrieve("ProjectileTexture"), 
+		        			dynamicValue1 + DEFAULT_DOUBLEPROJECTILE_RIGHT_XOFFSET, 
+		        			dynamicValue2 + DEFAULT_DOUBLEPROJECTILE_YOFFSET, 
+		            		DEFAULT_PROJECTILE_WIDTH, 
+		            		DEFAULT_PROJECTILE_HEIGHT, 
+		            		COLLIDABLE, 
+		            		AI_CONTROL, 
+		            		DEFAULT_PROJECTILE_SPEED * projectileSpeedMultiplier);
 	            default:
 	                return null;
 	    	}
@@ -165,6 +192,14 @@ public class SpaceEntityFactory {
 	    	}
         }
     }
+
+	public int getProjectileSpeedMultiplier() {
+		return projectileSpeedMultiplier;
+	}
+
+	public void setProjectileSpeedMultiplier(int projectileSpeedMultiplier) {
+		this.projectileSpeedMultiplier = projectileSpeedMultiplier;
+	}
     
     
 

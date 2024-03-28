@@ -24,7 +24,7 @@ import com.mygdx.gamelayer.screens.GameScreen;
 
 public class SpaceCollisionManager extends CollisionManager {
 	
-	private final int DEFAULT_DEBRIS_WIDTH=80;
+	private final int DEFAULT_DEBRIS_WIDTH=120;
 	
 	public SpaceCollisionManager() {
 		super();
