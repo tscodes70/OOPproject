@@ -203,20 +203,24 @@ public class GameScreen extends Scene {
 			    }
 			}
 			
-			// TESTING: hardcoded to go to level cleared screen after 10s of gameplay
+			// level successfully cleared
 			if((int)countdownTime == 0) {
 				System.out.println("YOU VERY ZAI BRO");
-				simulation.levelCleared(planet.getName(), planet.getTex());
+				simulation.levelCleared(planet.getName(), planet.getTex(), playerPoints);
 			}
+			
+			// if player pass away, show the player's texture in the level failed screen
 			for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
 				if(((Player)player).getHealthBar().getCurrentValue() <= 0) {
 					System.out.println("YOU BAO ZHA ALR BRO");
-					simulation.levelCleared(planet.getName(), planet.getTex());
+					simulation.levelFailed("You",((Player)player).getTex(), playerPoints);
 				}
 			}
+			
+			// if planet pass away
 			if(planet.getCurrentHP() <= 0) {
 				System.out.println("PLANET BAO ZHA ALR BRO");
-				simulation.levelCleared(planet.getName(), planet.getTex());
+				simulation.levelFailed(planet.getName(), planet.getTex(), playerPoints);
 			}
 		}
 	}

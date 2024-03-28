@@ -31,7 +31,7 @@ import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
 import com.mygdx.gamelayer.simulation.AppSimulation;
 
-public class LevelClearedScreen extends Scene {	
+public class LevelFailedScreen extends Scene {	
 	private SpriteBatch batch;
     private ShapeRenderer shape;
     private ButtonManager buttonManager;
@@ -41,19 +41,22 @@ public class LevelClearedScreen extends Scene {
     private Texture planetImage;
     private BitmapFont planetNameFont, messageFont;
     private GlyphLayout planetNameGlyph, messageGlyph;
-    private String GLYPHMESSAGE = "has been successfully defended from pollution!";
+    private String GLYPHMESSAGE = "has been destroyed by space debris!";
+    private String GLYPHMESSAGE_PLAYER_DEATH = "were destroyed by space debris!";
+
     private int playerPoints;
 	private Mouse mouseDevice;
 	
 	private final String CONTINUE = "continue";
 
 
-	public LevelClearedScreen(HashMap<String, Texture> buttonTextures, IOManager ioManager, AppSimulation simulation) {
+	public LevelFailedScreen(HashMap<String, Texture> buttonTextures, IOManager ioManager, AppSimulation simulation) {
 		super(
 				(Sound)ioManager.getOutputManager().retrieve("ESBGMusic"),
-				(Texture)ioManager.getOutputManager().retrieve("LCBGImage"));
+				(Texture)ioManager.getOutputManager().retrieve("LFBGImage"));
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
+		int screenWidth = Gdx.graphics.getWidth();
 
 		this.simulation = simulation;
 		this.mouseDevice = (Mouse)ioManager.getInputManager().retrieve(2);
@@ -72,10 +75,8 @@ public class LevelClearedScreen extends Scene {
 		messageFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
-
-        messageGlyph = new GlyphLayout(messageFont, GLYPHMESSAGE); //for getting width/height of text
         planetNameGlyph = new GlyphLayout(planetNameFont, "");
-        
+
 		//Instantiate ButtonManager
 		buttonManager = new ButtonManager();
 		
@@ -106,11 +107,19 @@ public class LevelClearedScreen extends Scene {
 		// draw planet name and message text
 		planetNameFont.draw(batch, planetName, super.centeredXPos(planetNameGlyph.width), 420f);
 		
-		// wrapped text
-		messageFont.draw(batch, GLYPHMESSAGE, super.centeredXPos(400f), 350f, 400f, Align.center, true);
+		// personalise text based on which entity died
+		if(planetName == "You") {
+			messageFont.draw(batch, GLYPHMESSAGE_PLAYER_DEATH, super.centeredXPos(400f), 350f, 400f, Align.center, true);
+		} else {
+			// wrapped text
+			messageFont.draw(batch, GLYPHMESSAGE, super.centeredXPos(400f), 350f, 400f, Align.center, true);
+		}
+		
+		messageFont.draw(batch, "Better luck next time!", super.centeredXPos(400f), 305f, 400f, Align.center, true);
 
 		// draw stars score here
 		messageFont.draw(batch, "Your score: " + playerPoints, super.centeredXPos(400f), 260f, 400f, Align.center, true);
+		
 
 		batch.end();
 		
@@ -128,9 +137,9 @@ public class LevelClearedScreen extends Scene {
 		}
 	}
 	
-	// set info of level that was completed
+	// set info of level that was failed
 	public void setLevel(String planetName, Texture planetImage, int playerPoints) {
-        planetNameGlyph.setText(planetNameFont, planetName);
+        planetNameGlyph.setText(planetNameFont, planetName); //for getting width/height of text
 		this.planetName = planetName;
 		this.planetImage = planetImage;
 		this.playerPoints = playerPoints;

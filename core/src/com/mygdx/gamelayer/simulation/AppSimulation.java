@@ -17,6 +17,7 @@ import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Simulation;
 import com.mygdx.gameengine.models.Sound;
 import com.mygdx.gamelayer.factories.SpaceEntityFactory;
+import com.mygdx.gamelayer.managers.SpaceSceneManager;
 import com.mygdx.gamelayer.models.JSONReader;
 import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.Projectile;
@@ -25,7 +26,7 @@ import com.mygdx.gamelayer.screens.*;
 public class AppSimulation extends Simulation {
 	
 	private int gameState;
-	private SceneManager sceneManager;
+	private SpaceSceneManager sceneManager;
 	private Keyboard keyboardDevice;
 	private Mouse mouseDevice;
 	private InputManager<iInput> iManager;
@@ -38,7 +39,7 @@ public class AppSimulation extends Simulation {
 	
 	private SpaceTexture playerModel, projectileModel, startButtonModel, statsButtonModel, quitButtonModel;
 	private SpaceTexture mercuryButtonModel, venusButtonModel, earthButtonModel, marsButtonModel, jupiterButtonModel, saturnButtonModel, uranusButtonModel, neptuneButtonModel, backButtonModel, continueButtonModel;
-	private SpaceTexture bgSSImage, bgLSSImage, bgLCImage, bgStatsImage, bgGSImage;
+	private SpaceTexture bgSSImage, bgLSSImage, bgLCImage, bgLFImage, bgStatsImage, bgGSImage;
 	private SpaceTexture mercuryPlanetModel, venusPlanetModel, earthPlanetModel, marsPlanetModel, jupiterPlanetModel, saturnPlanetModel, uranusPlanetModel, neptunePlanetModel;
 	private SpaceTexture mercuryDebrisModel, venusDebrisModel, earthDebrisModel, marsDebrisModel, jupiterDebrisModel, saturnDebrisModel, uranusDebrisModel, neptuneDebrisModel;
 	private SpaceTexture mercuryDebris2Model, venusDebris2Model, earthDebris2Model, marsDebris2Model, jupiterDebris2Model, saturnDebris2Model, uranusDebris2Model, neptuneDebris2Model;
@@ -108,6 +109,7 @@ public class AppSimulation extends Simulation {
 	private final String BGIMAGE_SS_PATH = String.format("%s/splash.jpg", IMAGE_PATH);
 	private final String BGIMAGE_LSS_PATH = String.format("%s/choose_planet.png", IMAGE_PATH);
 	private final String BGIMAGE_LC_PATH = String.format("%s/level_cleared.png", IMAGE_PATH);
+	private final String BGIMAGE_LF_PATH = String.format("%s/level_failed.png", IMAGE_PATH);
 	private final String BGIMAGE_STATS_PATH = String.format("%s/statsbg.png", IMAGE_PATH);
 	private final String BGIMAGE_GAME_PATH = String.format("%s/gamebg.png", IMAGE_PATH);
 
@@ -130,7 +132,8 @@ public class AppSimulation extends Simulation {
 	private final int GAME_SCREEN = 3;
 	private final int PAUSE_SCREEN = 4;
 	private final int END_SCREEN = 5;
-	private final int STATS_SCREEN = 6;
+	private final int END_SCREEN_FAILURE = 6;
+	private final int STATS_SCREEN = 7;
 	
 	// Button texture lists
 	private HashMap<String, Texture> menuButtons;
@@ -172,6 +175,7 @@ public class AppSimulation extends Simulation {
 			bgSSImage = new SpaceTexture(BGIMAGE_SS_PATH);
 			bgLSSImage = new SpaceTexture(BGIMAGE_LSS_PATH);
 			bgLCImage = new SpaceTexture(BGIMAGE_LC_PATH);
+			bgLFImage = new SpaceTexture(BGIMAGE_LF_PATH);
 			bgStatsImage = new SpaceTexture(BGIMAGE_STATS_PATH);
 			bgGSImage = new SpaceTexture(BGIMAGE_GAME_PATH);
 			
@@ -233,6 +237,7 @@ public class AppSimulation extends Simulation {
 			oManager.add("SSBGImage", bgSSImage);
 			oManager.add("LSSBGImage", bgLSSImage);
 			oManager.add("LCBGImage", bgLCImage);
+			oManager.add("LFBGImage", bgLFImage);
 			oManager.add("StatsBGImage", bgStatsImage);
 			oManager.add("GSBGImage", bgGSImage);
 			
@@ -338,7 +343,7 @@ public class AppSimulation extends Simulation {
 		super.start();
 		
 		// Instantiate SceneManager & All AppSimulation Scenes
-		sceneManager = new SceneManager(oManager);
+		sceneManager = new SpaceSceneManager(oManager);
 		
 		// Instantiate SpaceEntityFactory
 		spaceEntityFactory = new SpaceEntityFactory(ioManager);
@@ -363,6 +368,7 @@ public class AppSimulation extends Simulation {
 		sceneManager.add(new GameScreen((Planet)planetHashmap.get("Mercury"), ioManager, this));
 		sceneManager.add(new PauseScreen());
 		sceneManager.add(new LevelClearedScreen(levelClearedButtons, ioManager, this));
+		sceneManager.add(new LevelFailedScreen(levelClearedButtons, ioManager, this));
 		sceneManager.add(new StatsScreen(statsButtons, statsFile, ioManager, this));
 
 		// Set Starting Scene
@@ -436,7 +442,7 @@ public class AppSimulation extends Simulation {
 	// display planet info
 	public void showLevelInfo(Planet planet) {
 		gameState = LEVEL_INFO_SCREEN;
-		sceneManager.setLevelInfo(planet, keyboardDevice, mouseDevice);
+		sceneManager.setLevelInfo(planet);
 		sceneManager.setScene(gameState);
 	}
 	
@@ -447,9 +453,15 @@ public class AppSimulation extends Simulation {
 	}
 	
 	// end of level
-	public void levelCleared(String planetName, Texture planetImage) {
+	public void levelCleared(String planetName, Texture planetImage, int playerPoints) {
 		gameState = END_SCREEN;
-		sceneManager.setLevelClearedInfo(planetName, planetImage);
+		sceneManager.setLevelClearedInfo(planetName, planetImage, playerPoints);
+		sceneManager.setScene(gameState);
+	}
+	
+	public void levelFailed(String planetName, Texture planetImage, int playerPoints) {
+		gameState = END_SCREEN_FAILURE;
+		sceneManager.setLevelFailedInfo(planetName, planetImage, playerPoints);
 		sceneManager.setScene(gameState);
 	}
 	
