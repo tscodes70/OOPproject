@@ -33,7 +33,7 @@ public class AppSimulation extends Simulation {
 	
 	private Sound bgSSMusic, bgGSMusic, bgESMusic;
 	
-	private SpaceTexture playerModel, projectileModel, startButtonModel, statsButtonModel, quitButtonModel;
+	private SpaceTexture playerModel, projectileModel, explosionModel, startButtonModel, statsButtonModel, quitButtonModel;
 	private SpaceTexture mercuryButtonModel, venusButtonModel, earthButtonModel, marsButtonModel, jupiterButtonModel, saturnButtonModel, uranusButtonModel, neptuneButtonModel, backButtonModel, continueButtonModel;
 	private SpaceTexture bgSSImage, bgLSSImage, bgLCImage, bgLFImage, bgStatsImage, bgGSImage;
 	private SpaceTexture mercuryPlanetModel, venusPlanetModel, earthPlanetModel, marsPlanetModel, jupiterPlanetModel, saturnPlanetModel, uranusPlanetModel, neptunePlanetModel;
@@ -79,6 +79,9 @@ public class AppSimulation extends Simulation {
 	
 	// Projectile resource
 	private final String IMAGE_PROJECTILE_PATH = String.format("%s/projectile.png", IMAGE_PATH);
+	
+	// Explosion resource
+	private final String IMAGE_EXPLOSION_PATH = String.format("%s/explosion.png", IMAGE_PATH);
 	
 	// generic menu buttons
 	private final String IMAGE_STARTBUTTON_PATH = String.format("%s/start_button.png", IMAGE_PATH);
@@ -187,6 +190,8 @@ public class AppSimulation extends Simulation {
 			// Projectile Model
 			projectileModel = new SpaceTexture(IMAGE_PROJECTILE_PATH);
 			
+			explosionModel = new SpaceTexture(IMAGE_EXPLOSION_PATH);
+			
 			// Debris Model
 			mercuryDebrisModel = new SpaceTexture(IMAGE_MERCURY_DEBRIS_PATH);
 			venusDebrisModel = new SpaceTexture(IMAGE_VENUS_DEBRIS_PATH);
@@ -240,6 +245,7 @@ public class AppSimulation extends Simulation {
 			oManager.add("PlayerTexture", playerModel);
 			
 			oManager.add("ProjectileTexture", projectileModel);
+			oManager.add("ExplosionTexture", explosionModel);
 			
 			oManager.add("MercuryDebrisTexture", mercuryDebrisModel);
 			oManager.add("VenusDebrisTexture", venusDebrisModel);

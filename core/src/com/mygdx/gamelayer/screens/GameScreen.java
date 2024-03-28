@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.gameengine.managers.IOManager;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gameengine.models.Keyboard;
@@ -26,6 +27,7 @@ import com.mygdx.gamelayer.managers.SpaceCollisionManager;
 import com.mygdx.gamelayer.managers.SpaceEntityManager;
 import com.mygdx.gamelayer.managers.SpacePlayerControlManager;
 import com.mygdx.gamelayer.models.Debris;
+import com.mygdx.gamelayer.models.Explosion;
 import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.Player;
 import com.mygdx.gamelayer.models.Projectile;
@@ -46,7 +48,7 @@ public class GameScreen extends Scene {
 
 	private BitmapFont font, countdownFont;
 	private GlyphLayout countdown;
-    private float countdownTime = 180f;
+    private float countdownTime = 120f;
     private float delay;
 
     private int playerPoints = 0;//Initial points
@@ -55,7 +57,7 @@ public class GameScreen extends Scene {
 	private Player player1;
     private float projectileSpawnTimer = 0;
     private float debrisSpawnTimer = 0;
-    private float projectileSpawnThreshold = 0.2f;
+    private float projectileSpawnThreshold = 0.1f;
     
     private SpaceEntityFactory spaceEntityFactory;
     
@@ -261,6 +263,13 @@ public class GameScreen extends Scene {
 	    	spaceAIControlManager.update(spaceEntityManager.getEntityList());
 	        spaceCollisionManager.update(spaceEntityManager.getEntityList());
 	        debrisSpawnTimer -= 1;
+	    }
+	    
+	    // Handle Explosion Effects (Remove after delay)
+	    for (Entity entity : spaceEntityManager.getEntityList()) {
+	    	if(entity instanceof Explosion) {
+	    		((Explosion)entity).update(deltaTime);
+	    	}
 	    }
 
 	    // Prevent negative countdown time

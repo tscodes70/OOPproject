@@ -22,7 +22,7 @@ public class Projectile extends Entity implements iProjectile {
 	
 	private boolean collidable;
 	private Rectangle boundingBox;
-	private int speedMultiplier;
+	private float speedMultiplier;
 	private boolean aiControl;
 	private float damage;
 	
@@ -36,7 +36,7 @@ public class Projectile extends Entity implements iProjectile {
 			Color colour, 
 			boolean collidable,
 			boolean aiControl,
-			int speedMultiplier) {
+			float speedMultiplier) {
 		
 		super(positionX, positionY, width, height, colour);
 		this.boundingBox = new Rectangle(positionX, positionY, width, height);
@@ -53,7 +53,7 @@ public class Projectile extends Entity implements iProjectile {
 			float height,
 			boolean collidable,
 			boolean aiControl,
-			int speedMultiplier) {
+			float speedMultiplier) {
 		
 		super(texture, positionX, positionY, width, height);
 		this.boundingBox = new Rectangle(positionX, positionY, width, height);
@@ -163,13 +163,13 @@ public class Projectile extends Entity implements iProjectile {
 	}
 
 	@Override
-	public int getSpeedMultiplier() {
+	public float getSpeedMultiplier() {
 		// TODO Auto-generated method stub
 		return speedMultiplier;
 	}
 
 	@Override
-	public void setSpeedMultiplier(int speedMultiplier) {
+	public void setSpeedMultiplier(float speedMultiplier) {
 		// TODO Auto-generated method stub
 		this.speedMultiplier = speedMultiplier;
 		

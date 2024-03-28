@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.gameengine.managers.EntityManager;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gamelayer.models.Debris;
+import com.mygdx.gamelayer.models.Explosion;
 import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.Player;
 import com.mygdx.gamelayer.models.Projectile;
@@ -41,6 +42,9 @@ public class SpaceEntityManager extends EntityManager{
 		for (Entity entity : super.getEntityList()) {
 			if (entity.getTex() != null) {
 				if(entity instanceof Planet) {
+					entity.draw(batch, entity.getWidth(), entity.getHeight());
+				}
+				if(entity instanceof Explosion) {
 					entity.draw(batch, entity.getWidth(), entity.getHeight());
 				}
 			    if (entity instanceof Player) {

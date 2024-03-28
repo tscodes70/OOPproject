@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.mygdx.gameengine.managers.IOManager;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gamelayer.models.Debris;
+import com.mygdx.gamelayer.models.Explosion;
 import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.Player;
 import com.mygdx.gamelayer.models.Projectile;
@@ -30,10 +31,13 @@ public class SpaceEntityFactory {
 	private final int DEFAULT_PROJECTILE_WIDTH = 10;
 	private final int DEFAULT_PROJECTILE_HEIGHT = 30;
 	
+	private final int DEFAULT_EXPLOSION_WIDTH = 40;
+	private final int DEFAULT_EXPLOSION_HEIGHT = 40;
+	
 	private final int DEFAULT_DEBRIS_RADIUS = 40; // remove
 	private final int DEFAULT_DEBRIS_WIDTH = 120;
 	private final int DEFAULT_DEBRIS_HEIGHT = 120;
-	private final int DEFAULT_DEBRIS_SPEED = 1;
+	private final float DEFAULT_DEBRIS_SPEED = 1;
 
 	private final Color DEFAULT_AI_COLOR = Color.RED;
 	private final boolean COLLIDABLE = true;
@@ -97,7 +101,7 @@ public class SpaceEntityFactory {
                 					right,
                 					up,
                 					down,
-							shift
+                					shift
 							);
                 default:
                     return null;
@@ -165,6 +169,14 @@ public class SpaceEntityFactory {
 		            		COLLIDABLE, 
 		            		AI_CONTROL, 
 		            		DEFAULT_PROJECTILE_SPEED * projectileSpeedMultiplier);
+		        	
+		        case "Explosion":
+		        	return new Explosion(
+		        			(SpaceTexture)ioManager.getOutputManager().retrieve("ExplosionTexture"), 
+		        			dynamicValue1, 
+		        			dynamicValue2, 
+		            		DEFAULT_EXPLOSION_WIDTH, 
+		            		DEFAULT_EXPLOSION_HEIGHT);
 	            default:
 	                return null;
 	    	}

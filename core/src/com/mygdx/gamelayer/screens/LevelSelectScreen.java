@@ -45,15 +45,19 @@ public class LevelSelectScreen extends Scene {
 		//Instantiate ButtonManager
 		buttonManager = new ButtonManager();
 		
+		// Declare the array
+        int[] yCoordButtonArray = {775, 700, 625, 550, 475, 400, 325, 250};
+		
 		// add buttons
-		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("MercuryButtonTexture"), 775, BUTTONSCALE, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("VenusButtonTexture"), 700, BUTTONSCALE, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("EarthButtonTexture"), 625, BUTTONSCALE, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("MarsButtonTexture"), 550, BUTTONSCALE, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("JupiterButtonTexture"), 475, BUTTONSCALE, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("SaturnButtonTexture"), 400, BUTTONSCALE, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("UranusButtonTexture"), 325, BUTTONSCALE, VIEW_LEVEL_INFO));
-		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("NeptuneButtonTexture"), 250, BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("MercuryButtonTexture"), yCoordButtonArray[0], BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("EarthButtonTexture"), yCoordButtonArray[1], BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("NeptuneButtonTexture"), yCoordButtonArray[2], BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("VenusButtonTexture"), yCoordButtonArray[3], BUTTONSCALE, VIEW_LEVEL_INFO));
+
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("MarsButtonTexture"), yCoordButtonArray[4], BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("JupiterButtonTexture"), yCoordButtonArray[5], BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("SaturnButtonTexture"), yCoordButtonArray[6], BUTTONSCALE, VIEW_LEVEL_INFO));
+		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("UranusButtonTexture"), yCoordButtonArray[7], BUTTONSCALE, VIEW_LEVEL_INFO));
 
 		// buttons for additional levels go here
 		
@@ -61,13 +65,15 @@ public class LevelSelectScreen extends Scene {
 
 		// set button data (planet name)
 		buttonManager.getButtonList().get(0).addData("planet", "Mercury");
-		buttonManager.getButtonList().get(1).addData("planet", "Venus");
-		buttonManager.getButtonList().get(2).addData("planet", "Earth");
-		buttonManager.getButtonList().get(3).addData("planet", "Mars");
-		buttonManager.getButtonList().get(4).addData("planet", "Jupiter");
-		buttonManager.getButtonList().get(5).addData("planet", "Saturn");
-		buttonManager.getButtonList().get(6).addData("planet", "Uranus");
-		buttonManager.getButtonList().get(7).addData("planet", "Neptune");
+		buttonManager.getButtonList().get(1).addData("planet", "Earth");
+		buttonManager.getButtonList().get(2).addData("planet", "Neptune");
+		buttonManager.getButtonList().get(3).addData("planet", "Venus");
+
+		buttonManager.getButtonList().get(4).addData("planet", "Mars");
+		buttonManager.getButtonList().get(5).addData("planet", "Jupiter");
+		buttonManager.getButtonList().get(6).addData("planet", "Saturn");
+		buttonManager.getButtonList().get(7).addData("planet", "Uranus");
+
 
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 		this.planetHashmap = planetHashmap;

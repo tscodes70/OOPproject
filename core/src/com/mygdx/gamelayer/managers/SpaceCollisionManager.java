@@ -17,6 +17,7 @@ import com.mygdx.gamelayer.interfaces.iSpacePlayer;
 import com.mygdx.gamelayer.interfaces.iDebris;
 import com.mygdx.gamelayer.interfaces.iPlanet;
 import com.mygdx.gamelayer.models.Debris;
+import com.mygdx.gamelayer.models.Explosion;
 import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.Player;
 import com.mygdx.gamelayer.models.Projectile;
@@ -66,14 +67,14 @@ public class SpaceCollisionManager extends CollisionManager {
 			this.remove(x);	
 			gamescreen.setPlayerPoints(gamescreen.getPlayerPoints()-50);
 			((Debris)x).handleCollision(((Player)y),entityManager,aiControlManager,playerControlManager);
-			System.out.println("Collision Between Player & Debris - Debris Entity Removed");
+//			System.out.println("Collision Between Player & Debris - Debris Entity Removed");
 				 
 		 }else if (x instanceof iSpacePlayer && y instanceof iDebris) {
 			// Remove Debris
 			this.remove(y);	
 			gamescreen.setPlayerPoints(gamescreen.getPlayerPoints()-50);
 			((Player)x).handleCollision(((Debris)y),entityManager,aiControlManager,playerControlManager);
-			System.out.println("Collision Between Player & Debris - Debris Entity Removed");
+//			System.out.println("Collision Between Player & Debris - Debris Entity Removed");
 				 
 		 }else if(x instanceof iProjectile && y instanceof iDebris) {
 			 // Remove Projectile & Debris
@@ -89,14 +90,16 @@ public class SpaceCollisionManager extends CollisionManager {
 			aiControlManager.update(entityManager.getEntityList());
 			
 			((Projectile)x).handleCollision(((Debris)y),entityManager,aiControlManager,playerControlManager);
-			System.out.println("Collision Between Projectile & Debris - Both Removed");
+//			System.out.println("Collision Between Projectile & Debris - Both Removed");
 				 
 		 }else if(x instanceof iDebris && y instanceof iProjectile) {
 			 // Remove Projectile & Debris
 			 this.remove(y);
 			 this.remove(x);
 			 gamescreen.setPlayerPoints(gamescreen.getPlayerPoints()+100);
-
+			 
+			 // Explosion Effect
+			 entityManager.add((Explosion)gamescreen.getSpaceEntityFactory().createDynamicEntity("Explosion",((Debris)x).getPositionX(),((Debris)x).getPositionY()));
 			 
 			 if(((Debris)x).getWidth()==DEFAULT_DEBRIS_WIDTH) {
 				 // Spawn 2 more smaller debris
@@ -105,21 +108,21 @@ public class SpaceCollisionManager extends CollisionManager {
 			 aiControlManager.update(entityManager.getEntityList());
 			
 			 ((Debris)x).handleCollision(((Projectile)y),entityManager,aiControlManager,playerControlManager);
-			 System.out.println("Collision Between Projectile & Debris - Both Removed");
+//			 System.out.println("Collision Between Projectile & Debris - Both Removed");
 			 
 		 }else if (x instanceof iPlanet && y instanceof iDebris){
 			 // Remove Debris
 			 this.remove(y);
 			 
 			 ((Planet)x).handleCollision(((Debris)y),entityManager,aiControlManager,playerControlManager);
-			 System.out.println("Collision Between Planet & Debris - AI Entity Removed");
+//			 System.out.println("Collision Between Planet & Debris - AI Entity Removed");
 			 
 		 }else if (x instanceof iDebris && y instanceof iPlanet) {
 			 // Remove Debris
 			 this.remove(x);
 			 
 			 ((Debris)x).handleCollision(((Planet)y),entityManager,aiControlManager,playerControlManager);
-			 System.out.println("Collision Between Planet & Debris - AI Entity Removed");
+//			 System.out.println("Collision Between Planet & Debris - AI Entity Removed");
 			 
 		 }
 

@@ -249,7 +249,7 @@ public class Player extends Entity implements iSpacePlayer {
 			if(collidedEntity instanceof iSpacePlayer) {
 				
 			}else if (collidedEntity instanceof iPlanet) {
-	
+				
 			}else if (collidedEntity instanceof iDebris) {
 				// Reduce player health
 				spaceEntityManager.updateEntityHealth(this,10);

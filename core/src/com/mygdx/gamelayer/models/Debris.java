@@ -31,7 +31,7 @@ public class Debris extends Entity implements iDebris{
 	private boolean aiControl;
 	private boolean collidable;
 	private Rectangle boundingBox;
-	private int speedMultiplier;
+	private float speedMultiplier;
 	private float gravity;
 	
 	
@@ -45,25 +45,25 @@ public class Debris extends Entity implements iDebris{
 	private float screenWidth = Gdx.graphics.getWidth();
 	private float verticalDirection;
 
-	// Circle Shape Debris
-	public Debris(
-			float positionX, 
-			float positionY, 
-			int speedMultiplier, 
-			float radius, 
-			Color colour, 
-			float gravity,
-			boolean aiControl, 
-			boolean collidable) {
-		super(positionX, positionY, radius, colour);
-		this.boundingBox = new Rectangle(positionX-radius, positionY-radius, radius * 2, radius * 2);
-		this.speedMultiplier = speedMultiplier;
-		this.gravity = gravity;
-		this.aiControl = aiControl;
-		this.collidable = collidable;
-		this.horizontalDirection = random.nextBoolean() ? 1 : -1;
-		
-	}
+//	// Circle Shape Debris
+//	public Debris(
+//			float positionX, 
+//			float positionY, 
+//			float speedMultiplier, 
+//			float radius, 
+//			Color colour, 
+//			float gravity,
+//			boolean aiControl, 
+//			boolean collidable) {
+//		super(positionX, positionY, radius, colour);
+//		this.boundingBox = new Rectangle(positionX-radius, positionY-radius, radius * 2, radius * 2);
+//		this.speedMultiplier = speedMultiplier;
+//		this.gravity = gravity;
+//		this.aiControl = aiControl;
+//		this.collidable = collidable;
+//		this.horizontalDirection = random.nextBoolean() ? 1 : -1;
+//		
+//	}
 	
 	// Textured Debris
 	public Debris(
@@ -73,12 +73,12 @@ public class Debris extends Entity implements iDebris{
 			float positionX, 
 			float positionY, 
 
-			int speedMultiplier, 
+			float speedMultiplier, 
 			
 			boolean aiControl, 
 			boolean collidable) {
 		super(texture, positionX, positionY, width, height);
-		this.boundingBox = new Rectangle(positionX, positionY, width, height);
+		this.boundingBox = new Rectangle(positionX+(width/2), positionY+(height/2), width/2, height/2);
 		this.speedMultiplier = speedMultiplier;
 		this.aiControl = aiControl;
 		this.collidable = collidable;
@@ -92,7 +92,7 @@ public class Debris extends Entity implements iDebris{
 		move(deltaTime, gravity);
 
         // Update bounding box position
-        boundingBox.setPosition(super.getPositionX()-super.getRadius(), super.getPositionY()-super.getRadius());
+        boundingBox.setPosition(super.getPositionX()+(super.getWidth()/4), super.getPositionY()+(super.getHeight()/4));
         	
         float newX = getPositionX() + horizontalDirection * speedMultiplier * deltaTime;        
         float newY = getPositionY() + verticalDirection * speedMultiplier * deltaTime;
@@ -114,7 +114,7 @@ public class Debris extends Entity implements iDebris{
 		float newPositionX = super.getPositionX() + horizontalDistance;
 		
 	    // Boundary checks to reverse direction at screen edges
-		if (newPositionX < 0 || newPositionX > screenWidth) {
+		if (newPositionX < 0 || newPositionX > screenWidth-super.getWidth()) {
 			horizontalDirection *= -1; // Reverse direction
 			
 			// Adjust newPositionX to ensure it's within bounds, preventing overshoot
@@ -195,8 +195,8 @@ public class Debris extends Entity implements iDebris{
 	@Override public void setCollidable(boolean collidable) { this.collidable = collidable; }
 	@Override public Rectangle getBoundingBox() { return boundingBox; }
 	@Override public void setBoundingBox(Rectangle boundingBox) { this.boundingBox = boundingBox; }
-	@Override public int getSpeedMultiplier() { return speedMultiplier; }
-	@Override public void setSpeedMultiplier(int speedMultiplier) { this.speedMultiplier = speedMultiplier; }
+	@Override public float getSpeedMultiplier() { return speedMultiplier; }
+	@Override public void setSpeedMultiplier(float speedMultiplier) { this.speedMultiplier = speedMultiplier; }
 	
 	// Getter Setter
 	public float getCurrentHP() { return currentHP; }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.mygdx.gameengine.interfaces.iAI;
 import com.mygdx.gameengine.interfaces.iCollidable;
+import com.mygdx.gameengine.interfaces.iPlayer;
 import com.mygdx.gameengine.managers.PlayerControlManager;
 import com.mygdx.gameengine.models.Entity;
 import com.mygdx.gamelayer.interfaces.iDebris;
