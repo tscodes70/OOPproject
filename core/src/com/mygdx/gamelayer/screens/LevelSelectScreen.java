@@ -46,7 +46,7 @@ public class LevelSelectScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// Declare the array
-        int[] yCoordButtonArray = {775, 700, 625, 550, 475, 400, 325, 250};
+        int[] yCoordButtonArray = {775, 700, 625, 550, 400, 325, 250, 175};
 		
 		// add buttons
 		buttonManager.add(new Button((Texture)ioManager.getOutputManager().retrieve("MercuryButtonTexture"), yCoordButtonArray[0], BUTTONSCALE, VIEW_LEVEL_INFO));
