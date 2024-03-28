@@ -37,12 +37,13 @@ public class Planet extends Entity implements iPlanet {
 			float positionX, 
 			float positionY, 
 			float gravity,
-			boolean collidable) {
+			boolean collidable,
+			String info) {
 		super(texture,positionX, positionY, width, height);
 		this.boundingBox = new Rectangle(positionX, positionY, width, height);
 		this.collidable = collidable;
 		this.name = name;
-		this.info = String.format("This is a description of %s.", name);
+		this.info = info;
 		this.setGravity(gravity);
 		
 		this.currentHP = 5;

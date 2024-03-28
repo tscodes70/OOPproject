@@ -72,8 +72,8 @@ public class PlanetInfoScreen extends Scene {
 		buttonManager = new ButtonManager();
 		
 		// add buttons
-		buttonManager.add(new Button(buttonTextures.get("Start"), 175, 0.2f, START));
-		buttonManager.add(new Button(buttonTextures.get("Back"), 75, 0.2f, SELECT_LEVEL));
+		buttonManager.add(new Button(buttonTextures.get("Start"), 500, 75, 0.2f, START));
+		buttonManager.add(new Button(buttonTextures.get("Back"), 100, 75, 0.2f, SELECT_LEVEL));
 		
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
 	}
@@ -89,15 +89,21 @@ public class PlanetInfoScreen extends Scene {
 		batch.begin();
 		buttonManager.drawButtons(batch);
 		
-		// draw planet name
+		String[] planetFacts = planet.getInfo().split("<");
+
+		// Draw planet name
 		planetNameFont.draw(batch, planet.getName(), super.centeredXPos(planetNameGlyph.width), 825f);
-		
-		// draw wrapped text for planet description
-		descriptionFont.draw(batch, planet.getInfo(),  super.centeredXPos(600f), DESCRIPTION_Y_POS, TEXTAREA_WIDTH, Align.left, true);
-		
-		// vertical position of these elements are dynamic based on height of the description text
-		descriptionFont.draw(batch, "Gravity: " + planet.getGravity() + " m/s^2", super.centeredXPos(600f), DESCRIPTION_Y_POS - descriptionGlyph.height - 40f, TEXTAREA_WIDTH, Align.left, true);
-		descriptionFont.draw(batch, "Highscore: placeholder/3 stars", super.centeredXPos(600f), DESCRIPTION_Y_POS - descriptionGlyph.height - 120f, TEXTAREA_WIDTH, Align.left, true);
+
+		// Draw wrapped text for planet description
+		float yPos = DESCRIPTION_Y_POS;
+		for (int i = 0; i < planetFacts.length; i++) {
+		    descriptionFont.draw(batch, planetFacts[i].trim(), super.centeredXPos(600f), yPos, TEXTAREA_WIDTH, Align.left, true);
+		    yPos -= 100; // Adjust vertical position for the next line
+		}
+
+		// Draw additional information
+		descriptionFont.draw(batch, "Gravity: " + planet.getGravity() + " m/s^2", super.centeredXPos(600f), yPos, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Highscore: placeholder/3 stars", super.centeredXPos(600f), yPos - 30, TEXTAREA_WIDTH, Align.left, true);
 
 		batch.end();
 		

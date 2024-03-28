@@ -350,16 +350,23 @@ public class AppSimulation extends Simulation {
 		// Instantiate SpaceEntityFactory
 		spaceEntityFactory = new SpaceEntityFactory(ioManager);
 		
+		// Planet Descriptions
+		String mercuryInfo = "Mercury is the planet closest to the Sun! But guess what? It's not the hottest planet!<"
+				+ "Mercury zooms around the Sun super fast! That's why it's named after a Roman god known for speed.<"
+				+ "You know what's cool? You can actually see Mercury from Earth! Keep an eye out when the sun rises or sets! It looks like a shiny star near the sun.<"
+				+ "Mercury is mostly made of rock and has a super strong iron core!";
+
+		
 		// Planet Hashmap
 		planetHashmap = new HashMap<String, Planet>();
-		planetHashmap.put("Mercury", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Mercury", 3.7f));
-		planetHashmap.put("Venus", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Venus", 8.87f));
-		planetHashmap.put("Earth", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Earth", 9.81f));
-		planetHashmap.put("Mars", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Mars", 3.71f));
-		planetHashmap.put("Jupiter", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Jupiter", 24.79f));
-		planetHashmap.put("Saturn", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Saturn", 10.44f));
-		planetHashmap.put("Uranus", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Uranus", 8.69f));
-		planetHashmap.put("Neptune", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Neptune", 11.15f));
+		planetHashmap.put("Mercury", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Mercury", mercuryInfo, 3.7f));
+		planetHashmap.put("Venus", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Venus", mercuryInfo, 8.87f));
+		planetHashmap.put("Earth", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Earth", mercuryInfo, 9.81f));
+		planetHashmap.put("Mars", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Mars", mercuryInfo, 3.71f));
+		planetHashmap.put("Jupiter", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Jupiter", mercuryInfo, 24.79f));
+		planetHashmap.put("Saturn", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Saturn", mercuryInfo, 10.44f));
+		planetHashmap.put("Uranus", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Uranus", mercuryInfo, 8.69f));
+		planetHashmap.put("Neptune", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Neptune", mercuryInfo, 11.15f));
 
 
 

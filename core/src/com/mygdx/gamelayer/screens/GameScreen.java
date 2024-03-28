@@ -47,13 +47,19 @@ public class GameScreen extends Scene {
     private Planet planet;
 
 	private BitmapFont countdownFont,topHudFont,bottomHudFont;
-	private GlyphLayout countdown, planetText, livesText;
+	private GlyphLayout countdown, planetText, livesText, tempVarText, tempVarDetailsText;
 	
     private float countdownTime = 120f;
     private float delay;
 
     private int playerPoints = 0;//Initial points
     private int pointCheckpoint = 1;
+    
+    private String tempVarMessage = "";
+    private String tempVarMessageDetails = "";
+    
+    private boolean tempEffect = false;
+    private float tempEffectTimer = 10f;
 
 	private Player player1;
     private float projectileSpawnTimer = 0;
@@ -130,6 +136,8 @@ public class GameScreen extends Scene {
      	
      	planetText = new GlyphLayout(bottomHudFont, planet.getName());     
      	livesText = new GlyphLayout(bottomHudFont, "Lives 5");  
+     	tempVarText = new GlyphLayout(bottomHudFont, "Temperature Variation Incoming!");  
+     	tempVarDetailsText = new GlyphLayout(bottomHudFont, "No Usage Of Stamina!");  
         generator.dispose(); // prevent mem leaks
 
 	}
@@ -175,8 +183,12 @@ public class GameScreen extends Scene {
 			// HUD display (time left and points)
 	        topHudFont.draw(batch, "Time " + (int) countdownTime, 10, Gdx.graphics.getHeight() - 10);
 	        topHudFont.draw(batch, "Score " + playerPoints, 10, Gdx.graphics.getHeight() - 50);
+
 	        bottomHudFont.draw(batch, planet.getName(), super.centeredXPos(planetText.width), 130);
 	        bottomHudFont.draw(batch, "Lives " + (int)planet.getCurrentHP() , super.centeredXPos(livesText.width), 80);
+	        
+	        topHudFont.draw(batch, tempVarMessage, 200, 512);
+	        topHudFont.draw(batch, tempVarMessageDetails, 200, 490);
 		batch.end();
 		
 		// Screen Transition Fade-In Effect
@@ -234,28 +246,57 @@ public class GameScreen extends Scene {
 				projectileSpawnThreshold -= 0.05f;
 				pointCheckpoint++;
 			}
+						
 		}
 	}
 	
-	public void update(float deltaTime) {
-		delay -= deltaTime;
-        // Check if the countdown has reached zero or below
-		if (delay <= 0) {
-            delay = 0; // Prevent negative countdown time
-            // Handle countdown completion, e.g., end the game or take appropriate action
-        }
-
-		// After Delay, start game timer
-		if(delay == 0) {
-			countdownTime -= deltaTime;
-		    // Accumulate time for spawning 
-		    projectileSpawnTimer += deltaTime;
-		    debrisSpawnTimer += deltaTime;
-		    // Accumulate time for temp variation
-		    temperatureVariationTimer += deltaTime;
+	public void handleTempVariance(float deltaTime) {
+		if((int)tempEffectTimer <= 0) {
+			tempEffect=false;
 		}
-		
-	    // Spawn projectiles
+
+		// Temperature Variation
+	    if(temperatureVariationTimer >= temperatureVariationThreshhold-5 && countdownTime >0) {
+	    	if(planet.getName().equals("Neptune")) {
+		    	tempVarMessage = "Temperature Variation Incoming!";
+		    	tempVarMessageDetails = "Cold Debuff!";
+		    	if(temperatureVariationTimer >= temperatureVariationThreshhold) {
+		    		tempEffect = true;
+		    		temperatureVariationTimer -= 40;
+		    	}
+	    	}if(planet.getName().equals("Venus")) {
+	    		tempVarMessage = "Temperature Variation Incoming!";
+	    		tempVarMessageDetails = "HP Tick Damage!";
+		    	if(temperatureVariationTimer >= temperatureVariationThreshhold) {
+		    		tempEffect = true;
+		    		temperatureVariationTimer -= 40;
+		    	}
+	    	}
+	    }else {
+	    	tempVarMessage = "";
+	    	tempVarMessageDetails = "";
+	    }
+	    
+	    // Temperature Effect Timer 
+	    if(tempEffect) {
+    		if(planet.getName().equals("Neptune")) {
+    			for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
+		    		((Player)player).getStaminaBar().setCurrentValue(0.00f);
+	    		}
+    			tempEffectTimer -= deltaTime;
+	    	}if(planet.getName().equals("Venus")) {
+	    		for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
+		    		((Player)player).getHealthBar().setCurrentValue(((Player)player).getHealthBar().getCurrentValue()-0.01f);;
+	    		}
+    			tempEffectTimer -= deltaTime;
+	    	}
+	    }else {
+	    	tempEffectTimer = 10;
+	    }
+	}
+	
+	public void handleProjectileSpawn(float deltaTime){
+		// Spawn projectiles
 	    if (projectileSpawnTimer >= projectileSpawnThreshold && countdownTime > 0) {
 	    	if(pointCheckpoint >= 2) {
 	    		for (iSpacePlayer player : spaceplayerControlManager.getSpacePlayerList()) {
@@ -267,38 +308,55 @@ public class GameScreen extends Scene {
 			        spaceEntityManager.add((Projectile)spaceEntityFactory.createDynamicEntity("SingleProjectile",((Player)player).getPositionX(),((Player)player).getPositionY()));
 			    	}
 	    	}
-		    	
-	        spaceAIControlManager.update(spaceEntityManager.getEntityList());
-	        spaceCollisionManager.update(spaceEntityManager.getEntityList());
 	        projectileSpawnTimer -= 0.2; // Reset the timer for next second
 	    }
-	    
+	}
+	
+	public void handleDebrisSpawn(float deltaTime) {
 	    // Spawn debris
 	    if (debrisSpawnTimer >= debrisSpawnThreshold && countdownTime > 0) {
 	    	for (int i=0; i<(int)Math.floor(Math.random() * DEBRIS_MAX_SPAWN)+DEBRIS_MIN_SPAWN; i++) {
 	        	spaceEntityManager.add((Debris)spaceEntityFactory.createEntity("Debris", planet.getName()));	
 	        }
-	    	spaceAIControlManager.update(spaceEntityManager.getEntityList());
-	        spaceCollisionManager.update(spaceEntityManager.getEntityList());
 	        debrisSpawnTimer -= 1;
 	    }
-	    
-	    // Temperature Variation
-	    if(temperatureVariationTimer >= temperatureVariationThreshhold && countdownTime >0) {
-	    	System.out.println("Planet: " +  planet.getName());
-	    	temperatureVariationTimer -= 40;
-	    }
-	    
+	}
+	
+	public void handleExplosionSpawn(float deltaTime) {
 	    // Handle Explosion Effects (Remove after delay)
 	    for (Entity entity : spaceEntityManager.getEntityList()) {
 	    	if(entity instanceof Explosion) {
 	    		((Explosion)entity).update(deltaTime);
 	    	}
 	    }
-
-	    // Prevent negative countdown time
+	}
+	
+	public void update(float deltaTime) {
+		// Countdown delay
+		delay -= deltaTime;
+		
+		// Prevent negative timers
+		if (delay <= 0) delay = 0; 
         if (countdownTime <= 0) countdownTime = 0;
+		
+		// After Delay, start game timer
+		if(delay == 0) {
+			countdownTime -= deltaTime;
+		    // Accumulate time for spawning 
+		    projectileSpawnTimer += deltaTime;
+		    debrisSpawnTimer += deltaTime;
+		    // Accumulate time for temp variation
+		    temperatureVariationTimer += deltaTime;
+		}
+		
+		handleTempVariance(deltaTime);
+		handleProjectileSpawn(deltaTime);
+		handleDebrisSpawn(deltaTime);
+		handleExplosionSpawn(deltaTime);
         
+    	spaceplayerControlManager.update(spaceEntityManager.getEntityList());
+        spaceAIControlManager.update(spaceEntityManager.getEntityList());
+        spaceCollisionManager.update(spaceEntityManager.getEntityList());
 	}
 	
 	// set the delay for fade in effect

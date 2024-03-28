@@ -126,8 +126,8 @@ public class SpaceEntityFactory {
         }
 	}
 
-	public Entity createDynamicEntity(String entityType, String dynamicString1, float dynamicValue1) {
-        if (entityType == null || dynamicString1 == null || dynamicString1.isEmpty()) {
+	public Entity createDynamicEntity(String entityType, String dynamicString1, String dynamicString2, float dynamicValue1) {
+        if (entityType == null || dynamicString1 == null || dynamicString1.isEmpty() || dynamicString2.isEmpty()) {
         	return null;
         }
         else {
@@ -142,7 +142,8 @@ public class SpaceEntityFactory {
 	        					PLANET_POSITION_X,
 	        					PLANET_POSITION_Y,
 	        					dynamicValue1,
-	        					PLANET_COLLIDABLE);
+	        					PLANET_COLLIDABLE,
+	        					dynamicString2);
 	        default:
 	            return null;
 	        }
