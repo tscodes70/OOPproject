@@ -90,7 +90,11 @@ public class Planet extends Entity implements iPlanet {
 	@Override public Rectangle getBoundingBox() { return boundingBox; }
 	@Override public void setBoundingBox(Rectangle boundingBox) { this.boundingBox = boundingBox; }
 
-
+	// reset HP values if needed
+	public void resetHP() {
+		currentHP = 5;
+		maxHP= 5;
+	}
 
 	
 	// Getter Setter

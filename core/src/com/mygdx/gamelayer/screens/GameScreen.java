@@ -73,6 +73,9 @@ public class GameScreen extends Scene {
 		this.simulation = simulation;
 		this.planet = planet;
 		
+		// reset planet HP on game start
+		planet.resetHP();
+		
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         font = new BitmapFont();
