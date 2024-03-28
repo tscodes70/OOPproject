@@ -76,6 +76,7 @@ public class GameScreen extends Scene {
 		this.keyboardDevice = (Keyboard) ioManager.getInputManager().retrieve(1);
 		this.simulation = simulation;
 		this.planet = planet;
+		planet.resetHP();
 		
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arcadeclassic.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
