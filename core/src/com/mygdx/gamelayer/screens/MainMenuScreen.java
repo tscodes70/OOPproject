@@ -85,7 +85,6 @@ public class MainMenuScreen extends Scene {
 		}
 		
 		
-		//entityManager.drawEntities(batch);
 		buttonManager.drawButtons(batch);
 		batch.end();
 		
@@ -99,7 +98,7 @@ public class MainMenuScreen extends Scene {
 					// go to planet selection screen
 					simulation.chooseLevel();
 					break;
-				case  STATS:
+				case STATS:
 					simulation.showStats();
 					break;
 				case QUIT:

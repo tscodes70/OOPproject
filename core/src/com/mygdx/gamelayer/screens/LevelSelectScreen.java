@@ -82,7 +82,6 @@ public class LevelSelectScreen extends Scene {
 		super.render();
 		
 		batch.begin();
-		//entityManager.drawEntities(batch);
 		buttonManager.drawButtons(batch);
 		
 		batch.end();

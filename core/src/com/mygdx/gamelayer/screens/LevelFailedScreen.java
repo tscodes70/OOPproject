@@ -46,7 +46,6 @@ public class LevelFailedScreen extends Scene {
 				(Texture)ioManager.getOutputManager().retrieve("LFBGImage"));
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
-		int screenWidth = Gdx.graphics.getWidth();
 
 		this.simulation = simulation;
 		this.mouseDevice = (Mouse)ioManager.getInputManager().retrieve(2);
@@ -84,11 +83,7 @@ public class LevelFailedScreen extends Scene {
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		super.render();
 		
-		//Gdx.gl.glClearColor(0, 0, 0, 1);
-		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
 		batch.begin();
-		//entityManager.drawEntities(batch);
 		buttonManager.drawButtons(batch);
 		
 		// draw planet image
@@ -97,7 +92,7 @@ public class LevelFailedScreen extends Scene {
 		// draw planet name and message text
 		planetNameFont.draw(batch, planetName, super.centeredXPos(planetNameGlyph.width), 420f);
 		
-		// personalise text based on which entity died
+		// personalise text based on which entity died (planet or player)
 		if(planetName == "You") {
 			messageFont.draw(batch, GLYPHMESSAGE_PLAYER_DEATH, super.centeredXPos(400f), 350f, 400f, Align.center, true);
 		} else {

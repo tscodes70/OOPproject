@@ -211,8 +211,6 @@ public class GameScreen extends Scene {
 	}
 	
 	public void update(float deltaTime) {
-		// TESTING: PRINT
-//		System.out.println("Planet Hp " + planet.getCurrentHP() + "/" + planet.getMaxHP());
 		delay -= deltaTime;
         // Check if the countdown has reached zero or below
 		if (delay <= 0) {

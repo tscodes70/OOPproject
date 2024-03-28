@@ -2,8 +2,6 @@ package com.mygdx.gamelayer.simulation;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.gameengine.interfaces.iInput;
@@ -11,7 +9,6 @@ import com.mygdx.gameengine.interfaces.iOutput;
 import com.mygdx.gameengine.managers.IOManager;
 import com.mygdx.gameengine.managers.InputManager;
 import com.mygdx.gameengine.managers.OutputManager;
-import com.mygdx.gameengine.managers.SceneManager;
 import com.mygdx.gameengine.models.Keyboard;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Simulation;
@@ -20,7 +17,6 @@ import com.mygdx.gamelayer.factories.SpaceEntityFactory;
 import com.mygdx.gamelayer.managers.SpaceSceneManager;
 import com.mygdx.gamelayer.models.JSONReader;
 import com.mygdx.gamelayer.models.Planet;
-import com.mygdx.gamelayer.models.Projectile;
 import com.mygdx.gamelayer.models.SpaceTexture;
 import com.mygdx.gamelayer.screens.*;
 public class AppSimulation extends Simulation {
@@ -416,9 +412,6 @@ public class AppSimulation extends Simulation {
 		}
         // Transition from PAUSE_SCREEN/GAME_SCREEN to SPLASH_SCREEN (BACKSPACE key)
 		if (keyboardDevice.pollInputPress(BACKSPACEKEY) && (gameState == GAME_SCREEN || gameState == PAUSE_SCREEN)) {
-//			gameState = END_SCREEN;
-//			sceneManager.resetGameScene("Mercury", new Texture(IMAGE_PLANET_MERCURY), keyboardDevice, mouseDevice, this);
-//			sceneManager.setLevelClearedInfo("Mercury");
 			gameState = SPLASH_SCREEN;
 			sceneManager.setScene(gameState);
 		}
