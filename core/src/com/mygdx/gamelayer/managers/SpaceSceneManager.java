@@ -22,11 +22,6 @@ public class SpaceSceneManager extends SceneManager{
 	
 	private final int END_SCREEN = 5;
 	private final int END_SCREEN_FAILURE = 6;
-
-	private final String AUDIO_PATH = "audio/music";
-	private final String BGAUDIO_GS_PATH = String.format("%s/burnt_toaster.mp3", AUDIO_PATH);
-	
-	private Sound bgGSMusic = new Sound(BGAUDIO_GS_PATH);
 	
 	public SpaceSceneManager(OutputManager<iOutput> oManager) {
 		super(oManager);
@@ -38,13 +33,14 @@ public class SpaceSceneManager extends SceneManager{
 		Scene gameScene = super.getSceneList().get(GAME_SCREEN);
 		int gameSceneIndex = super.getSceneList().indexOf(gameScene);
 		super.getSceneList().set(gameSceneIndex, new GameScreen(planet, ioManager, simulation));
+		gameScene.dispose();
 	}
 	
 	// go to the info screen for the selected level
 	public void setLevelInfo(Planet planet) {
 		PlanetInfoScreen levelInfoScene = (PlanetInfoScreen)super.getSceneList().get(LEVEL_INFO_SCREEN);
 		levelInfoScene.setChosenLevel(planet);
-		setScene(LEVEL_INFO_SCREEN);
+		super.setScene(LEVEL_INFO_SCREEN);
 	}
 	
 	// set which planet to display in the level cleared screen

@@ -61,9 +61,9 @@ public class EntityManager {
 	 * Disposal of EntityManager Resources
 	 */
 	public void dispose() {
-		for(Entity e : entityList) {
-			if(e.getTex()!=null) e.getTex().dispose();
-		}
+//		for(Entity e : entityList) {
+//			if(e.getTex()!=null) e.getTex().dispose();
+//		}
 		System.out.println("EntityManager Resources Disposed");
 	}
 
