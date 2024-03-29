@@ -12,14 +12,4 @@ public class SpaceAIControlManager extends AIControlManager {
 		super(entityList);
 	}
 	
-	public void addAI(Entity entity) {
-		super.getAiEntityList().add(entity);
-		
-	}
-	
-	 public void removeAI(Entity entity) {
-	        // Remove an AI entity from the game
-	        super.getAiEntityList().remove(entity);
-	    }
-
 }
