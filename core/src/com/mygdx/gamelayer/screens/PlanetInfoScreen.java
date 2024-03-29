@@ -21,6 +21,7 @@ import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
 import com.mygdx.gamelayer.models.Planet;
+import com.mygdx.gamelayer.models.TextFileHandler;
 import com.mygdx.gamelayer.simulation.AppSimulation;
 
 public class PlanetInfoScreen extends Scene {	
@@ -31,8 +32,9 @@ public class PlanetInfoScreen extends Scene {
     private AppSimulation simulation;
     private Planet planet;
     private Mouse mouseDevice;
-    
-    private BitmapFont planetNameFont, descriptionFont;
+	private TextFileHandler statsFile;
+	
+    private BitmapFont planetNameFont, descriptionFont, descriptionFont2;
     private GlyphLayout planetNameGlyph, descriptionGlyph;
 	
 	private final String START = "Start";
@@ -42,7 +44,8 @@ public class PlanetInfoScreen extends Scene {
 	private final float DESCRIPTION_Y_POS = 695f;
 	private final float TEXTAREA_WIDTH = 600f;
 
-	public PlanetInfoScreen(HashMap<String, Texture> buttonTextures, IOManager ioManager, AppSimulation simulation) {
+
+	public PlanetInfoScreen(HashMap<String, Texture> buttonTextures, TextFileHandler statsFile,IOManager ioManager, AppSimulation simulation) {
 		super(
 				(Sound)ioManager.getOutputManager().retrieve("SSBGMusic"),
 				(Texture)ioManager.getOutputManager().retrieve("PISBGImage"));
@@ -52,6 +55,7 @@ public class PlanetInfoScreen extends Scene {
 
 		this.simulation = simulation;
 		this.mouseDevice = (Mouse)ioManager.getInputManager().retrieve(2);
+		this.statsFile = statsFile;
 		
 		// dynamically generate bitmap font of our desired size so it doesn't look pixelated
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
@@ -69,6 +73,12 @@ public class PlanetInfoScreen extends Scene {
 		descriptionFont.getData().setScale(1.1f);
 		descriptionFont.setColor(Color.BLACK);
 		descriptionFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		parameter.size = 20;
+		descriptionFont2 = generator.generateFont(parameter);
+		descriptionFont2.getData().setScale(1.1f);
+		descriptionFont2.setColor(Color.BLACK);
+		descriptionFont2.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
@@ -106,8 +116,8 @@ public class PlanetInfoScreen extends Scene {
 		}
 
 		// Draw additional information
-		descriptionFont.draw(batch, "Gravity: " + planet.getGravity() + " m/s^2", super.centeredXPos(300f), yPos, TEXTAREA_WIDTH, Align.left, true);
-		descriptionFont.draw(batch, "Highscore: 10000", super.centeredXPos(300f), yPos - 30, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont2.draw(batch, "Gravity: " + planet.getGravity() + " m/s^2", super.centeredXPos(200f), yPos, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont2.draw(batch, "Highscore: " + statsFile.getMap().get(planet.getName().toLowerCase() + "_highscore"), super.centeredXPos(200f), yPos-30, TEXTAREA_WIDTH, Align.left, true);
 
 		batch.end();
 		
@@ -153,6 +163,7 @@ public class PlanetInfoScreen extends Scene {
 		shape.dispose();
 		planetNameFont.dispose();
 		descriptionFont.dispose();
+		descriptionFont2.dispose();
 		buttonManager.dispose();
 		buttonControlManager.dispose();
 	}

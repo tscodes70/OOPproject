@@ -19,6 +19,7 @@ import com.mygdx.gameengine.models.Button;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
+import com.mygdx.gamelayer.models.TextFileHandler;
 import com.mygdx.gamelayer.simulation.AppSimulation;
 
 public class LevelClearedScreen extends Scene {	
@@ -34,11 +35,13 @@ public class LevelClearedScreen extends Scene {
     private String GLYPHMESSAGE = "has been successfully defended from pollution!";
     private int playerPoints;
 	private Mouse mouseDevice;
+	private TextFileHandler statsFile;
+	private boolean statsFileUpdated;
 	
 	private final String CONTINUE = "continue";
 
 
-	public LevelClearedScreen(HashMap<String, Texture> buttonTextures, IOManager ioManager, AppSimulation simulation) {
+	public LevelClearedScreen(HashMap<String, Texture> buttonTextures,TextFileHandler statsFile, IOManager ioManager, AppSimulation simulation) {
 		super(
 				(Sound)ioManager.getOutputManager().retrieve("ESBGMusic"),
 				(Texture)ioManager.getOutputManager().retrieve("LCBGImage"));
@@ -47,6 +50,8 @@ public class LevelClearedScreen extends Scene {
 
 		this.simulation = simulation;
 		this.mouseDevice = (Mouse)ioManager.getInputManager().retrieve(2);
+		this.statsFile = statsFile;
+		this.statsFileUpdated = false;
 		
 		// dynamically generate bitmap font of our desired size so it doesn't look pixelated
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
@@ -72,6 +77,7 @@ public class LevelClearedScreen extends Scene {
 		buttonManager.add(new Button(buttonTextures.get("Continue"), 125, 0.2f, CONTINUE));
 		
 		buttonControlManager = new ButtonControlManager(buttonManager.getButtonList(), mouseDevice);
+		
 	}
 	
 	/**
@@ -99,6 +105,15 @@ public class LevelClearedScreen extends Scene {
 		messageFont.draw(batch, "Your score: " + playerPoints, super.centeredXPos(400f), 260f, 400f, Align.center, true);
 
 		batch.end();
+		
+		if(planetName != null && !statsFileUpdated) {
+			String key = planetName.toLowerCase() + "_highscore";
+			if(statsFile.getMap().get(key) < playerPoints) {
+				statsFile.updateValueForKey(key, playerPoints);
+			}
+			statsFileUpdated = true;
+		}
+		
 		
 		// fade in transition
 		super.fadeIn(0.25f, deltaTime);

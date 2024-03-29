@@ -1,0 +1,8 @@
+uranus_highscore: 0
+mercury_highscore: 0
+mars_highscore: 0
+jupiter_highscore: 0
+earth_highscore: 0
+venus_highscore: 0
+neptune_highscore: 0
+saturn_highscore: 0

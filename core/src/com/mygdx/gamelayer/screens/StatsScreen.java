@@ -18,7 +18,7 @@ import com.mygdx.gameengine.models.Button;
 import com.mygdx.gameengine.models.Mouse;
 import com.mygdx.gameengine.models.Scene;
 import com.mygdx.gameengine.models.Sound;
-import com.mygdx.gamelayer.models.JSONReader;
+import com.mygdx.gamelayer.models.TextFileHandler;
 import com.mygdx.gamelayer.simulation.AppSimulation;
 
 public class StatsScreen extends Scene {	
@@ -27,7 +27,7 @@ public class StatsScreen extends Scene {
     private ButtonManager buttonManager;
     private ButtonControlManager buttonControlManager;
     private AppSimulation simulation;
-    private JSONReader statsFile;
+    private TextFileHandler statsFile;
 
     private BitmapFont descriptionFont;
 
@@ -37,7 +37,7 @@ public class StatsScreen extends Scene {
 	private final float DESCRIPTION_Y_POS = 850f;
 	private final float TEXTAREA_WIDTH = 600f;
 
-	public StatsScreen(HashMap<String, Texture> buttonTextures, JSONReader statsFile, IOManager iomanager, AppSimulation simulation) {
+	public StatsScreen(HashMap<String, Texture> buttonTextures, TextFileHandler statsFile, IOManager iomanager, AppSimulation simulation) {
 		super(
 				(Sound)iomanager.getOutputManager().retrieve("SSBGMusic"),
 				(Texture)iomanager.getOutputManager().retrieve("StatsBGImage"));
@@ -77,13 +77,13 @@ public class StatsScreen extends Scene {
 		buttonManager.drawButtons(batch);
 		
 		// statistics text
-		descriptionFont.draw(batch, "Mercury : " + statsFile.getJsonInt("mercury_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 40f, TEXTAREA_WIDTH, Align.left, true);
-		descriptionFont.draw(batch, "Venus : " + statsFile.getJsonInt("venus_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 80f, TEXTAREA_WIDTH, Align.left, true);
-		descriptionFont.draw(batch, "Earth : " + statsFile.getJsonInt("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 120f, TEXTAREA_WIDTH, Align.left, true);
-		descriptionFont.draw(batch, "Mars : " + statsFile.getJsonInt("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 160f, TEXTAREA_WIDTH, Align.left, true);
-		descriptionFont.draw(batch, "Jupiter : " + statsFile.getJsonInt("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 200f, TEXTAREA_WIDTH, Align.left, true);
-		descriptionFont.draw(batch, "Uranus : " + statsFile.getJsonInt("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 240f, TEXTAREA_WIDTH, Align.left, true);
-		descriptionFont.draw(batch, "Neptune : " + statsFile.getJsonInt("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 280f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Mercury : " + statsFile.getMap().get("mercury_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 40f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Venus : " + statsFile.getMap().get("venus_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 80f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Earth : " + statsFile.getMap().get("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 120f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Mars : " + statsFile.getMap().get("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 160f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Jupiter : " + statsFile.getMap().get("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 200f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Uranus : " + statsFile.getMap().get("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 240f, TEXTAREA_WIDTH, Align.left, true);
+		descriptionFont.draw(batch, "Neptune : " + statsFile.getMap().get("earth_highscore"), super.centeredXPos(600f), DESCRIPTION_Y_POS - 280f, TEXTAREA_WIDTH, Align.left, true);
 
 		batch.end();
 		

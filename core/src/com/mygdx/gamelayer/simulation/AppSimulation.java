@@ -15,9 +15,9 @@ import com.mygdx.gameengine.models.Simulation;
 import com.mygdx.gameengine.models.Sound;
 import com.mygdx.gamelayer.factories.SpaceEntityFactory;
 import com.mygdx.gamelayer.managers.SpaceSceneManager;
-import com.mygdx.gamelayer.models.JSONReader;
 import com.mygdx.gamelayer.models.Planet;
 import com.mygdx.gamelayer.models.SpaceTexture;
+import com.mygdx.gamelayer.models.TextFileHandler;
 import com.mygdx.gamelayer.screens.*;
 public class AppSimulation extends Simulation {
 	
@@ -29,7 +29,7 @@ public class AppSimulation extends Simulation {
 	private OutputManager<iOutput> oManager;
 	private IOManager ioManager;
 	
-	private JSONReader statsFile;
+	private TextFileHandler statsFile;
 	
 	private Sound bgSSMusic, bgGSMusic, bgESMusic;
 	
@@ -53,7 +53,7 @@ public class AppSimulation extends Simulation {
 	private final String AUDIO_PATH = "audio/music";
 	
 	// Stats Resource
-	private final String STATS_FILE_PATH = String.format("%s/stats.json", STATS_PATH);
+	private final String STATS_FILE_PATH = String.format("%s/stats.txt", STATS_PATH);
 	
 	// Player resources
 	private final String IMAGE_PLAYER_PATH = String.format("%s/player.png", IMAGE_PATH);
@@ -157,7 +157,7 @@ public class AppSimulation extends Simulation {
 		try {
 			// Load all resources for this simulation
 			// Load JSON stats file
-			statsFile = new JSONReader(STATS_FILE_PATH);
+			statsFile = new TextFileHandler(STATS_FILE_PATH);
 			
 			// Instantiate IOManagers
 			iManager = new InputManager<iInput>();
@@ -358,28 +358,51 @@ public class AppSimulation extends Simulation {
 				+ "Mercury zooms around the Sun super fast!\nThat's why it's named after a Roman god known\nfor speed.<"
 				+ "You know what's cool? You can actually see\nMercury from Earth! \nKeep an eye out when the sun rises or sets! <"
 				+ "Mercury is mostly made of rock and has a \nsuper strong iron core!";
+		
+		String venusInfo = "Venus is the second planet from the Sun! \nBut did you know? It's the hottest planet!<"
+                + "Venus has a thick atmosphere full of carbon\ndioxide.This causes a runaway\ngreenhouse effect.<"
+                + "Sometimes, Venus is called Earth's sister planet\nbecause of their similar size and mass. <"
+                + "Despite its hostile surface, Venus shows\nsigns of volcanic activity and has many\nvolcanoes!";
 
+		
+		String earthInfo = "Earth is the third planet from the Sun! \nAnd guess what? It's the only planet known\nto support life!<"
+                + "Earth has a protective atmosphere blocking\nharmful solar radiation and preserving life.<"
+                + "It's called the Blue Planet due to its\nabundant water that covers 70% of the surface.<"
+                + "Earth's diverse ecosystems range from\narid deserts to lush rainforests!";
+
+		
+		String neptuneInfo = "Neptune is the eighth planet from the Sun! \nIt's known for its beautiful blue color!<"
+                + "This color comes from methane in its \natmosphere, absorbing red light and reflecting\nblue.<"
+                + "Neptune has the strongest winds in the\nsolar system, reaching speeds of 2,100 km/h! <"
+                + "It's a gas giant with a dynamic climate \nand a storm named the Great Dark Spot.";
+
+		String wipInfo = "WIP<"
+				+ "WIP<"
+				+ "WIP<"
+				+ "WIP";
 		
 		// Planet Hashmap
 		planetHashmap = new HashMap<String, Planet>();
 		planetHashmap.put("Mercury", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Mercury", mercuryInfo, 3.7f));
-		planetHashmap.put("Venus", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Venus", mercuryInfo, 8.87f));
-		planetHashmap.put("Earth", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Earth", mercuryInfo, 9.81f));
-		planetHashmap.put("Mars", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Mars", mercuryInfo, 3.71f));
-		planetHashmap.put("Jupiter", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Jupiter", mercuryInfo, 24.79f));
-		planetHashmap.put("Saturn", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Saturn", mercuryInfo, 10.44f));
-		planetHashmap.put("Uranus", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Uranus", mercuryInfo, 8.69f));
-		planetHashmap.put("Neptune", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Neptune", mercuryInfo, 11.15f));
+		planetHashmap.put("Venus", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Venus", venusInfo, 8.87f));
+		planetHashmap.put("Earth", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Earth", earthInfo, 9.81f));
+		planetHashmap.put("Neptune", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Neptune", neptuneInfo, 11.15f));
+		
+		planetHashmap.put("Mars", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Mars", wipInfo, 3.71f));
+		planetHashmap.put("Jupiter", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Jupiter", wipInfo, 24.79f));
+		planetHashmap.put("Saturn", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Saturn", wipInfo, 10.44f));
+		planetHashmap.put("Uranus", (Planet) spaceEntityFactory.createDynamicEntity("Planet", "Uranus", wipInfo, 8.69f));
+
 
 
 
 		// a reference to appsimulation is passed to scenes so that they can request changes of game state
 		sceneManager.add(new MainMenuScreen(menuButtons, ioManager, this));
 		sceneManager.add(new LevelSelectScreen(levelButtons, planetHashmap, ioManager, this));
-		sceneManager.add(new PlanetInfoScreen(planetInfoButtons, ioManager, this));
+		sceneManager.add(new PlanetInfoScreen(planetInfoButtons, statsFile, ioManager, this));
 		sceneManager.add(new GameScreen((Planet)planetHashmap.get("Mercury"), ioManager, this));
 		sceneManager.add(new PauseScreen());
-		sceneManager.add(new LevelClearedScreen(levelClearedButtons, ioManager, this));
+		sceneManager.add(new LevelClearedScreen(levelClearedButtons, statsFile, ioManager, this));
 		sceneManager.add(new LevelFailedScreen(levelClearedButtons, ioManager, this));
 		sceneManager.add(new StatsScreen(statsButtons, statsFile, ioManager, this));
 
